@@ -1,5 +1,5 @@
 name "opscode-erchef"
-version "pc-rc-0.8.1-tag"
+version "ESPRINT-1300"
 
 dependencies ["erlang", "rsync"]
 
