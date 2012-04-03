@@ -110,12 +110,17 @@ http {
 <%= select_upstream("opscode_chef") %>
     }
 
-    # nodes goes to erchef
+    # nodes go to erchef
     location ~ "^/organizations/[a-z0-9\-_]+?/nodes/{0,1}.*$" {
 <%= select_upstream("opscode_erchef") %>
     }
 
     location ~ "^/organizations/[a-z0-9\-_]+?/environments/[^/]+/nodes$" {
+<%= select_upstream("opscode_erchef") %>
+    }
+
+    # roles go to erchef
+    location ~ "^/organizations/[a-z0-9\-_]+?/roles/{0,1}.*$" {
 <%= select_upstream("opscode_erchef") %>
     }
 
