@@ -1,5 +1,5 @@
 name "opscode-erchef"
-version "ESPRINT-1300"
+version "master"
 
 dependencies ["erlang", "rsync"]
 
