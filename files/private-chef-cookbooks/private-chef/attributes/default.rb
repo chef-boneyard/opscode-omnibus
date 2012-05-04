@@ -259,6 +259,10 @@ default['private_chef']['mysql']['mysql2_versions'] = IO.readlines("/opt/opscode
 ###
 # PostgreSQL
 ###
+
+# Map ha-status service_name for postgres
+default['private_chef']['postgresql']['service_name'] = {"postgresql" => "postgres"}
+
 default['private_chef']['postgresql']['enable'] = true
 default['private_chef']['postgresql']['ha'] = false
 default['private_chef']['postgresql']['dir'] = "/var/opt/opscode/postgresql"
