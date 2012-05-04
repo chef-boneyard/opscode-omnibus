@@ -247,6 +247,29 @@ end
 #  - check that the runit service status is correct based on our state
 #
 
+#Can take a hash of hashes/mash for replace_names, to replace multiple entries
+def replace_service_names(replace_names=nil,ha_services)
+  unless replace_names.nil?
+
+    ha_services.map do |x|
+
+      if replace_names['private_chef'][x]
+      
+        replace_entry = replace_names['private_chef'][x]['service_name']
+   
+        if replace_entry.has_key?(x)
+          x = replace_entry[x]
+        end
+
+      else
+        x
+      end
+
+    end
+
+  end
+end
+
 def ha_status
   load_json
 
@@ -267,7 +290,7 @@ def ha_status
   if @running_config['private_chef']['drbd']['enable']
     puts "[OK] DRBD disk replication enabled."
   else
-    puts "[ERROR] DRBD disk recplication services not enabled, please configure DRBD according to documentation."
+    puts "[ERROR] DRBD disk replication services not enabled, please configure DRBD according to documentation."
     exit 1 
   end
 
@@ -381,6 +404,9 @@ def ha_status
 
   ha_services = @running_config['private_chef'].select {|k,v| v.is_a?(Hash) && v['ha'] }.map {|k,v| k}
   ha_services += %w{php-fpm fcgiwrap opscode-expander-reindexer}
+ 
+  #map service_name to work around bug PL-718
+  ha_services = replace_service_names(node['private_chef']['postgresql']['service_name'],ha_services)
 
   get_all_services.sort.each do |service_name|
     if service_enabled?(service_name)
