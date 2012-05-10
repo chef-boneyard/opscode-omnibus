@@ -121,11 +121,12 @@ http {
 <%= select_upstream("opscode_erchef") %>
     }
 
-<% end %>
+<% else %>
     location ~ "^/organizations/[a-z0-9\-_]+?/environments/[^/]+/nodes$" {
 <%= select_upstream("opscode_erchef") %>
     }
 
+<% end %>
 <% if !node['private_chef']['dark_launch']['couchdb_roles'] %>
     # roles go to erchef
     location ~ "^/organizations/[a-z0-9\-_]+?/roles/{0,1}.*$" {
@@ -300,11 +301,12 @@ http {
 <%= select_upstream("opscode_erchef") %>
     }
 
-<% end %>
+<% else %>
     location ~ "^/organizations/[a-z0-9\-_]+?/environments/[^/]+/nodes$" {
 <%= select_upstream("opscode_erchef") %>
     }
 
+<% end %>
 <% if !node['private_chef']['dark_launch']['couchdb_roles'] %>
     # roles go to erchef
     location ~ "^/organizations/[a-z0-9\-_]+?/roles/{0,1}.*$" {
@@ -442,12 +444,13 @@ http {
 <%= select_upstream("opscode_erchef") %>
     }
 
-<% end %>
+<% else %>
     location ~ "^/organizations/[a-z0-9\-_]+?/environments/[^/]+/nodes$" {
       proxy_redirect http://opscode_erchef /;
       proxy_pass http://opscode_erchef;
     }
 
+<% end %>
 <% if !node['private_chef']['dark_launch']['couchdb_roles'] %>
     # roles go to erchef
     location ~ "^/organizations/[a-z0-9\-_]+?/roles/{0,1}.*$" {
