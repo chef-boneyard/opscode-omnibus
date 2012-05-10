@@ -349,6 +349,7 @@ default['private_chef']['dark_launch']["quick_start"] = false
 default['private_chef']['dark_launch']["new_theme"] = true
 default['private_chef']['dark_launch']["private-chef"] = true
 default['private_chef']['dark_launch']["sql_users"] = true
+default['private_chef']['dark_launch']["couchdb_environments"] = false
 default['private_chef']['dark_launch']["couchdb_roles"] = false
 default['private_chef']['dark_launch']["couchdb_data"] = false
 default['private_chef']['dark_launch']["add_type_and_bag_to_items"] = true
