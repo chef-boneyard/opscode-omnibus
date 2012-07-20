@@ -50,6 +50,7 @@ default['private_chef']['couchdb']['batch_save_size'] = 1000
 default['private_chef']['couchdb']['batch_save_interval'] = 1000
 default['private_chef']['couchdb']['log_level'] = 'error'
 default['private_chef']['couchdb']['reduce_limit'] = 'false'
+default['private_chef']['couchdb']['erl_flags'] = '+A 24 +P 500000'
 
 ####
 # RabbitMQ
