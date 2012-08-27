@@ -108,9 +108,9 @@ http {
 
     <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/environments/{0,1}.*$", 'couchdb_environments') %>
 
-    <%= @helper.reporting_api("^/organizations/[a-z0-9\-_]+?/reporting/.*$") %>
+    <%= @helper.reporting_api("^/organizations/[a-z0-9\-_]+?/reports/.*$") %>
     
-    <%= @helper.reporting_api("^/reporting/.*$") %>
+    <%= @helper.reporting_api("^/reports/.*$") %>
 
     # no caching of cookbook files for internal-lb
 
