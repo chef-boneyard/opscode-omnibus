@@ -32,6 +32,7 @@ module PrivateChef
   opscode_certificate Mash.new
   opscode_org_creator Mash.new
   opscode_account Mash.new
+  opscode_pushy Mash.new
   bootstrap Mash.new
   drbd Mash.new
   keepalived Mash.new
@@ -176,6 +177,7 @@ module PrivateChef
         "opscode_certificate",
         "opscode_org_creator",
         "opscode_account",
+        "opscode_pushy",
         "bootstrap",
         "drbd",
         "keepalived",

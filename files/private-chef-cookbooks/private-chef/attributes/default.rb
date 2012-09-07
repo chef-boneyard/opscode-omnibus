@@ -603,3 +603,20 @@ default['private_chef']['ldap'] = nil
 # Upgrades/Partybus
 ##
 default['private_chef']['upgrades']['dir'] = "/var/opt/opscode/upgrades"
+
+####
+# Opscode Pushy
+####
+default['private_chef']['opscode-pushy']['enable'] = true
+default['private_chef']['opscode-pushy']['dir'] = "/var/opt/opscode/opscode-pushy"
+default['private_chef']['opscode-pushy']['log_directory'] = "/var/log/opscode/opscode-pushy"
+default['private_chef']['opscode-pushy']['server_name'] = node['fqdn']
+default['private_chef']['opscode-pushy']['heartbeat_interval'] = 1000
+default['private_chef']['opscode-pushy']['dead_interval'] = 3
+default['private_chef']['opscode-pushy']['heartbeat_in_port'] = 10001
+default['private_chef']['opscode-pushy']['heartbeat_out_port'] = 10000
+default['private_chef']['opscode-pushy']['command_port'] = 10002
+default['private_chef']['opscode-pushy']['api_port'] = 10003
+
+default['private_chef']['opscode-pushy']['db_pool_max_count'] = 5
+default['private_chef']['opscode-pushy']['db_pool_init_count'] = 5
