@@ -1,7 +1,6 @@
 name "opscode-reporting"
 #version "pc-rel-0.13.0"
-# version "master" 
-version "JPL-OC-3404"
+version "master" 
 
 dependencies ["erlang", "rsync", "rebar"]
 
