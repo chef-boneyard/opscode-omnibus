@@ -93,6 +93,22 @@ file "/etc/opscode/pivotal.pem" do
   content key.to_pem.to_s unless File.exists?('/etc/opscode/pivotal.pem')
 end
 
+pushy_key = OpenSSL::PKey::RSA.generate(2048) unless File.exists?('/etc/opscode/pushy_pub.pem')
+
+file "/etc/opscode/pushy_pub.pem" do
+  owner node["private_chef"]["user"]["username"]
+  group "root"
+  mode "0644"
+  content pushy_key.public_key.to_s unless File.exists?('/etc/opscode/pushy_pub.pem')
+end
+
+file "/etc/opscode/pushy_priv.pem" do
+  owner node["private_chef"]["user"]["username"]
+  group "root"
+  mode "0600"
+  content pushy_key.to_pem.to_s unless File.exists?('/etc/opscode/pushy_pub.pem')
+end
+
 directory "/etc/chef" do
   owner "root"
   group node['private_chef']['user']['username']
@@ -130,6 +146,7 @@ include_recipe "runit"
   "opscode-chef",
   "opscode-erchef",
   "opscode-webui",
+  "opscode-pushy",
   "nagios",
   "nrpe",
   "nginx",

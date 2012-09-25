@@ -33,6 +33,7 @@ module PrivateChef
   opscode_org_creator Mash.new
   opscode_account Mash.new
   bookshelf Mash.new
+  opscode_pushy Mash.new
   bootstrap Mash.new
   drbd Mash.new
   keepalived Mash.new
@@ -182,6 +183,7 @@ module PrivateChef
         "opscode_org_creator",
         "opscode_account",
         "bookshelf",
+        "opscode_pushy",
         "bootstrap",
         "drbd",
         "keepalived",

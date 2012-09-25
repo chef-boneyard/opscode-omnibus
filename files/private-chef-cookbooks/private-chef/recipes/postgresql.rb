@@ -6,9 +6,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -82,7 +82,7 @@ else
 end
 
 
-if node['private_chef']['bootstrap']['enable'] 
+if node['private_chef']['bootstrap']['enable']
   execute "/opt/opscode/embedded/bin/initdb -D #{postgresql_data_dir}" do
     user node['private_chef']['postgresql']['username']
     not_if { File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) }
@@ -121,13 +121,13 @@ runit_service "postgres" do
   }.merge(params))
 end
 
-if node['private_chef']['bootstrap']['enable'] 
+if node['private_chef']['bootstrap']['enable']
 	execute "/opt/opscode/bin/private-chef-ctl postgres start" do
-		retries 20 
+		retries 20
 	end
 
   ###
-  # Create the database, migrate it, and create the users we need, and grant them 
+  # Create the database, migrate it, and create the users we need, and grant them
   # privileges.
   ###
   database_exists = "/opt/opscode/embedded/bin/chpst -u #{node['private_chef']['postgresql']['username']} /opt/opscode/embedded/bin/psql -d 'template1' -c 'select datname from pg_database' -x|grep opscode_chef"
@@ -142,7 +142,7 @@ if node['private_chef']['bootstrap']['enable']
   end
 
   execute "migrate_database" do
-    command "/opt/opscode/embedded/bin/bundle exec /opt/opscode/embedded/bin/rake pg:remigrate" 
+    command "/opt/opscode/embedded/bin/bundle exec /opt/opscode/embedded/bin/rake pg:remigrate"
     cwd "/opt/opscode/embedded/service/chef-sql-schema"
     user node['private_chef']['postgresql']['username']
     action :nothing
@@ -156,7 +156,7 @@ if node['private_chef']['bootstrap']['enable']
   end
 
   execute "grant opscode_chef privileges" do
-    command "/opt/opscode/embedded/bin/psql -d 'opscode_chef' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_chef TO #{node['private_chef']['postgresql']['sql_user']}\"" 
+    command "/opt/opscode/embedded/bin/psql -d 'opscode_chef' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_chef TO #{node['private_chef']['postgresql']['sql_user']}\""
     user node['private_chef']['postgresql']['username']
     action :nothing
   end
@@ -169,10 +169,40 @@ if node['private_chef']['bootstrap']['enable']
   end
 
   execute "grant opscode_chef_ro privileges" do
-    command "/opt/opscode/embedded/bin/psql -d 'opscode_chef' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_chef TO #{node['private_chef']['postgresql']['sql_ro_user']}\"" 
+    command "/opt/opscode/embedded/bin/psql -d 'opscode_chef' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_chef TO #{node['private_chef']['postgresql']['sql_ro_user']}\""
     user node['private_chef']['postgresql']['username']
     action :nothing
   end
+
+  # Pushy database
+  database_exists = "/opt/opscode/embedded/bin/chpst -u #{node['private_chef']['postgresql']['username']} /opt/opscode/embedded/bin/psql -d 'template1' -c 'select datname from pg_database' -x|grep opscode_pushy"
+
+  execute "/opt/opscode/embedded/bin/createdb -T template0 -E UTF-8 opscode_pushy" do
+    user node['private_chef']['postgresql']['username']
+    not_if database_exists
+    retries 30
+    notifies :run, "execute[migrate_pushy_database]", :immediately
+  end
+
+  execute "migrate_pushy_database" do
+    command "/opt/opscode/embedded/bin/bundle exec /opt/opscode/embedded/bin/rake pg:remigrate"
+    cwd "/opt/opscode/embedded/service/opscode-pushy/db"
+    user node['private_chef']['postgresql']['username']
+    action :nothing
+  end
+
+  execute "grant opscode_chef privileges to pushy" do
+    command "/opt/opscode/embedded/bin/psql -d 'opscode_pushy' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_pushy TO #{node['private_chef']['postgresql']['sql_user']}\""
+    user node['private_chef']['postgresql']['username']
+    action :nothing
+  end
+
+  execute "grant opscode_chef_ro privileges to pushy" do
+    command "/opt/opscode/embedded/bin/psql -d 'opscode_pushy' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_pushy TO #{node['private_chef']['postgresql']['sql_ro_user']}\""
+    user node['private_chef']['postgresql']['username']
+    action :nothing
+  end
+
 end
 
 add_nagios_hostgroup("postgresql")
