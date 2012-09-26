@@ -60,9 +60,10 @@
           {server_heartbeat_port, <%= @heartbeat_out_port %> },
           {command_port, <%= @command_port %> },
           {api_port, <%= @api_port %> },
-          {log_dir, "<%= @log_directory %>"},
-          {metrics_module, folsom_metrics}
-          ]},
+          {log_dir, "<%= @log_directory %>"}
+        ]},
+ {pushy_common, [{metrics_module, folsom_metrics}
+                ]},
  {chef_authn, [{keyring_dir, "/etc/opscode"}]},
  {sqerl, [
            %% The database system you are using (e.g., mysql, pgsql)
