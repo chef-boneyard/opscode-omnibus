@@ -62,8 +62,9 @@
           {api_port, <%= @api_port %> },
           {log_dir, "<%= @log_directory %>"}
         ]},
- {pushy_common, [{metrics_module, folsom_metrics}
-                ]},
+ {pushy_common, [{metrics_module, folsom_metrics},
+                 {enable_graphite, <%= node['private_chef']['opscode-pushy']['enable_graphite'] %> }]},
+ {folsom_graphite, [{application, "pushy"}]},
  {chef_authn, [{keyring_dir, "/etc/opscode"}]},
  {sqerl, [
            %% The database system you are using (e.g., mysql, pgsql)
