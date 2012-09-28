@@ -641,3 +641,6 @@ default['private_chef']['opscode-pushy']['api_port'] = 10003
 
 default['private_chef']['opscode-pushy']['db_pool_max_count'] = 5
 default['private_chef']['opscode-pushy']['db_pool_init_count'] = 5
+
+default['private_chef']['opscode-pushy']['enable_graphite'] = false
+
