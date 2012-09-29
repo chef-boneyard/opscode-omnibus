@@ -115,6 +115,7 @@ include_recipe "runit"
 [
 	"drbd",
   "couchdb",
+  "varnish",
   "rabbitmq",
   "postgresql",
   "mysql",
