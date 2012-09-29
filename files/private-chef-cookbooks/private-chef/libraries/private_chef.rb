@@ -18,6 +18,7 @@ module PrivateChef
   topology "standalone"
 
   couchdb Mash.new
+  estatsd Mash.new
   varnish Mash.new
   rabbitmq Mash.new
   opscode_solr Mash.new
@@ -188,6 +189,7 @@ module PrivateChef
         "drbd",
         "keepalived",
         "nagios",
+        "estatsd",
         "nrpe",
         "nginx",
         "ldap",
