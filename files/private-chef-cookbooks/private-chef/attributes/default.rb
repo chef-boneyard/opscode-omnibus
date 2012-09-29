@@ -52,6 +52,13 @@ default['private_chef']['couchdb']['log_level'] = 'error'
 default['private_chef']['couchdb']['reduce_limit'] = 'false'
 
 ####
+# Varnish
+####
+default['private_chef']['varnish']['enable'] = true
+default['private_chef']['varnish']['log_directory'] = "/var/log/opscode/varnish"
+default['private_chef']['varnish']['dir'] = "/var/opt/opscode/varnish"
+
+####
 # RabbitMQ
 ####
 default['private_chef']['rabbitmq']['enable'] = true
