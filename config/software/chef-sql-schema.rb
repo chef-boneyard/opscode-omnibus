@@ -1,5 +1,5 @@
 name "chef-sql-schema"
-version "master"
+version "gzipnode"
 
 dependencies ["ruby",
               "bundler",
