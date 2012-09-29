@@ -450,7 +450,7 @@ default['private_chef']['estatsd']['enable'] = true
 default['private_chef']['estatsd']['dir'] = "/var/opt/opscode/estatsd"
 default['private_chef']['estatsd']['log_directory'] = "/var/log/opscode/estatsd"
 default['private_chef']['estatsd']['vip'] = "127.0.0.1"
-default['private_chef']['estatsd']['port'] = 9466
+default['private_chef']['estatsd']['port'] = 5665
 
 ###
 # Nagios
