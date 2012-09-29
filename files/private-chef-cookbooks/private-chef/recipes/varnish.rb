@@ -20,7 +20,6 @@ varnish_log_dir = node['private_chef']['varnish']['log_directory']
   varnish_dir,
   varnish_etc_dir,
   varnish_cache_dir,
-  varnish_cache_tmp_dir,
   varnish_log_dir,
 ].each do |dir_name|
   directory dir_name do
