@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "uncle-ned-1"
+version "uncle-ned-2"
 
 dependencies ["erlang", "rebar", "rsync"]
 
