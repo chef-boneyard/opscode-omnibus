@@ -168,7 +168,7 @@ module PrivateChef
       results = { "private_chef" => {} }
       [
         "couchdb",
-	"varnish",
+        "varnish",
         "rabbitmq",
         "opscode_solr",
         "opscode_expander",

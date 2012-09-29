@@ -113,7 +113,7 @@ include_recipe "runit"
 
 # Configure Services
 [
-	"drbd",
+  "drbd",
   "couchdb",
   "varnish",
   "rabbitmq",
