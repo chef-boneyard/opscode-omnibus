@@ -36,7 +36,7 @@ default['private_chef']['couchdb']['log_directory'] = "/var/log/opscode/couchdb"
 default['private_chef']['couchdb']['svlogd_size'] = 1000000
 default['private_chef']['couchdb']['svlogd_num'] = 10
 # The port to listen on
-default['private_chef']['couchdb']['port'] = 5984
+default['private_chef']['couchdb']['port'] = 6984
 # The IP Address to bind on - use 0.0.0.0 for everything
 default['private_chef']['couchdb']['bind_address'] = '127.0.0.1'
 # The VIP
