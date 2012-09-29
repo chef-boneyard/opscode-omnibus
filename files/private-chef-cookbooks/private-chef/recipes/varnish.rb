@@ -33,12 +33,9 @@ end
 varnish_config = File.join(varnish_etc_dir, "default.vcl")
 
 varnish_vars = node['private_chef']['varnish'].to_hash
-varnish_vars = varnish_vars.merge({ :helper => VarnishErb.new(node),
-                                :allowed_webui_subnets => PrivateChef.allowed_webui_subnets})
-
 
 template File.join(varnish_etc_dir, "default.vcl") do
-  source "default.vcl.erb"
+  source "varnish-default.vcl.erb"
   owner "root"
   group "root"
   mode "0644"
