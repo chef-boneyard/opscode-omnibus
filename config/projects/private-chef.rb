@@ -27,6 +27,7 @@ deps << "opscode-expander"
 deps << "chef-sql-schema" # needed to migrate the DB.
 deps << "keepalived"
 deps << "bookshelf"
+deps << "varnish"
 
 # the front-end services
 deps << "oc_erchef"
@@ -46,8 +47,8 @@ deps << "nagios-plugins"
 deps << "opscode-nagios-plugins"
 deps << "nrpe"
 
-# oc-pedant for integration/smoke testing
-deps << "opscode-pedant"
+# oc-chef-pedant for integration/smoke testing
+deps << "oc-chef-pedant"
 
 # partybus and upgrade scripts
 deps << "partybus"

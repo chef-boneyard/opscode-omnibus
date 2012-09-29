@@ -113,8 +113,9 @@ include_recipe "runit"
 
 # Configure Services
 [
-	"drbd",
+  "drbd",
   "couchdb",
+  "varnish",
   "rabbitmq",
   "postgresql",
   "mysql",
@@ -133,6 +134,7 @@ include_recipe "runit"
   "nagios",
   "nrpe",
   "nginx",
+  "varnish",
 	"keepalived"
 ].each do |service|
   if node["private_chef"][service]["enable"]
@@ -143,7 +145,7 @@ include_recipe "runit"
 end
 
 include_recipe "private-chef::orgmapper"
-include_recipe "private-chef::opscode-pedant"
+include_recipe "private-chef::oc-chef-pedant"
 include_recipe "private-chef::log_cleanup"
 include_recipe "private-chef::partybus"
 

@@ -35,8 +35,6 @@ default['private_chef']['couchdb']['data_dir'] = "/var/opt/opscode/couchdb/db"
 default['private_chef']['couchdb']['log_directory'] = "/var/log/opscode/couchdb"
 default['private_chef']['couchdb']['svlogd_size'] = 1000000
 default['private_chef']['couchdb']['svlogd_num'] = 10
-# The port to listen on
-default['private_chef']['couchdb']['port'] = 5984
 # The IP Address to bind on - use 0.0.0.0 for everything
 default['private_chef']['couchdb']['bind_address'] = '127.0.0.1'
 # The VIP
@@ -50,6 +48,18 @@ default['private_chef']['couchdb']['batch_save_size'] = 1000
 default['private_chef']['couchdb']['batch_save_interval'] = 1000
 default['private_chef']['couchdb']['log_level'] = 'error'
 default['private_chef']['couchdb']['reduce_limit'] = 'false'
+
+# The port other services expect Couch to be on -- couch is hardcoded
+# at 5984 and varnish is at 6984, so set this to 5984 for direct Couch,
+# or 6984 to go through Varnish.
+default['private_chef']['couchdb']['port'] = 6984
+
+####
+# Varnish
+####
+default['private_chef']['varnish']['enable'] = true
+default['private_chef']['varnish']['log_directory'] = "/var/log/opscode/varnish"
+default['private_chef']['varnish']['dir'] = "/var/opt/opscode/varnish"
 
 ####
 # RabbitMQ
@@ -134,6 +144,7 @@ default['private_chef']['bookshelf']['svlogd_num'] = 10
 default['private_chef']['bookshelf']['vip'] = '127.0.0.1'
 default['private_chef']['bookshelf']['listen'] = '127.0.0.1'
 default['private_chef']['bookshelf']['port'] = 4321
+default['private_chef']['bookshelf']['stream_download'] = true
 default['private_chef']['bookshelf']['access_key_id'] = "generated-by-default"
 default['private_chef']['bookshelf']['secret_access_key'] = "generated-by-default"
 
@@ -152,10 +163,10 @@ default['private_chef']['opscode-chef']['proxy_user'] = "pivotal"
 default['private_chef']['opscode-chef']['environment'] = 'privatechef'
 default['private_chef']['opscode-chef']['url'] = "http://127.0.0.1:9460"
 default['private_chef']['opscode-chef']['upload_vip'] = "127.0.0.1"
-default['private_chef']['opscode-chef']['upload_port'] = 9460
+default['private_chef']['opscode-chef']['upload_port'] = 8000
 default['private_chef']['opscode-chef']['upload_proto'] = "http"
 default['private_chef']['opscode-chef']['upload_internal_vip'] = "127.0.0.1"
-default['private_chef']['opscode-chef']['upload_internal_port'] = 9460
+default['private_chef']['opscode-chef']['upload_internal_port'] = 8000
 default['private_chef']['opscode-chef']['upload_internal_proto'] = "http"
 default['private_chef']['opscode-chef']['vip'] = "127.0.0.1"
 default['private_chef']['opscode-chef']['port'] = 9460
@@ -188,6 +199,8 @@ default['private_chef']['opscode-erchef']['max_cache_size'] = '10000'
 default['private_chef']['opscode-erchef']['cache_ttl'] = '3600'
 default['private_chef']['opscode-erchef']['db_pool_size'] = '20'
 default['private_chef']['opscode-erchef']['couchdb_max_conn'] = '100'
+default['private_chef']['opscode-erchef']['ibrowse_max_sessions'] = 256
+default['private_chef']['opscode-erchef']['ibrowse_max_pipeline_size'] = 1
 default['private_chef']['opscode-erchef']['s3_bucket'] = 'bookshelf'
 
 ####
@@ -371,6 +384,11 @@ default['private_chef']['opscode-authz']['vip'] = '127.0.0.1'
 default['private_chef']['opscode-authz']['superuser_id'] = '5ca1ab1ef005ba111abe11eddecafbad'
 default['private_chef']['opscode-authz']['couchdb_max_conn'] = '100'
 
+default['private_chef']['opscode-authz']['skip_cookbooks'] = false
+default['private_chef']['opscode-authz']['skip_data'] = false
+default['private_chef']['opscode-authz']['skip_depsolver'] = false
+default['private_chef']['opscode-authz']['skip_roles'] = false
+
 ###
 # Opscode Certificate
 ###
@@ -407,12 +425,12 @@ default['private_chef']['dark_launch']["quick_start"] = false
 default['private_chef']['dark_launch']["new_theme"] = true
 default['private_chef']['dark_launch']["private-chef"] = true
 default['private_chef']['dark_launch']["sql_users"] = true
-default['private_chef']['dark_launch']["couchdb_roles"] = true
-default['private_chef']['dark_launch']["couchdb_data"] = true
-default['private_chef']['dark_launch']["couchdb_cookbooks"] = true
-default['private_chef']['dark_launch']["couchdb_checksums"] = true
-default['private_chef']['dark_launch']["couchdb_environments"] = true
+default['private_chef']['dark_launch']["couchdb_roles"] = false
+default['private_chef']['dark_launch']["couchdb_data"] = false
+default['private_chef']['dark_launch']["couchdb_cookbooks"] = false
+default['private_chef']['dark_launch']["couchdb_checksums"] = false
 default['private_chef']['dark_launch']["couchdb_clients"] = true
+default['private_chef']['dark_launch']["couchdb_environments"] = false
 default['private_chef']['dark_launch']["add_type_and_bag_to_items"] = true
 
 ###
