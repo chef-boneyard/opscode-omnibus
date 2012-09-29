@@ -1,7 +1,7 @@
 name "varnish"
 version "3.0.3"
 
-dependencies ["pcre"]
+dependencies ["pcre", "ncurses"]
 
 source :url => "http://repo.varnish-cache.org/source/varnish-3.0.3.tar.gz",
        :md5 => "714310c83fdbd2061d897dacd3f63d8b"
