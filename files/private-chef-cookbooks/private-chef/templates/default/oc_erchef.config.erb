@@ -25,8 +25,6 @@
               %% how many nodes are deserialized at a time in
               %% preparing a response.
               {bulk_fetch_batch_size, <%= @bulk_fetch_batch_size %>},
-              {estatsd_server, "<%= node['private_chef']['estatsd']['vip'] %>"},
-              {estatsd_port, <%= node['private_chef']['estatsd']['port'] %>},
               {authz_skip_depsolver, <%= node['private_chef']['opscode-authz']['skip_depsolver'] %>},
               {authz_skip_data, <%= node['private_chef']['opscode-authz']['skip_data'] %>},
               {authz_skip_cookbooks, <%= node['private_chef']['opscode-authz']['skip_cookbooks'] %>},
@@ -70,8 +68,8 @@
                  ]},
   {stats_hero, [
                {udp_socket_pool_size, 1 },
-               {estatsd_host, "127.0.0.1" },
-               {estatsd_port, 5665 }
+               {estatsd_server, "<%= node['private_chef']['estatsd']['vip'] %>"},
+               {estatsd_port, <%= node['private_chef']['estatsd']['port'] %>},
               ]},
   {sqerl, [
            %% The database system you are using (e.g., mysql, pgsql)
