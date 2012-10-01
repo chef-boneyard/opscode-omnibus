@@ -1,15 +1,15 @@
 name "postgresql"
-version "9.1.2"
+version "9.1.6"
 
 dependencies ["zlib",
               "openssl",
               "readline",
               "ncurses"]
 
-source :url => "http://ftp.postgresql.org/pub/source/v9.1.2/postgresql-9.1.2.tar.gz",
-       :md5 => "fe01293f96e04da9879840b1996a3d2c"
+source :url => "http://ftp.postgresql.org/pub/source/v9.1.6/postgresql-9.1.6.tar.gz",
+       :md5 => "d04593edd0c0b724a8eaad91bf4d7093"
 
-relative_path "postgresql-9.1.2"
+relative_path "postgresql-9.1.6"
 
 configure_env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
@@ -18,7 +18,7 @@ configure_env = {
 }
 
 build do
-  patch :source => 'postgresql-9.1.2-configure-ncurses-fix.patch'
+  patch :source => 'postgresql-9.1.6-configure-ncurses-fix.patch'
   command ["./configure",
            "--prefix=#{install_dir}/embedded",
            "--with-openssl --with-includes=#{install_dir}/embedded/include",
