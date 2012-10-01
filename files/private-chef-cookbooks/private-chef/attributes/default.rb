@@ -381,10 +381,11 @@ default['private_chef']['opscode-authz']['vip'] = '127.0.0.1'
 default['private_chef']['opscode-authz']['superuser_id'] = '5ca1ab1ef005ba111abe11eddecafbad'
 default['private_chef']['opscode-authz']['couchdb_max_conn'] = '100'
 
-default['private_chef']['opscode-authz']['skip_cookbooks'] = false
-default['private_chef']['opscode-authz']['skip_data'] = false
-default['private_chef']['opscode-authz']['skip_depsolver'] = false
-default['private_chef']['opscode-authz']['skip_roles'] = false
+default['private_chef']['opscode-authz']['custom_acls_always_for_modification'] = true
+default['private_chef']['opscode-authz']['custom_acls_cookbooks'] = true
+default['private_chef']['opscode-authz']['custom_acls_data'] = true
+default['private_chef']['opscode-authz']['custom_acls_depsolver'] = true
+default['private_chef']['opscode-authz']['custom_acls_roles'] = true
 
 ###
 # Opscode Certificate
