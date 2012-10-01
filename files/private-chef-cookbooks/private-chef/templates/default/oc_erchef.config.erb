@@ -25,6 +25,8 @@
               %% how many nodes are deserialized at a time in
               %% preparing a response.
               {bulk_fetch_batch_size, <%= @bulk_fetch_batch_size %>},
+              {estatsd_server, "<%= node['private_chef']['estatsd']['vip'] %>"},
+              {estatsd_port, <%= node['private_chef']['estatsd']['port'] %>},
               {superusers, [<<"pivotal">>]}
              ]},
   {chef_wm, [
