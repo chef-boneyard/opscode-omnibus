@@ -27,6 +27,10 @@
               {bulk_fetch_batch_size, <%= @bulk_fetch_batch_size %>},
               {estatsd_server, "<%= node['private_chef']['estatsd']['vip'] %>"},
               {estatsd_port, <%= node['private_chef']['estatsd']['port'] %>},
+              {authz_skip_depsolver, <%= node['private_chef']['opscode-authz']['skip_depsolver'] %>},
+              {authz_skip_data, <%= node['private_chef']['opscode-authz']['skip_data'] %>},
+              {authz_skip_cookbooks, <%= node['private_chef']['opscode-authz']['skip_cookbooks'] %>},
+              {authz_skip_roles, <%= node['private_chef']['opscode-authz']['skip_roles'] %>},
               {superusers, [<<"pivotal">>]}
              ]},
   {chef_wm, [
