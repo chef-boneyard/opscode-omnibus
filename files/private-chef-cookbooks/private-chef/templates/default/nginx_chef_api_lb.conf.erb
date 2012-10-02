@@ -40,18 +40,10 @@
       alias /opt/opscode/docs;
     }
 
-    # bookshelf with optional cookbook file caching on nginx
-    <%- if node['private_chef']['lb']['cache_cookbook_files'] -%>
-    location ~ "/<%= node['private_chef']['opscode-erchef']['s3_bucket'] %>/{0,1}.*$" {
-      proxy_pass http://bookshelf;
-      proxy_cache webui-cache;
-      proxy_cache_valid 200 300m;
-    }
-    <%- else -%>
+    # bookshelf
     location ~ "/<%= node['private_chef']['opscode-erchef']['s3_bucket'] %>/{0,1}.*$" {
       proxy_pass http://bookshelf;
     }
-    <%- end -%>
 
     # object ACL requests go to opscode-account service
     <%= @helper.account_api("^/organizations/[a-z0-9\-_]+?/.*?/_acl.*$", :account) %>
