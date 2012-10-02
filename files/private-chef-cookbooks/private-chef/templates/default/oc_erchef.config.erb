@@ -65,8 +65,8 @@
                   {s3_platform_bucket_name, "<%= node['private_chef']['opscode-erchef']['s3_bucket'] %>"}
                  ]},
   {stats_hero, [
-               %% Set sender pool size to DB max_connections to avoid contention
-               {udp_socket_pool_size, <%= node['private_chef']['postgresql']['max_connections'] %> },
+               %% Set sender pool size to DB pool size to avoid contention
+               {udp_socket_pool_size, <%= node['private_chef']['opscode-erchef']['db_pool_size'] %> },
                {estatsd_host, "<%= node['private_chef']['estatsd']['vip'] %>"},
                {estatsd_port, <%= node['private_chef']['estatsd']['port'] %>}
               ]},
