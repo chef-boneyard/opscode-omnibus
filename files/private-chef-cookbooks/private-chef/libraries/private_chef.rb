@@ -232,6 +232,7 @@ module PrivateChef
       PrivateChef['opscode_chef']['sandbox_path'] ||= "/var/opt/opscode/drbd/data/opscode-chef/sandbox"
       PrivateChef['opscode_chef']['checksum_path'] ||= "/var/opt/opscode/drbd/data/opscode-chef/checksum"
       PrivateChef["couchdb"]["data_dir"] ||= "/var/opt/opscode/drbd/data/couchdb"
+      PrivateChef['bookshelf']['data_dir'] = "/var/opt/opscode/drbd/data/bookshelf"
       PrivateChef["rabbitmq"]["data_dir"] ||= "/var/opt/opscode/drbd/data/rabbitmq"
       PrivateChef["opscode_solr"]["data_dir"] ||= "/var/opt/opscode/drbd/data/opscode-solr"
       PrivateChef["postgresql"]["data_dir"] ||= "/var/opt/opscode/drbd/data/postgresql"
@@ -261,6 +262,7 @@ module PrivateChef
         PrivateChef['servers'][node_name]['cluster_ipaddress'] || PrivateChef['servers'][node_name]['ipaddress']
       PrivateChef["keepalived"]["vrrp_instance_vrrp_unicast_peer"] = PrivateChef['servers'][node_name]['peer_ipaddress']
       PrivateChef["keepalived"]["vrrp_instance_ipaddress_dev"] = backend_vip["device"]
+      PrivateChef["bookshelf"]["ha"] ||= true
       PrivateChef["couchdb"]["ha"] ||= true
       PrivateChef["varnish"]["ha"] ||= true
       PrivateChef["rabbitmq"]["ha"] ||= true
@@ -282,6 +284,7 @@ module PrivateChef
 
     def gen_backend(bootstrap=false)
       PrivateChef[:role] = "backend" #mixlib-config wants a symbol :(
+      PrivateChef["bookshelf"]["listen"] ||= "0.0.0.0"
       PrivateChef["couchdb"]["bind_address"] ||= "0.0.0.0"
       PrivateChef["varnish"]["bind_address"] ||= "0.0.0.0"
       PrivateChef["rabbitmq"]["node_ip_address"] ||= "0.0.0.0"
@@ -302,6 +305,8 @@ module PrivateChef
 
     def gen_frontend
       PrivateChef[:role] = "frontend"
+      PrivateChef["bookshelf"]["enable"] ||= false
+      PrivateChef["bookshelf"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["couchdb"]["enable"] ||= false
       PrivateChef["couchdb"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["varnish"]["enable"] ||= false
@@ -322,6 +327,8 @@ module PrivateChef
       PrivateChef["opscode_chef"]["upload_internal_vip"] ||= PrivateChef['backend_vips']['ipaddress']
       PrivateChef["opscode_chef"]["upload_internal_port"] ||= 9680
       PrivateChef["lb"]["cache_cookbook_files"] ||= true
+      PrivateChef["lb"]["upstream"] = Mash.new
+      PrivateChef["lb"]["upstream"]["bookshelf"] ||= [ PrivateChef["backend_vips"]["ipaddress"] ]
       PrivateChef["nagios"]["enable"] ||= false
       PrivateChef["bootstrap"]["enable"] = false
     end
