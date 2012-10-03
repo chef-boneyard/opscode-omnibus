@@ -149,9 +149,9 @@ default['private_chef']['bookshelf']['access_key_id'] = "generated-by-default"
 default['private_chef']['bookshelf']['secret_access_key'] = "generated-by-default"
 
 ####
-# Legacy Chef Server API -- Disabled by default
+# Chef Server API
 ####
-default['private_chef']['opscode-chef']['enable'] = false
+default['private_chef']['opscode-chef']['enable'] = true
 default['private_chef']['opscode-chef']['ha'] = false
 default['private_chef']['opscode-chef']['dir'] = "/var/opt/opscode/opscode-chef"
 default['private_chef']['opscode-chef']['log_directory'] = "/var/log/opscode/opscode-chef"
@@ -163,10 +163,10 @@ default['private_chef']['opscode-chef']['proxy_user'] = "pivotal"
 default['private_chef']['opscode-chef']['environment'] = 'privatechef'
 default['private_chef']['opscode-chef']['url'] = "http://127.0.0.1:9460"
 default['private_chef']['opscode-chef']['upload_vip'] = "127.0.0.1"
-default['private_chef']['opscode-chef']['upload_port'] = 8000
+default['private_chef']['opscode-chef']['upload_port'] = 9460
 default['private_chef']['opscode-chef']['upload_proto'] = "http"
 default['private_chef']['opscode-chef']['upload_internal_vip'] = "127.0.0.1"
-default['private_chef']['opscode-chef']['upload_internal_port'] = 8000
+default['private_chef']['opscode-chef']['upload_internal_port'] = 9460
 default['private_chef']['opscode-chef']['upload_internal_proto'] = "http"
 default['private_chef']['opscode-chef']['vip'] = "127.0.0.1"
 default['private_chef']['opscode-chef']['port'] = 9460
@@ -236,7 +236,6 @@ default['private_chef']['lb']['api_fqdn'] = node['fqdn']
 default['private_chef']['lb']['web_ui_fqdn'] = node['fqdn']
 default['private_chef']['lb']['cache_cookbook_files'] = false
 default['private_chef']['lb']['debug'] = false
-default['private_chef']['lb']['upstream']['opscode-chef'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-erchef'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-account'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-webui'] = [ "127.0.0.1" ]
@@ -588,7 +587,6 @@ default['private_chef']['keepalived']['service_order'] = [
   { "key" => "opscode-expander", "service_name" => "opscode-expander" },
   { "key" => "opscode-expander", "service_name" => "opscode-expander-reindexer" },
   { "key" => "opscode-org-creator", "service_name" => "opscode-org-creator" },
-  { "key" => "opscode-chef", "service_name" => "opscode-chef" },
   { "key" => "opscode-erchef", "service_name" => "opscode-erchef" },
   { "key" => "opscode-webui", "service_name" => "opscode-webui" },
   { "key" => "nagios", "service_name" => "php-fpm" },
@@ -616,7 +614,6 @@ default['private_chef']['logs']['log_retention'] = {
   "opscode-solr" => 14,
   "opscode-expander" => 14,
   "opscode-org-creator" => 14,
-  "opscode-chef" => 14,
   "opscode-erchef" => 14,
   "opscode-webui" => 14,
   "nagios" => 14,
