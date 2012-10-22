@@ -64,6 +64,7 @@
     <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/_status/{0,1}.*$") %>
     <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/cookbooks/{0,1}.*$") %>
     <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/sandboxes/{0,1}.*$") %>
+    <%= @helper.chef_api("^/_status") %>
 
     # opscode-account service endpoints
     <%= @helper.account_api("^/organizations/[a-z0-9\-_]+?/clients/{0,1}.*$", 'couchdb_clients') %>
