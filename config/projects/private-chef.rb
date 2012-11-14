@@ -13,20 +13,10 @@ deps << "chef-pc"
 deps << "private-chef-cookbooks"
 deps << "private-chef-administration"
 deps << "private-chef-scripts"
-deps << "nginx"
-deps << "runit"
-deps << "unicorn"
 
 # the backend
-deps << "couchdb"
-deps << "postgresql"
-deps << "redis"
-deps << "rabbitmq"
-deps << "opscode-solr"
 deps << "opscode-expander"
 deps << "chef-sql-schema" # needed to migrate the DB.
-deps << "keepalived"
-deps << "bookshelf"
 
 # the front-end services
 deps << "oc_erchef"
@@ -38,11 +28,8 @@ deps << "opscode-org-creator"
 deps << "opscode-certificate"
 deps << "opscode-platform-debug"
 deps << "opscode-test"
-deps << "mysql2"
 
 # monitoring
-deps << "nagios"
-deps << "nagios-plugins"
 deps << "opscode-nagios-plugins"
 deps << "nrpe"
 
