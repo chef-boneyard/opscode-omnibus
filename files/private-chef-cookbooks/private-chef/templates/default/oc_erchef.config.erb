@@ -30,6 +30,7 @@
               {superusers, [<<"pivotal">>]}
              ]},
   {chef_wm, [
+             {server_version, "<%= node['private_chef']['version'] %>"},
              {health_ping_timeout, 400},
              {health_ping_modules, [chef_authz, chef_otto, chef_sql, chef_solr]}
             ]},
