@@ -17,8 +17,11 @@
                          {file_size, 50}]]}
             ]},
  {oc_chef_wm, [
-              {ip, "<%= @listen %>"},
-              {port, <%= @port %>},
+               {api_version, "<%= node['private_chef']['api_version'] %>"},
+               {server_flavor, "<%= node['private_chef']['flavor'] %>"},
+
+               {ip, "<%= @listen %>"},
+               {port, <%= @port %>},
               {reqid_header_name, "X-Request-Id"},
               {auth_skew, <%= @auth_skew %>},
               %% currently only used by the search endpoint to bound
