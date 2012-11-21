@@ -17,8 +17,11 @@
                          {file_size, 50}]]}
             ]},
  {oc_chef_wm, [
-              {ip, "<%= @listen %>"},
-              {port, <%= @port %>},
+               {api_version, "<%= node['private_chef']['api_version'] %>"},
+               {server_flavor, "<%= node['private_chef']['flavor'] %>"},
+
+               {ip, "<%= @listen %>"},
+               {port, <%= @port %>},
               {reqid_header_name, "X-Request-Id"},
               {auth_skew, <%= @auth_skew %>},
               %% currently only used by the search endpoint to bound
@@ -30,6 +33,7 @@
               {superusers, [<<"pivotal">>]}
              ]},
   {chef_wm, [
+             {server_version, "<%= node['private_chef']['version'] %>"},
              {health_ping_timeout, 400},
              {health_ping_modules, [chef_authz, chef_otto, chef_sql, chef_solr]}
             ]},
@@ -80,7 +84,7 @@
            {db_pass, "<%= node['private_chef'][node['private_chef']['database_type']]['sql_password'] %>"},
            {db_name, "opscode_chef" },
 
-           {prepared_statements, {chef_sql, statements, [<%= node['private_chef']['database_type'] == "postgresql" ? "pgsql" : "mysql" %>]}},
+           {prepared_statements, {chef_sql, opc_statements, [<%= node['private_chef']['database_type'] == "postgresql" ? "pgsql" : "mysql" %>]}},
            {column_transforms,
            <%-if node['private_chef']['database_type'] == "mysql" %>
                               [{<<"frozen">>,
