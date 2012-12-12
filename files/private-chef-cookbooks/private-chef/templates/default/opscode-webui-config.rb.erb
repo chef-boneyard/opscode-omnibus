@@ -5,7 +5,7 @@ Chef::Config[:chef_server_host_uri]  = 'http://<%= node['private_chef']['lb_inte
 Chef::Config[:web_ui_proxy_user]     = 'pivotal'
 Chef::Config[:web_ui_private_key]    = '/etc/opscode/webui_priv.pem'
 Chef::Config[:job_worker_public_key] = '/etc/opscode/worker-public.pem'
-Chef::Config[:google_analytics_id]   = ''
+Chef::Config[:google_analytics_id]   = false
 
 ##
 ## TODO: the chargify config values are environment dependent - set the environments up with chargify
@@ -68,5 +68,3 @@ OpscodeWebui::Application.configure do
 
 
 end
-
-
