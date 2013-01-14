@@ -55,10 +55,10 @@
             {erchef_base_url, "https://localhost"}
                ]},
   {stats_hero, [
-                 {udp_socket_pool_size, 1 },
-                 {estatsd_host, "127.0.0.1" },
-                 {estatsd_port, 5665 }
-                ]},
+               {udp_socket_pool_size, <%= node['private_chef']['postgresql']['max_connections'] %> },
+               {estatsd_host, "<%= node['private_chef']['estatsd']['vip'] %>"},
+               {estatsd_port, <%= node['private_chef']['estatsd']['port'] %>}
+               ]},
   {sqerl, [
              %% The database system you are using (e.g., mysql, pgsql)
              {db_type, <%= node['private_chef']['database_type'] == "postgresql" ? "pgsql" : "mysql" %> },
