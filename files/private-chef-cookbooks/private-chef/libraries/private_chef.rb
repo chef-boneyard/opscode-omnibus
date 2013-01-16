@@ -40,6 +40,7 @@ module PrivateChef
   nrpe Mash.new
   nginx Mash.new
   opscode_reporting Mash.new
+  opscode_tsdbd Mash.new
   log_retention Mash.new
   log_rotation Mash.new
 
@@ -191,7 +192,8 @@ module PrivateChef
         "nginx",
         "ldap",
         "user",
-        "opscode_reporting"
+        "opscode_reporting",
+        "opscode_tsdbd"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['private_chef'][rkey] = PrivateChef[key]

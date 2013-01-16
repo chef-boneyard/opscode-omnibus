@@ -655,7 +655,7 @@ default['private_chef']['upgrades']['dir'] = "/var/opt/opscode/upgrades"
 ####
 # Opscode Reporting
 ####
-default['private_chef']['opscode-reporting']['enable'] = false
+default['private_chef']['opscode-reporting']['enable'] = true
 default['private_chef']['opscode-reporting']['dir'] = "/var/opt/opscode/opscode-reporting"
 default['private_chef']['opscode-reporting']['log_directory'] = "/var/log/opscode/opscode-reporting"
 default['private_chef']['opscode-reporting']['listen'] = '127.0.0.1'
@@ -670,3 +670,13 @@ default['private_chef']['opscode-reporting']['cache_ttl'] = '3600'
 default['private_chef']['opscode-reporting']['node_search_limit'] = 50
 default['private_chef']['opscode-reporting']['summary_only_percentage'] = 0.9
 default['private_chef']['opscode-reporting']['summary_client_min_version'] = "10.16.0"
+
+####
+# Opscode tsdbd
+####
+default['private_chef']['opscode-tsdbd']['enable'] = true
+default['private_chef']['opscode-tsdbd']['dir'] = "/var/opt/opscode/opscode-tsdbd"
+default['private_chef']['opscode-tsdbd']['log_directory'] = "/var/log/opscode/opscode-tsdbd"
+default['private_chef']['opscode-tsdbd']['port'] = 8123
+default['private_chef']['opscode-tsdbd']['graphite_host'] = "localhost"
+default['private_chef']['opscode-tsdbd']['graphite_port'] = 2003

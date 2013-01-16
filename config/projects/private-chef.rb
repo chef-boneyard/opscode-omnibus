@@ -32,6 +32,7 @@ deps << "bookshelf"
 # the front-end services
 deps << "oc_erchef"
 deps << "opscode-reporting"
+deps << "opscode-tsdbd"
 deps << "opscode-chef"
 deps << "opscode-account"
 deps << "opscode-webui"
