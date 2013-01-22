@@ -52,7 +52,7 @@
             {rabbitmq_vhost, <<"<%= node['private_chef']['rabbitmq']['reports_vhost'] %>">>},
             {stats_hero_app_name, <<"reportingAPI">>},
             {chef_base_url, "https://localhost"},
-            {erchef_base_url, "https://localhost"}
+            {erchef_base_url, "http://localhost:<%= node['private_chef']['opscode-erchef']['port'] %>"}
                ]},
   {stats_hero, [
                {udp_socket_pool_size, <%= node['private_chef']['postgresql']['max_connections'] %> },
