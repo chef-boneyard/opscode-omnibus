@@ -1,5 +1,5 @@
 name "opscode-tsdbd"
-version "v0.0.2"
+version "v0.0.3"
 
 dependencies ["erlang", "rebar", "rsync"]
 
