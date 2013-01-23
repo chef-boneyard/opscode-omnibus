@@ -655,7 +655,7 @@ default['private_chef']['upgrades']['dir'] = "/var/opt/opscode/upgrades"
 ####
 # Opscode Reporting
 ####
-default['private_chef']['opscode-reporting']['enable'] = true
+default['private_chef']['opscode-reporting']['enable'] = false
 default['private_chef']['opscode-reporting']['dir'] = "/var/opt/opscode/opscode-reporting"
 default['private_chef']['opscode-reporting']['log_directory'] = "/var/log/opscode/opscode-reporting"
 default['private_chef']['opscode-reporting']['listen'] = '127.0.0.1'
