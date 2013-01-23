@@ -52,9 +52,9 @@
             {rabbitmq_vhost, <<"<%= node['private_chef']['rabbitmq']['reports_vhost'] %>">>},
             {stats_hero_app_name, <<"reportingAPI">>},
             {chef_base_url, "https://localhost"},
-            {erchef_base_url, "http://localhost:<%= node['private_chef']['opscode-erchef']['port'] %>"}
+            {erchef_base_url, "https://localhost"}
                ]},
-  {tsdb, [{graphite_url, "http://localhost:8080/render?rawData=true"}]},
+  {tsdb, [{graphite_url, "http://<%= node['private_chef']['opscode-reporting']['graphite_host'] %>:<%= node['private_chef']['opscode-reporting']['graphite_port'] %>"}]},
   {stats_hero, [
                {udp_socket_pool_size, <%= node['private_chef']['postgresql']['max_connections'] %> },
                {estatsd_host, "<%= node['private_chef']['estatsd']['vip'] %>"},
