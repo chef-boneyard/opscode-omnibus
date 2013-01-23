@@ -1,5 +1,5 @@
 name "opscode-reporting"
-version "tsdb" 
+version "rel-1.1.2"
 
 dependencies ["erlang", "rsync", "rebar"]
 
