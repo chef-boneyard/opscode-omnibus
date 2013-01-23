@@ -30,7 +30,13 @@
               {bulk_fetch_batch_size, <%= @bulk_fetch_batch_size %>},
               {superusers, [<<"pivotal">>]},
               %% metrics config
-              {root_metric_key, "<%= @root_metric_key %>"}
+              {root_metric_key, "<%= @root_metric_key %>"},
+              %% search cache
+              {eredis_client_pool_size, <%= @eredis_client_pool_size %>},
+              {redis_host, "<%= node['private_chef']['redis']['vip'] %>"},
+              {redis_port, <%= node['private_chef']['redis']['port'] %>},
+              {redis_db, <%= @redis_db %>},
+              {search_cache_entry_ttl, <%= @search_cache_entry_ttl %>}
              ]},
   {chef_wm, [
              {server_version, "<%= node['private_chef']['version'] %>"},
