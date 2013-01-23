@@ -670,6 +670,8 @@ default['private_chef']['opscode-reporting']['cache_ttl'] = '3600'
 default['private_chef']['opscode-reporting']['node_search_limit'] = 50
 default['private_chef']['opscode-reporting']['summary_only_percentage'] = 0.9
 default['private_chef']['opscode-reporting']['summary_client_min_version'] = "10.16.0"
+default['private_chef']['opscode-reporting']['graphite_host'] = "localhost"
+default['private_chef']['opscode-reporting']['graphite_port'] = 8080
 
 ####
 # Opscode tsdbd
