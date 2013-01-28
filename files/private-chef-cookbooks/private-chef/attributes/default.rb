@@ -443,7 +443,7 @@ default['private_chef']['dark_launch']["couchdb_checksums"] = true
 default['private_chef']['dark_launch']["couchdb_environments"] = true
 default['private_chef']['dark_launch']["couchdb_clients"] = true
 default['private_chef']['dark_launch']["add_type_and_bag_to_items"] = true
-default['private_chef']['dark_launch']["node_run_history"] = false
+default['private_chef']['dark_launch']["node_run_history"] = true
 ###
 # Opscode Account
 ###
@@ -466,6 +466,8 @@ default['private_chef']['opscode-account']['worker_timeout'] = 3600
 default['private_chef']['opscode-account']['validation_client_name'] = "chef"
 default['private_chef']['opscode-account']['umask'] = "0022"
 default['private_chef']['opscode-account']['worker_processes'] = node['cpu']['total'].to_i
+
+
 
 ###
 # Opscode Test
@@ -623,7 +625,8 @@ default['private_chef']['logs']['log_retention'] = {
   "opscode-erchef" => 14,
   "opscode-webui" => 14,
   "nagios" => 14,
-  "nginx" => 14
+  "nginx" => 14,
+  "opscode-reporting" => 14
 }
 
 default['private_chef']['logs']['log_rotation'] = {
@@ -652,3 +655,34 @@ default['private_chef']['ldap'] = nil
 # Upgrades/Partybus
 ##
 default['private_chef']['upgrades']['dir'] = "/var/opt/opscode/upgrades"
+
+
+####
+# Opscode Reporting
+####
+default['private_chef']['opscode-reporting']['enable'] = true
+default['private_chef']['opscode-reporting']['dir'] = "/var/opt/opscode/opscode-reporting"
+default['private_chef']['opscode-reporting']['log_directory'] = "/var/log/opscode/opscode-reporting"
+default['private_chef']['opscode-reporting']['listen'] = '127.0.0.1'
+default['private_chef']['opscode-reporting']['port'] = 10010
+default['private_chef']['opscode-reporting']['db_pool_max_count'] = 20
+default['private_chef']['opscode-reporting']['db_pool_init_count'] = 5
+default['private_chef']['opscode-reporting']['node_run_worker_count'] = 5
+default['private_chef']['opscode-reporting']['node_run_init_sender_count'] = 5
+default['private_chef']['opscode-reporting']['node_run_max_sender_count'] = 20
+default['private_chef']['opscode-reporting']['max_cache_size'] = '10000'
+default['private_chef']['opscode-reporting']['cache_ttl'] = '3600'
+default['private_chef']['opscode-reporting']['node_search_limit'] = 50
+default['private_chef']['opscode-reporting']['summary_only_percentage'] = 0.9
+default['private_chef']['opscode-reporting']['summary_client_min_version'] = "10.16.0"
+
+####
+# Opscode tsdbd
+####
+default['private_chef']['opscode-tsdbd']['enable'] = true
+default['private_chef']['opscode-tsdbd']['dir'] = "/var/opt/opscode/opscode-tsdbd"
+default['private_chef']['opscode-tsdbd']['log_directory'] = "/var/log/opscode/opscode-tsdbd"
+default['private_chef']['opscode-tsdbd']['port'] = 8123
+default['private_chef']['opscode-tsdbd']['graphite_host'] = "localhost"
+default['private_chef']['opscode-tsdbd']['graphite_port'] = 2003
+
