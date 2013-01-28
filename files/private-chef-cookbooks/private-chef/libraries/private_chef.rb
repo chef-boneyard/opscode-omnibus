@@ -42,6 +42,8 @@ module PrivateChef
   nginx Mash.new
   log_retention Mash.new
   log_rotation Mash.new
+  opscode_reporting Mash.new
+  opscode_tsdbd Mash.new
 
   servers Mash.new
   backend_vips Mash.new
@@ -191,7 +193,9 @@ module PrivateChef
         "estatsd",
         "nginx",
         "ldap",
-        "user"
+        "user",
+        "opscode_reporting",
+        "opscode_tsdbd"
       ].each do |key|
         rkey = key.gsub('_', '-')
         results['private_chef'][rkey] = PrivateChef[key]
