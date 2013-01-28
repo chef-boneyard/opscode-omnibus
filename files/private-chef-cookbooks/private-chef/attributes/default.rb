@@ -236,6 +236,8 @@ default['private_chef']['lb']['upstream']['opscode-webui'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-authz'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-solr'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['bookshelf'] = [ "127.0.0.1" ]
+default['private_chef']['lb']['upstream']['opscode-reporting'] = [ "127.0.0.1" ]
+
 default['private_chef']['lb_internal']['enable'] = true
 default['private_chef']['lb_internal']['vip'] = "127.0.0.1"
 default['private_chef']['lb_internal']['chef_port'] = 9680
@@ -657,6 +659,7 @@ default['private_chef']['upgrades']['dir'] = "/var/opt/opscode/upgrades"
 # Opscode Reporting
 ####
 default['private_chef']['opscode-reporting']['enable'] = true
+default['private_chef']['opscode-reporting']['ha'] = false
 default['private_chef']['opscode-reporting']['dir'] = "/var/opt/opscode/opscode-reporting"
 default['private_chef']['opscode-reporting']['log_directory'] = "/var/log/opscode/opscode-reporting"
 default['private_chef']['opscode-reporting']['listen'] = '127.0.0.1'

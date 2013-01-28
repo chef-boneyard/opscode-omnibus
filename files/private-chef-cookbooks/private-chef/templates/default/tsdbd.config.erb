@@ -1,0 +1,21 @@
+[
+  %% SASL config
+  {sasl, [
+         {sasl_error_logger, {file, "<%= File.join(@log_directory, 'sasl-error.log') %>"}},
+         {errlog_type, error},
+         {error_logger_mf_dir, "<%= File.join(@log_directory, 'sasl') %>"},      % Log directory
+         {error_logger_mf_maxbytes, 104857600},   % 10 MB max file size
+         {error_logger_mf_maxfiles, 5}           % 5 files max
+        ]},
+ {tsdbd, [
+          {tcp_listen_port, <%= @port %>}
+         ]},
+ {folsom_graphite, [
+            {graphite_port, <%= node['private_chef']['opscode-tsdbd']['graphite_port'] %> },
+            {graphite_host, "<%= node['private_chef']['opscode-tsdbd']['graphite_host'] %>" },
+            {flush_interval, 10},
+            {prefix, "tsdbd" },
+            {reset_metrics, true},
+            {append_hostname, false}
+           ]}
+].
