@@ -82,6 +82,10 @@
 
     <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/environments/{0,1}.*$", 'couchdb_environments') %>
 
+    # identifiers endpoint goes to erchef.  Currently only nodes is supported - 
+    # if we expand this, we'll want to revisit this expression. 
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/nodes/[^/]+/_identifiers$") %>
+
     # principals go to erchef
     <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/principals/{0,1}.*$") %>
 
@@ -103,6 +107,10 @@
                               node['private_chef']['opscode-chef']['upload_proto']) %>
 
     <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/status/{0,1}.*$", :ruby) %>
+
+    # opscode reporting endpoints
+    <%= @helper.reporting_api("^/organizations/[a-z0-9\-_]+?/reports/.*$") %>
+    <%= @helper.reporting_api("^/reports/.*$") %>
 
     # opscode-account service endpoints
     <%= @helper.account_api("^/organizations/[a-z0-9\-_]+?/clients/{0,1}.*$", 'couchdb_clients') %>
