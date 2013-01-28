@@ -51,8 +51,8 @@
             {rabbitmq_password, <<"<%= node['private_chef']['rabbitmq']['reports_password'] %>">>},
             {rabbitmq_vhost, <<"<%= node['private_chef']['rabbitmq']['reports_vhost'] %>">>},
             {stats_hero_app_name, <<"reportingAPI">>},
-            {chef_base_url, "https://localhost"},
-            {erchef_base_url, "https://localhost"}
+            {chef_base_url, "https://<%= node['private_chef']['lb']['vip'] %>"},
+            {erchef_base_url, "http://<%= node['private_chef']['opscode-erchef']['listen'] %>:<%= node['private_chef']['opscode-erchef']['port'] %>"}
                ]},
   {stats_hero, [
                {udp_socket_pool_size, <%= node['private_chef']['postgresql']['max_connections'] %> },
