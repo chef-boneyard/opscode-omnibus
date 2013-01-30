@@ -68,7 +68,7 @@
              {db_port, <%= node['private_chef']['database_type'] == "postgresql" ? 5432 : 3306 %>},
              {db_user, "<%= node['private_chef'][node['private_chef']['database_type']]['sql_user'] %>"},
              {db_pass, "<%= node['private_chef'][node['private_chef']['database_type']]['sql_password'] %>"},
-             {db_name, "opscode_chef" },
+             {db_name, "opscode_reporting" },
 
              {prepared_statements, {reporting_sql, statements, [<%= node['private_chef']['database_type'] == "postgresql" ? "pgsql" : "mysql" %>]}},
              {column_transforms, undefined}
