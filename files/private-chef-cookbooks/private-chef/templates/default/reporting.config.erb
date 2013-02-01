@@ -19,6 +19,8 @@
                            {file_size, 50}]]}
               ]},
   {chef_db, [
+             %% TODO: cache_defaults here are unused past oc_reporting/master on 1/31/13.
+             %% Remove when no longer needed.
              {cache_defaults, [{max_size, <%= @max_cache_size %> },
                                  {ttl, <%= @cache_ttl %> }]},
              {couchdb_host, "<%= node['private_chef']['couchdb']['vip'] %>"},
@@ -52,8 +54,10 @@
             {rabbitmq_vhost, <<"<%= node['private_chef']['rabbitmq']['reports_vhost'] %>">>},
             {stats_hero_app_name, <<"reportingAPI">>},
             {chef_base_url, "https://<%= node['private_chef']['lb']['vip'] %>"},
-            {erchef_base_url, "http://<%= node['private_chef']['opscode-erchef']['listen'] %>:<%= node['private_chef']['opscode-erchef']['port'] %>"}
-               ]},
+            {erchef_base_url, "http://<%= node['private_chef']['opscode-erchef']['listen'] %>:<%= node['private_chef']['opscode-erchef']['port'] %>"},
+            {org_guid_cache, [{max_size, <%= @org_cache_size %>}, {ttl, <%= @org_cache_ttl %>}]},
+            {principals_cache, [{max_size, <%= @principals_cache_size %>}, {ttl, <%= @principals_cache_ttl %>}]}
+            ]},
   {stats_hero, [
                {udp_socket_pool_size, <%= node['private_chef']['postgresql']['max_connections'] %> },
                {estatsd_host, "<%= node['private_chef']['estatsd']['vip'] %>"},
