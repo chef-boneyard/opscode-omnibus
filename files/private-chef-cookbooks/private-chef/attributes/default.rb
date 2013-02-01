@@ -673,11 +673,19 @@ default['private_chef']['opscode-reporting']['db_pool_init_count'] = 5
 default['private_chef']['opscode-reporting']['node_run_worker_count'] = 5
 default['private_chef']['opscode-reporting']['node_run_init_sender_count'] = 5
 default['private_chef']['opscode-reporting']['node_run_max_sender_count'] = 20
-default['private_chef']['opscode-reporting']['max_cache_size'] = '10000'
-default['private_chef']['opscode-reporting']['cache_ttl'] = '3600'
 default['private_chef']['opscode-reporting']['node_search_limit'] = 50
 default['private_chef']['opscode-reporting']['summary_only_percentage'] = 0.9
 default['private_chef']['opscode-reporting']['summary_client_min_version'] = "10.16.0"
+# Note: max_cache_size and cache_ttl are unused after reporting master 1/31/13.
+# Remove when no longer needed.
+default['private_chef']['opscode-reporting']['max_cache_size'] = '10000'
+default['private_chef']['opscode-reporting']['cache_ttl'] = '3600'
+# Starting with reporting master 1/31/13 we now have two caches
+default['private_chef']['opscode-reporting']['org_cache_size'] = '10000'
+default['private_chef']['opscode-reporting']['org_ttl'] = '3600' # 1 hour
+default['private_chef']['opscode-reporting']['principals_cache_size'] = '10000'
+default['private_chef']['opscode-reporting']['principals_ttl'] = '600' # 10 min
+
 
 ####
 # Opscode tsdbd
