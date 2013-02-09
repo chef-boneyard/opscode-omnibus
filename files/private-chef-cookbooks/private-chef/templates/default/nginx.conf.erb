@@ -136,7 +136,7 @@ http {
     listen <%= node['private_chef']['lb_internal']['authz_port'] %>;
     server_name <%= node['fqdn'] %>;
 
-		client_max_body_size <%= @client_max_body_size %>;
+    client_max_body_size <%= @client_max_body_size %>;
     proxy_set_header        Host            $host;
     proxy_set_header        X-Real-IP       $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -150,6 +150,10 @@ http {
 
     access_log /var/log/opscode/nginx/internal-authz.access.log opscode;
     error_log  /var/log/opscode/nginx/internal-authz.error.log<%= node['private_chef']['lb']['debug'] ? " debug" : "" %>;
+
+    location ~ ^/(actors|containers|grous|objects)/.*/acl/.* {
+      return 200 "{}";
+    }
 
     location / {
       proxy_pass http://opscode_authz;
