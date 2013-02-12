@@ -686,7 +686,6 @@ default['private_chef']['opscode-reporting']['org_cache_ttl'] = '3600' # 1 hour
 default['private_chef']['opscode-reporting']['principals_cache_size'] = '10000'
 default['private_chef']['opscode-reporting']['principals_cache_ttl'] = '600' # 10 min
 
-
 ####
 # Opscode tsdbd
 ####
