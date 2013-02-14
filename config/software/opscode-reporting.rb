@@ -1,5 +1,5 @@
 name "opscode-reporting"
-version "dev-1.2.4"
+version "dev-1.2.5"
 
 dependencies ["erlang", "rsync", "rebar"]
 

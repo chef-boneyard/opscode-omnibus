@@ -210,7 +210,7 @@ end
   end
 
   execute "migrate_reporting_database" do
-    command "/opt/opscode/embedded/bin/bundle exec /opt/opscode/embedded/bin/rake pg:migrate"
+    command "/opt/opscode/embedded/bin/psql opscode_reporting < pgsql_schema.sql"
     cwd "/opt/opscode/embedded/service/opscode-reporting/db"
     user node['private_chef']['postgresql']['username']
     action :nothing
