@@ -47,6 +47,9 @@
                 ]}
         ]}
   ]},
+  {webmachine, [
+        {webmachine_logger_module, request_logger}
+  ]},
   {reporting, [{server_name, "<%= @server_name %>" },
             {ip, "<%= @listen %>" },
             {port, <%= @port %> },
