@@ -34,6 +34,7 @@ deps << "bookshelf"
 deps << "oc_erchef"
 deps << "opscode-chef"
 deps << "opscode-account"
+deps << "opscode-reporting"
 deps << "opscode-webui"
 deps << "opscode-authz"
 deps << "opscode-org-creator"
@@ -50,6 +51,8 @@ deps << "nrpe"
 
 # oc-chef-pedant for integration/smoke testing
 deps << "oc-chef-pedant"
+
+deps << "oc-reporting-pedant"
 
 # partybus and upgrade scripts
 deps << "partybus"

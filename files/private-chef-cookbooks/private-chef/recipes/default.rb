@@ -131,6 +131,7 @@ include_recipe "runit"
   "opscode-chef",
   "opscode-erchef",
   "opscode-webui",
+  "opscode-reporting",
   "nagios",
   "nrpe",
   "nginx",

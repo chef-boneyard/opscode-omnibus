@@ -198,4 +198,34 @@ execute "grant opscode_chef_ro privileges" do
   action :nothing
 end
 
+# Adding a seperate reporting database.
+
+  database_exists = "/opt/opscode/embedded/bin/chpst -u #{node['private_chef']['postgresql']['username']} /opt/opscode/embedded/bin/psql -d 'template1' -c 'select datname from pg_database' -x|grep opscode_reporting"
+
+  execute "/opt/opscode/embedded/bin/createdb -T template0 -E UTF-8 opscode_reporting" do
+    user node['private_chef']['postgresql']['username']
+    not_if database_exists
+    retries 30
+    notifies :run, "execute[migrate_reporting_database]", :immediately
+  end
+
+  execute "migrate_reporting_database" do
+    command "/opt/opscode/embedded/bin/psql opscode_reporting < pgsql_schema.sql"
+    cwd "/opt/opscode/embedded/service/opscode-reporting/db"
+    user node['private_chef']['postgresql']['username']
+    action :nothing
+  end
+
+  execute "grant opscode_reporting privileges" do
+    command "/opt/opscode/embedded/bin/psql -d 'opscode_reporting' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_reporting TO #{node['private_chef']['postgresql']['sql_user']}\""
+    user node['private_chef']['postgresql']['username']
+    action :nothing
+  end
+
+  execute "grant opscode_reporting_ro privileges" do
+    command "/opt/opscode/embedded/bin/psql -d 'opscode_reporting' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_reporting TO #{node['private_chef']['postgresql']['sql_ro_user']}\""
+    user node['private_chef']['postgresql']['username']
+    action :nothing
+  end
+
 add_nagios_hostgroup("postgresql")
