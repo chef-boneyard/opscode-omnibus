@@ -38,6 +38,15 @@
   {chef_index, [
                   {solr_url, "http://<%= node['private_chef']['opscode-solr']['vip'] %>:<%= node['private_chef']['opscode-solr']['port'] %>/solr"}
                  ]},
+  {lager, [
+        {handlers, [
+                {lager_console_backend, [warning, {lager_default_formatter, [module, ":", function, "#", line, " [", severity, "] ", pid, " ", message, "\n"]}]},
+                {lager_file_backend, [
+                        [{"<%= File.join(@log_directory, 'error.log') %>", error, 10485760, "$D0", 5}, {lager_default_formatter, [date, "T", time, " [", severity, "] ", message, "\n"]}],
+                        [{"<%= File.join(@log_directory, 'console.log') %>", info, 10485760, "$D0", 5}, {lager_default_formatter, [date, "T", time, " [", severity, "] ", message, "\n"]}]
+                ]}
+        ]}
+  ]},
   {reporting, [{server_name, "<%= @server_name %>" },
             {ip, "<%= @listen %>" },
             {port, <%= @port %> },
