@@ -7,9 +7,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,12 +23,14 @@ require 'pp'
 options = {
   :drbd_vg => "ops-aw2az1-opcbe01",
   :drbd_lv => "chef",
+  :drbd_snapsize => "40G",
   :mail_to => "root@localhost",
   :pg_data => "/var/opt/opscode/drbd/data/postgresql",
   :pg_user => "opscode-pgsql",
   :backup_mp => "/var/opt/opscode/drbd-backups",
   :path_str => "/usr/bin:/bin:/usr/sbin:/sbin",
   :pg_backup_file => nil,
+  :data => "/var/opt/opscode/drbd/data"
 }
 
 # use these binary helpers from omnibus
@@ -47,6 +49,9 @@ MAIL="mail"
 MKDIR="mkdir"
 MOUNT="mount"
 DMSETUP="dmsetup"
+TAR="tar -zcf"
+# The tr handles possible longline newline splits in the full df output
+TYPE="df -T #{options[:data]} > /dev/null 2>&1 && df -T #{options[:data]} | tail -n +2 | tr '\n' ' '| awk '{print $2}'"
 
 optparse = OptionParser.new do |opts|
 
@@ -84,6 +89,10 @@ optparse = OptionParser.new do |opts|
     options[:pg_backup_file] = path
   end
 
+  opts.on( '-s', '--snap-size SIZE', 'Snapshot volume size. Leave default for production install' ) do |size|
+    options[:drbd_snapsize] = size
+  end
+
   opts.on( '-h', '--help', 'Display this help' ) do
     puts opts
     exit
@@ -97,6 +106,10 @@ envstr += options[:path_str].split(':')
 ENV['PATH'] = envstr.join(':')
 
 sysname = `#{HOSTNAME}`.chomp
+
+if !system("#{TAR} #{options[:data]}/opc-config-bak.tar.gz /etc/opscode")
+    system("#{MAIL} -s 'privatechef /etc/opscode/* backup failed on #{sysname}' #{options[:mail_to]} < /dev/null")
+end
 
 if File.directory?(options[:pg_data])
   # we are mounting drbd and can take a PostgreSQL backup
@@ -149,19 +162,19 @@ while true
   # dmsetup likes to claim it worked when it didn't, running it still seems to help
   # break unless failed
   count += 1
-end 
+end
 
 datestamp=`#{DATE} +%Y-%m-%d-%H-%M-%S`.chomp
 
 system("sync")
-if !system("#{LVCREATE} -L40G -s -n backup-#{datestamp} /dev/#{options[:drbd_vg]}/#{options[:drbd_lv]}")
+if !system("#{LVCREATE} -L#{options[:drbd_snapsize]} -s -n backup-#{datestamp} /dev/#{options[:drbd_vg]}/#{options[:drbd_lv]}")
   system("#{MAIL} -s 'privatechef lvcreate failed on #{sysname}' #{options[:mail_to]} < /dev/null")
   exit -1
 end
 
 system("#{MKDIR} -p #{options[:backup_mp]}")
 
-if !system("#{MOUNT} /dev/#{options[:drbd_vg]}/backup-#{datestamp} #{options[:backup_mp]}")
+type=`#{TYPE}`.chomp
+if !system("#{MOUNT} #{if type != "false" then "-t " << type; end} /dev/#{options[:drbd_vg]}/backup-#{datestamp} #{options[:backup_mp]}")
   system("#{MAIL} -s 'privatechef mounting #{options[:backup_mp]} failed on #{sysname}' #{options[:mail_to]} < /dev/null")
 end
-
