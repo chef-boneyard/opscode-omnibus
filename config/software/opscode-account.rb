@@ -6,7 +6,7 @@ dependencies ["ruby",
               "postgresql",
               "rsync"]
 
-source :git => "git@github.com:opscode/opscode-account"
+source :git => "git@github.com:opscode/opscode-account", :branch => 'hh/OC-6342/xdarklaunch'
 
 relative_path "opscode-account"
 

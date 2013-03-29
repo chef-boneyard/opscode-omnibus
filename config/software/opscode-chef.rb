@@ -10,7 +10,7 @@ dependencies ["ruby",
               "curl",
               "rsync"]
 
-source :git => "git@github.com:opscode/opscode-chef"
+source :git => "git@github.com:opscode/opscode-chef", :branch => 'hh/OC-6342/xdarklaunch'
 
 relative_path "opscode-chef"
 
