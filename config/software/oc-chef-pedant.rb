@@ -5,7 +5,7 @@ dependencies ["ruby",
               "bundler",
               "rsync"]
 
-source :git => "git@github.com:opscode/oc-chef-pedant.git"
+source :git => "git@github.com:opscode/oc-chef-pedant.git", :branch => 'hh/OC-7113/xdarklaunch'
 
 relative_path "oc-chef-pedant"
 
