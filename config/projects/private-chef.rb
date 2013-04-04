@@ -15,7 +15,7 @@ deps << "private-chef-cookbooks" # used by private-chef-ctl reconfigure
 deps << "private-chef-scripts" # assorted scripts used by installed instance
 deps << "private-chef-ctl" # additional project-specific private-chef-ctl subcommands
 deps << "private-chef-administration"
-deps << "nginx"
+deps << "openresty"
 deps << "runit"
 deps << "unicorn"
 

@@ -301,6 +301,57 @@ default['private_chef']['nginx']['keepalive_timeout'] = 65
 default['private_chef']['nginx']['client_max_body_size'] = '250m'
 default['private_chef']['nginx']['cache_max_size'] = '5000m'
 
+#
+# Openresty
+# (Cloned from nginx)
+default['private_chef']['openresty']['enable'] = true
+default['private_chef']['openresty']['ha'] = false
+default['private_chef']['openresty']['dir'] = "/var/opt/opscode/openresty"
+default['private_chef']['openresty']['log_directory'] = "/var/log/opscode/openresty"
+default['private_chef']['openresty']['svlogd_size'] = 1000000
+default['private_chef']['openresty']['svlogd_num'] = 10
+default['private_chef']['openresty']['ssl_port'] = 443
+default['private_chef']['openresty']['enable_non_ssl'] = false
+default['private_chef']['openresty']['non_ssl_port'] = 80
+default['private_chef']['openresty']['x_forwarded_proto'] = 'https'
+default['private_chef']['openresty']['server_name'] = node['fqdn']
+default['private_chef']['openresty']['url'] = "https://#{node['fqdn']}"
+# HIGHEST SECURITY AT ALL COSTS: TLSv1 only to prevent BEAST, can also turn off RC4/MEDIUM/MD5 to really favor security over speed/comptability
+#default['private_chef']['openresty']['ssl_protocols'] = "-ALL +TLSv1"
+#default['private_chef']['openresty']['ssl_ciphers'] = "RC4-SHA:RC4-MD5:RC4:RSA:HIGH:MEDIUM:!LOW:!kEDH:!aNULL:!ADH:!eNULL:!EXP:!SSLv2:!SEED:!CAMELLIA:!PSK"
+# HIGHEST SECURITY THAT IS COMPTATIBLE AND FAST: SSLv3 for compatibility, but RC4 only to definitively block BEAST
+#default['private_chef']['openresty']['ssl_protocols'] = "-ALL +SSLv3 +TLSv1"
+#default['private_chef']['openresty']['ssl_ciphers'] = "RC4-SHA:RC4-MD5:RC4:RSA:!LOW:!kEDH:!aNULL:!ADH:!eNULL:!EXP:!SSLv2:!SEED:!CAMELLIA:!PSK"
+# HIGHEST SECURITY ON PAPER: Favors only HIGH security ciphers, still compatible with non-TLSv1 browsers, slow, vulnerable to BEAST on all ciphers over SSLv3
+#default['private_chef']['openresty']['ssl_protocols'] = "-ALL +SSLv3 +TLSv1"
+#default['private_chef']['openresty']['ssl_ciphers'] = "HIGH:!MEDIUM:!LOW:!ADH:!kEDH:!aNULL:!eNULL:!EXP:!SSLv2:!SEED:!CAMELLIA:!PSK"
+# FAST/COMPTATIBLE/AUDITABLE: Favors performance and compatibility, default is not vulnerable to BEAST attacks, uses RC4/MEDIUM, allows MD5
+default['private_chef']['openresty']['ssl_protocols'] = "SSLv3 TLSv1"
+default['private_chef']['openresty']['ssl_ciphers'] = "RC4-SHA:RC4-MD5:RC4:RSA:HIGH:MEDIUM:!LOW:!kEDH:!aNULL:!ADH:!eNULL:!EXP:!SSLv2:!SEED:!CAMELLIA:!PSK"
+# For any of the above:  drop the "RC4-SHA:RC4-MD5:RC4:RSA" prefix and you should wind up favoring AES256 with ECDHE forward security if you want that and don't
+# care about speed.
+default['private_chef']['openresty']['ssl_certificate'] = nil
+default['private_chef']['openresty']['ssl_certificate_key'] = nil
+default['private_chef']['openresty']['ssl_country_name'] = "US"
+default['private_chef']['openresty']['ssl_state_name'] = "WA"
+default['private_chef']['openresty']['ssl_locality_name'] = "Seattle"
+default['private_chef']['openresty']['ssl_company_name'] = "YouCorp"
+default['private_chef']['openresty']['ssl_organizational_unit_name'] = "Operations"
+default['private_chef']['openresty']['ssl_email_address'] = "you@example.com"
+default['private_chef']['openresty']['worker_processes'] = node['cpu']['total'].to_i
+default['private_chef']['openresty']['worker_connections'] = 10240
+default['private_chef']['openresty']['sendfile'] = 'on'
+default['private_chef']['openresty']['tcp_nopush'] = 'on'
+default['private_chef']['openresty']['tcp_nodelay'] = 'on'
+default['private_chef']['openresty']['gzip'] = "on"
+default['private_chef']['openresty']['gzip_http_version'] = "1.0"
+default['private_chef']['openresty']['gzip_comp_level'] = "2"
+default['private_chef']['openresty']['gzip_proxied'] = "any"
+default['private_chef']['openresty']['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
+default['private_chef']['openresty']['keepalive_timeout'] = 65
+default['private_chef']['openresty']['client_max_body_size'] = '250m'
+default['private_chef']['openresty']['cache_max_size'] = '5000m'
+
 ###
 # MySQL
 ###
@@ -440,12 +491,12 @@ default['private_chef']['dark_launch']["quick_start"] = false
 default['private_chef']['dark_launch']["new_theme"] = true
 default['private_chef']['dark_launch']["private-chef"] = true
 default['private_chef']['dark_launch']["sql_users"] = true
-default['private_chef']['dark_launch']["couchdb_roles"] = true
-default['private_chef']['dark_launch']["couchdb_data"] = true
-default['private_chef']['dark_launch']["couchdb_cookbooks"] = true
-default['private_chef']['dark_launch']["couchdb_checksums"] = true
-default['private_chef']['dark_launch']["couchdb_environments"] = true
-default['private_chef']['dark_launch']["couchdb_clients"] = true
+default['private_chef']['dark_launch']["couchdb_roles"]          = !ENV['OPC_ERLANG']
+default['private_chef']['dark_launch']["couchdb_data"]           = !ENV['OPC_ERLANG']
+default['private_chef']['dark_launch']["couchdb_cookbooks"]      = !ENV['OPC_ERLANG']
+default['private_chef']['dark_launch']["couchdb_checksums"]      = !ENV['OPC_ERLANG']
+default['private_chef']['dark_launch']["couchdb_environments"]   = !ENV['OPC_ERLANG']
+default['private_chef']['dark_launch']["couchdb_clients"]        = !ENV['OPC_ERLANG']
 default['private_chef']['dark_launch']["add_type_and_bag_to_items"] = true
 
 ###
