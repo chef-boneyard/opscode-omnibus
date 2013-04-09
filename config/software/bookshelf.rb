@@ -1,5 +1,5 @@
 name "bookshelf"
-version "0.2.1"
+version "sf/R16"
 
 dependencies ["erlang", "rebar", "rsync"]
 
