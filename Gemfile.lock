@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/opscode/omnibus-ruby.git
-  revision: 3146dfe89756f94028a803745b21e1890a7b42b7
-  branch: cleanup-and-tlc
+  revision: d63d0229fee7ae821b887240d270b74e14b53341
+  branch: omnibus-1.0
   specs:
     omnibus (0.5.3)
       fpm (= 0.3.11)
