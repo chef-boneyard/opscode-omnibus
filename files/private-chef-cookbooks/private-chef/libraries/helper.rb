@@ -1,4 +1,6 @@
 require 'mixlib/shellout'
+require 'socket'
+require 'timeout'
 
 class OmnibusHelper
   def self.should_notify?(service_name)
@@ -105,6 +107,28 @@ EOKEY
         OpenSSL::PKey::RSA.new(keypair_string)
       end
   end
+
+  def self.port_open?(ip, port, seconds=1)
+    Timeout::timeout(seconds) do
+       begin
+         TCPSocket.new(ip, port).close
+         true
+       rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+        false
+       end
+    end
+    rescue Timeout::Error
+      false
+  end
+
+  def self.ports_open?(ip, ports, seconds=1)
+    result = []
+    ports.each do |port|
+      result << port_open?(ip,port,seconds=1)
+    end
+    result
+  end
+
 end
 
 class Chef::Recipe

@@ -32,6 +32,9 @@ else
   node.consume_attributes(PrivateChef.generate_config(node['fqdn']))
 end
 
+#Check for annoyances that prevent OPC working
+include_recipe "private-chef::prereqs"
+
 # the bootstrap_server attribute is set to signify that this node is
 # cofigured to be the bootstrap server. If bootstrap#enable is set in
 # the OPC config, then we know we should be the bootstrap server.
@@ -172,4 +175,3 @@ file "/etc/opscode/chef-server-running.json" do
   mode "0600"
   content Chef::JSONCompat.to_json_pretty({ "private_chef" => node['private_chef'].to_hash, "run_list" => node.run_list })
 end
-
