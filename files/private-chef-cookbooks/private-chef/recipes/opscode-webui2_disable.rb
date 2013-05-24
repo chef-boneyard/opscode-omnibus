@@ -5,7 +5,7 @@
 # All Rights Reserved
 #
 
-%w[ opscode-webui2 opscode-webui2-events ].each do |service|
+%w[ opscode-webui2 opscode-webui2-events opscode-webui2-worker ].each do |service|
   runit_service service do
     action :disable
   end
