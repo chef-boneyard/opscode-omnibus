@@ -15,12 +15,18 @@ should_notify_events = OmnibusHelper.should_notify?('opscode-webui2-events')
 private_chef_webui2_dir = node['private_chef']['opscode-webui2']['dir']
 private_chef_webui2_etc_dir = File.join(private_chef_webui2_dir, 'etc')
 private_chef_webui2_log_dir = node['private_chef']['opscode-webui2']['log_directory']
-private_chef_webui2_events_log_dir = node['private_chef']['opscode-webui2']['events_log_directory']
+private_chef_webui2_events_log_dir = File.join(
+  private_chef_webui2_log_dir, 'events'
+)
+private_chef_webui2_worker_log_dir = File.join(
+  private_chef_webui2_log_dir, 'worker'
+)
 private_chef_webui2_tmp_dir = File.join(private_chef_webui2_dir, 'tmp')
 private_chef_redis_url = "redis://#{node['private_chef']['redis']['bind']}:#{node['private_chef']['redis']['port']}"
 [
-  private_chef_webui2_events_log_dir,
   private_chef_webui2_log_dir,
+  private_chef_webui2_events_log_dir,
+  private_chef_webui2_worker_log_dir,
   private_chef_webui2_tmp_dir,
   '/opt/opscode/embedded/service/opscode-webui2/public',
   '/opt/opscode/embedded/service/opscode-webui2/app/assets/images' # FIXME see https://github.com/opscode/opscode-webui2/pull/114
@@ -41,6 +47,8 @@ end
 # TODO: Secret token
 # TODO: s3 business
 # TODO: redis
+# TODO: redis alt db
+# TODO: redis persistence
 # TODO: Log rotation
 # TODO: nginx
 
@@ -115,7 +123,8 @@ add_nagios_hostgroup('opscode-webui2')
 
 runit_service 'opscode-webui2-events' do
   options runit_options.merge({
-    :log_directory => private_chef_webui2_events_log_dir
+    :log_directory => private_chef_webui2_events_log_dir,
+    :port          => node['private_chef']['opscode-webui2']['events_port']
   })
   action node['private_chef']['opscode-webui2']['ha'] ? :disable : :enable
 end
@@ -125,4 +134,13 @@ service_resource.restart_command "#{node['runit']['sv_bin']} -w 300 restart opsc
 
 add_nagios_hostgroup('opscode-webui2-events')
 
-# TODO: Worker service configuration
+# Worker service configuration
+
+runit_service 'opscode-webui2-worker' do
+  options runit_options.merge({
+    :log_directory => private_chef_webui2_worker_log_dir
+  })
+  action node['private_chef']['opscode-webui2']['ha'] ? :disable : :enable
+end
+
+add_nagios_hostgroup('opscode-webui2-worker')
