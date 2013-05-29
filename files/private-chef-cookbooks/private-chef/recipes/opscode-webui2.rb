@@ -69,7 +69,7 @@ file "#{private_chef_webui2_etc_dir}/opscode_platform.yml" do
     'production' => {
       'key_file' => node['private_chef']['opscode-webui2']['private_key'],
       'origin'   => node['private_chef']['lb']['api_fqdn'],
-      'url'      => "https://#{node['private_chef']['lb']['api_fqdn']}",
+      'url'      => "https://#{node['private_chef']['lb']['api_fqdn']}:#{node['private_chef']['opscode-webui2']['external']['port']}",
       'user'     => node['private_chef']['opscode-webui2']['proxy_user']
     }
   }.to_yaml)
@@ -113,6 +113,7 @@ execute 'compile webui2 assets' do
   cwd '/opt/opscode/embedded/service/opscode-webui2'
   user node['private_chef']['user']['username']
   creates '/opt/opscode/embedded/service/opscode-webui2/public/assets/manifest.yml'
+  notifies :restart, 'service[opscode-webui2]' if should_notify
 end
 
 # Web service configuration
