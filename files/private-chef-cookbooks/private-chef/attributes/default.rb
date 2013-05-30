@@ -241,14 +241,14 @@ default['private_chef']['lb']['upstream']['opscode-chef'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-erchef'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-account'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-webui'] = [ "127.0.0.1" ]
-default['private_chef']['lb']['upstream']['opscode-authz'] = [ "127.0.0.1" ]
+default['private_chef']['lb']['upstream']['oc_bifrost'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-solr'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['bookshelf'] = [ "127.0.0.1" ]
 default['private_chef']['lb_internal']['enable'] = true
 default['private_chef']['lb_internal']['vip'] = "127.0.0.1"
 default['private_chef']['lb_internal']['chef_port'] = 9680
 default['private_chef']['lb_internal']['account_port'] = 9685
-default['private_chef']['lb_internal']['authz_port'] = 9683
+default['private_chef']['lb_internal']['oc_bifrost_port'] = 9683
 
 ####
 # Nginx
@@ -373,19 +373,27 @@ default['private_chef']['redis']['maxmemory'] = "1g"
 default['private_chef']['redis']['maxmemory_policy'] = "volatile-lru"
 
 ###
-# Opscode Authorization
+# Bifrost
 ###
-default['private_chef']['opscode-authz']['enable'] = true
-default['private_chef']['opscode-authz']['ha'] = false
-default['private_chef']['opscode-authz']['dir'] = "/var/opt/opscode/opscode-authz"
-default['private_chef']['opscode-authz']['log_directory'] = "/var/log/opscode/opscode-authz"
-default['private_chef']['opscode-authz']['svlogd_size'] = 1000000
-default['private_chef']['opscode-authz']['svlogd_num'] = 10
-default['private_chef']['opscode-authz']['caching'] = "enabled"
-default['private_chef']['opscode-authz']['port'] = 9463
-default['private_chef']['opscode-authz']['vip'] = '127.0.0.1'
-default['private_chef']['opscode-authz']['superuser_id'] = '5ca1ab1ef005ba111abe11eddecafbad'
-default['private_chef']['opscode-authz']['couchdb_max_conn'] = '100'
+default['private_chef']['oc_bifrost']['enable'] = true
+default['private_chef']['oc_bifrost']['ha'] = false
+default['private_chef']['oc_bifrost']['dir'] = "/var/opt/opscode/oc_bifrost"
+default['private_chef']['oc_bifrost']['log_directory'] = "/var/log/opscode/oc_bifrost"
+# Bifrost is currently rather chatty: default to ~2G of logs on the box
+default['private_chef']['oc_bifrost']['console_log_size']  = (1024 * 1024 * 400) # 400 MB (measured in bytes)
+default['private_chef']['oc_bifrost']['console_log_count'] = 5
+# Keep ~100 MB of error logs
+default['private_chef']['oc_bifrost']['error_log_size']  = (1024 * 1024 * 20) # 20 MB (measured in bytes)
+default['private_chef']['oc_bifrost']['error_log_count'] = 5
+default['private_chef']['oc_bifrost']['vip'] = '127.0.0.1'
+default['private_chef']['oc_bifrost']['listen'] = '127.0.0.1'
+default['private_chef']['oc_bifrost']['port'] = 9463
+default['private_chef']['oc_bifrost']['superuser_id'] = '5ca1ab1ef005ba111abe11eddecafbad'
+default['private_chef']['oc_bifrost']['db_pool_size'] = '20'
+default['private_chef']['oc_bifrost']['sql_user'] = "bifrost"
+default['private_chef']['oc_bifrost']['sql_password'] = "challengeaccepted"
+default['private_chef']['oc_bifrost']['sql_ro_user'] = "bifrost_ro"
+default['private_chef']['oc_bifrost']['sql_ro_password'] = "foreveralone"
 
 ####
 # Bookshelf
@@ -587,7 +595,7 @@ default['private_chef']['keepalived']['service_order'] = [
   { "key" => "postgresql", "service_name" => "postgresql" },
   { "key" => "rabbitmq", "service_name" => "rabbitmq" },
   { "key" => "redis", "service_name" => "redis" },
-  { "key" => "opscode-authz", "service_name" => "opscode-authz" },
+  { "key" => "oc_bifrost", "service_name" => "oc_bifrost" },
   { "key" => "opscode-certificate", "service_name" => "opscode-certificate" },
   { "key" => "opscode-account", "service_name" => "opscode-account" },
   { "key" => "opscode-solr", "service_name" => "opscode-solr" },
@@ -616,7 +624,7 @@ default['private_chef']['logs']['log_retention'] = {
   "postgresql" => 14,
   "rabbitmq" => 14,
   "redis" => 14,
-  "opscode-authz" => 14,
+  "oc_bifrost" => 14,
   "opscode-certificate" => 14,
   "opscode-account" => 14,
   "opscode-solr" => 14,
