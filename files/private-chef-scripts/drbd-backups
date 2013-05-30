@@ -21,8 +21,8 @@ require 'optparse'
 require 'pp'
 
 options = {
-  :drbd_vg => "ops-aw2az1-opcbe01",
-  :drbd_lv => "chef",
+  :drbd_vg => "opscode",
+  :drbd_lv => "drbd",
   :drbd_snapsize => "40G",
   :mail_to => "root@localhost",
   :pg_data => "/var/opt/opscode/drbd/data/postgresql",
