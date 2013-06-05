@@ -6,11 +6,8 @@
 #
 
 # TODO: HA business
-# TODO: S3 business
 # TODO: redis persistence
 # TODO: backups
-# TODO: nginx
-# TODO: software version
 
 include_recipe 'runit'
 
@@ -42,6 +39,7 @@ private_chef_webui2_worker_run_dir = File.join(
 )
 
 [
+  private_chef_webui2_etc_dir,
   private_chef_webui2_tmp_dir,
   private_chef_webui2_worker_run_dir,
   private_chef_webui2_log_dir,
@@ -62,15 +60,19 @@ end
 
 # Configuration files
 
-file "#{private_chef_webui2_etc_dir}/opscode_platform.yml" do
+file "#{private_chef_webui2_etc_dir}/config.yml" do
   owner node['private_chef']['user']['username']
   mode '0600'
   content({
     'production' => {
-      'key_file' => node['private_chef']['opscode-webui2']['private_key'],
-      'origin'   => node['private_chef']['lb']['api_fqdn'],
-      'url'      => "https://#{node['private_chef']['lb']['api_fqdn']}:#{node['private_chef']['opscode-webui2']['external']['port']}",
-      'user'     => node['private_chef']['opscode-webui2']['proxy_user']
+      'origin'       => node['private_chef']['lb']['api_fqdn'],
+      'platform'     => {
+        'key_file' => node['private_chef']['opscode-webui2']['private_key'],
+        'url'      => "https://#{node['private_chef']['lb']['api_fqdn']}",
+        'user'     => node['private_chef']['opscode-webui2']['proxy_user']
+      },
+      'port'         => node['private_chef']['opscode-webui2']['external']['port'],
+      'secret_token' => node['private_chef']['opscode-webui2']['secret_token']
     }
   }.to_yaml)
   notifies :restart, 'service[opscode-webui2]' if should_notify
@@ -78,21 +80,8 @@ file "#{private_chef_webui2_etc_dir}/opscode_platform.yml" do
   notifies :restart, 'service[opscode-webui2-worker]' if should_notify_worker
 end
 
-link '/opt/opscode/embedded/service/opscode-webui2/config/opscode_platform.yml' do
-  to "#{private_chef_webui2_etc_dir}/opscode_platform.yml"
-end
-
-file "#{private_chef_webui2_etc_dir}/secret_token.rb" do
-  owner node['private_chef']['user']['username']
-  mode '0600'
-  content "OpscodeWebui::Application.config = #{node['private_chef']['opscode-webui2']['secret_token']}"
-  notifies :restart, 'service[opscode-webui2]' if should_notify
-  notifies :restart, 'service[opscode-webui2-events]' if should_notify_events
-  notifies :restart, 'service[opscode-webui2-worker]' if should_notify_worker
-end
-
-link '/opt/opscode/embedded/service/opscode-webui2/config/secret_token.rb' do
-  to "#{private_chef_webui2_etc_dir}/secret_token.rb"
+link '/opt/opscode/embedded/service/opscode-webui2/config/config.yml' do
+  to "#{private_chef_webui2_etc_dir}/config.yml"
 end
 
 template "#{node['private_chef']['nginx']['dir']}/etc/nginx.d/opscode-webui2.conf" do
@@ -104,16 +93,6 @@ template "#{node['private_chef']['nginx']['dir']}/etc/nginx.d/opscode-webui2.con
     :port => node['private_chef']['opscode-webui2']['external']['port']
   }))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?('nginx')
-end
-
-# Asset compilation
-
-execute 'compile webui2 assets' do
-  command 'bundle exec rake assets:precompile'
-  cwd '/opt/opscode/embedded/service/opscode-webui2'
-  user node['private_chef']['user']['username']
-  creates '/opt/opscode/embedded/service/opscode-webui2/public/assets/manifest.yml'
-  notifies :restart, 'service[opscode-webui2]' if should_notify
 end
 
 # Web service configuration
