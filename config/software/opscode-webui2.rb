@@ -4,6 +4,7 @@ version "release"
 dependency "bundler"
 dependency "libxml2"
 dependency "libxslt"
+dependency "nodejs"
 dependency "rsync"
 dependency "zlib"
 
