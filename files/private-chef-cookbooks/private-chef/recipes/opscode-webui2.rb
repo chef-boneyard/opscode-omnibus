@@ -5,10 +5,6 @@
 # All Rights Reserved
 #
 
-# TODO: HA business
-# TODO: redis persistence
-# TODO: backups
-
 include_recipe 'runit'
 
 should_notify = OmnibusHelper.should_notify?('opscode-webui2')
@@ -124,6 +120,7 @@ unicorn_config File.join(private_chef_webui2_etc_dir, "unicorn.rb") do
 end
 
 runit_service 'opscode-webui2' do
+  down node['private_chef']['opscode-webui2']['ha']
   options runit_options.merge({ :log_directory => private_chef_webui2_log_dir })
 end
 
@@ -132,6 +129,7 @@ add_nagios_hostgroup('opscode-webui2')
 # Event service configuration
 
 runit_service 'opscode-webui2-events' do
+  down node['private_chef']['opscode-webui2']['ha']
   options runit_options.merge({
     :log_directory => private_chef_webui2_events_log_dir,
     :port          => node['private_chef']['opscode-webui2-events']['port']
@@ -146,6 +144,7 @@ add_nagios_hostgroup('opscode-webui2-events')
 # Worker service configuration
 
 runit_service 'opscode-webui2-worker' do
+  down node['private_chef']['opscode-webui2']['ha']
   options runit_options.merge({
     :log_directory => private_chef_webui2_worker_log_dir,
     :run_directory => private_chef_webui2_worker_run_dir
