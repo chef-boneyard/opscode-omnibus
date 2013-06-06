@@ -1,5 +1,5 @@
 name "opscode-webui2"
-version "release"
+version "master"
 
 dependency "bundler"
 dependency "libxml2"
