@@ -222,6 +222,28 @@ default['private_chef']['opscode-webui']['cookie_domain'] = "all"
 default['private_chef']['opscode-webui']['cookie_secret'] = "47b3b8d95dea455baf32155e95d1e64e"
 
 ####
+# Chef Server WebUI 2
+####
+default['private_chef']['opscode-webui2']['enable'] = true
+default['private_chef']['opscode-webui2']['ha'] = false
+default['private_chef']['opscode-webui2']['dir'] = "/var/opt/opscode/opscode-webui2"
+default['private_chef']['opscode-webui2']['log_directory'] = "/var/log/opscode/opscode-webui2"
+default['private_chef']['opscode-webui2']['proxy_user'] = 'pivotal'
+default['private_chef']['opscode-webui2']['private_key'] = '/etc/opscode/webui_priv.pem'
+default['private_chef']['opscode-webui2']['svlogd_size'] = 1000000
+default['private_chef']['opscode-webui2']['svlogd_num'] = 10
+default['private_chef']['opscode-webui2']['listen'] = '127.0.0.1:9467'
+default['private_chef']['opscode-webui2']['port'] = 9467
+default['private_chef']['opscode-webui2']['external']['port'] = 2013
+default['private_chef']['opscode-webui2-events']['port'] = 9468
+default['private_chef']['opscode-webui2']['backlog'] = 1024
+default['private_chef']['opscode-webui2']['tcp_nodelay'] = true
+default['private_chef']['opscode-webui2']['worker_timeout'] = 3600
+default['private_chef']['opscode-webui2']['worker_processes'] = node["cpu"]["total"].to_i
+default['private_chef']['opscode-webui2']['secret_token'] = 'K5hcotplgXvKWX8zE2KkPFJRn2_831j4U8lx2FDY_DSSO6nuMMkoGaAzPl3j8TFO'
+default['private_chef']['opscode-webui2']['redis_db'] = 2
+
+####
 # Chef Pedant
 ####
 default['private_chef']['oc-chef-pedant']['dir'] = "/var/opt/opscode/oc-chef-pedant"
@@ -241,6 +263,8 @@ default['private_chef']['lb']['upstream']['opscode-chef'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-erchef'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-account'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-webui'] = [ "127.0.0.1" ]
+default['private_chef']['lb']['upstream']['opscode-webui2'] = [ "127.0.0.1" ]
+default['private_chef']['lb']['upstream']['opscode-webui2-events'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-authz'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-solr'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['bookshelf'] = [ "127.0.0.1" ]

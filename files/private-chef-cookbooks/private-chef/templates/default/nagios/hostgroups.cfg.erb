@@ -78,6 +78,21 @@ define hostgroup {
 }
 
 define hostgroup {
+  hostgroup_name opscode-webui2
+  alias opscode-webui2
+}
+
+define hostgroup {
+  hostgroup_name opscode-webui2-events
+  alias opscode-webui2-events
+}
+
+define hostgroup {
+  hostgroup_name opscode-webui2-worker
+  alias opscode-webui2-events-worker
+}
+
+define hostgroup {
   hostgroup_name lb
   alias lb
 }

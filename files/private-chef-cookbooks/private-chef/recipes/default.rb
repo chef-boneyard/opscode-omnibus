@@ -138,6 +138,7 @@ include_recipe "runit"
   "nagios",
   "nrpe",
   "nginx",
+  "opscode-webui2",
 	"keepalived"
 ].each do |service|
   if node["private_chef"][service]["enable"]

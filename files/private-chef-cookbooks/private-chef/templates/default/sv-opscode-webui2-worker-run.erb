@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd /opt/opscode/embedded/service/opscode-webui2
+exec 2>&1
+exec chpst -P -U <%= node['private_chef']['user']['username'] %> -u <%= node['private_chef']['user']['username'] %> env HOME="<%= node['private_chef']['opscode-webui2']['dir'] %>" PATH=/opt/opscode/embedded/bin:$PATH bundle exec sidekiq -e production -P <%= @options[:run_directory] %>/sidekiq.pid
