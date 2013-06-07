@@ -67,7 +67,7 @@ file "#{private_chef_webui2_etc_dir}/config.yml" do
         'url'      => "https://#{node['private_chef']['lb']['api_fqdn']}",
         'user'     => node['private_chef']['opscode-webui2']['proxy_user']
       },
-      'port'         => node['private_chef']['opscode-webui2']['external']['port'],
+      'public_port'  => node['private_chef']['opscode-webui2']['external']['port'],
       'secret_token' => node['private_chef']['opscode-webui2']['secret_token']
     }
   }.to_yaml)
@@ -78,17 +78,6 @@ end
 
 link '/opt/opscode/embedded/service/opscode-webui2/config/config.yml' do
   to "#{private_chef_webui2_etc_dir}/config.yml"
-end
-
-template "#{node['private_chef']['nginx']['dir']}/etc/nginx.d/opscode-webui2.conf" do
-  source 'opscode-webui2-nginx.conf.erb'
-  owner 'root'
-  group 'root'
-  mode '0644'
-  variables(node['private_chef']['nginx'].merge({
-    :port => node['private_chef']['opscode-webui2']['external']['port']
-  }))
-  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?('nginx')
 end
 
 # Web service configuration
@@ -156,3 +145,14 @@ service_resource = resources('service[opscode-webui2-worker]')
 service_resource.restart_command "#{node['runit']['sv_bin']} -w 30 restart opscode-webui2-worker"
 
 add_nagios_hostgroup('opscode-webui2-worker')
+
+template "#{node['private_chef']['nginx']['dir']}/etc/nginx.d/opscode-webui2.conf" do
+  source 'opscode-webui2-nginx.conf.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  variables(node['private_chef']['nginx'].merge({
+    :port => node['private_chef']['opscode-webui2']['external']['port']
+  }))
+  notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?('nginx')
+end
