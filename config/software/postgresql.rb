@@ -1,5 +1,5 @@
 name "postgresql"
-version "9.1.2"
+version "9.2.4"
 
 dependency "zlib"
 dependency "openssl"
@@ -7,7 +7,7 @@ dependency "libedit"
 dependency "ncurses"
 
 source :url => "http://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.gz",
-       :md5 => "fe01293f96e04da9879840b1996a3d2c"
+       :md5 => "52df0a9e288f02d7e6e0af89ed4dcfc6"
 
 relative_path "postgresql-#{version}"
 
