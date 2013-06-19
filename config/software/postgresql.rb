@@ -6,10 +6,10 @@ dependency "openssl"
 dependency "libedit"
 dependency "ncurses"
 
-source :url => "http://ftp.postgresql.org/pub/source/v9.1.2/postgresql-9.1.2.tar.gz",
+source :url => "http://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.gz",
        :md5 => "fe01293f96e04da9879840b1996a3d2c"
 
-relative_path "postgresql-9.1.2"
+relative_path "postgresql-#{version}"
 
 configure_env = {
   "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
@@ -18,7 +18,7 @@ configure_env = {
 }
 
 build do
-  patch :source => 'postgresql-9.1.2-configure-ncurses-fix.patch'
+  patch :source => "postgresql-#{version}-configure-ncurses-fix.patch"
   command ["./configure",
            "--prefix=#{install_dir}/embedded",
            "--with-libedit-preferred",
