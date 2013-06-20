@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "0.21.1"
+version "sd/status-error-logging"
 
 dependency "erlang"
 dependency "rebar"
