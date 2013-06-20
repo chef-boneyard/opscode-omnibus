@@ -15,7 +15,14 @@ add_command "password", "Set a user's password or System Recovery Password.", 2 
   running_config
   username = ARGV[3]
   superuser = running_config['private_chef']['opscode-account']['proxy_user']
-  command = "bundle exec bin/updateobjecttool -a #{running_config['private_chef']['opscode-account']['url']} -o #{superuser} -p /etc/opscode/#{superuser}.pem -w user -n #{username}"
+  command = [
+    'bundle', 'exec', 'bin/updateobjecttool',
+    '-a', running_config['private_chef']['opscode-account']['url'],
+    '-o', superuser,
+    '-p', "/etc/opscode/#{superuser}.pem",
+    '-w', 'user',
+    '-n', username
+  ]
 
   if ARGV.length == 4
     password = HighLine.ask("Enter the new password:  " ) { |q| q.echo = "*" }
@@ -34,23 +41,25 @@ add_command "password", "Set a user's password or System Recovery Password.", 2 
       exit 1
     end 
 
-    command << ' --user-password'
-    command << " #{password}"
+    command << '--user-password'
+    command << "#{password}"
     if ldap_authentication_enabled?
-      command << ' --recovery-authentication-enabled'
+      command << '--recovery-authentication-enabled'
       verbed = 'enabled for System Recovery'
     else
       verbed = 'set'
     end
   else
     if ldap_authentication_enabled?
-      command << ' --no-recovery-authentication-enabled'
+      command << '--no-recovery-authentication-enabled'
       verbed = 'disabled for System Recovery'
     else
       STDERR.puts "External authentication (such as LDAP) must be enabled to clear a user's password."
       exit 1
     end
   end
+
+command = command.join(' ')
 
   ENV["PATH"] = "/opt/opscode/embedded/bin:#{ENV['PATH']}"
   Dir.chdir("/opt/opscode/embedded/service/opscode-account")
