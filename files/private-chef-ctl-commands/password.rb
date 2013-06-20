@@ -7,7 +7,7 @@
 require 'highline/import'
 
 add_command "password", "Set a user's password or System Recovery Password.", 2 do
-  unless ARGV.length == 4  || (ARGV.length == 5 && ARGV[4] == "--disable")
+  unless ARGV.length == 4 || (ARGV.length == 5 && ARGV[4] == "--disable")
     STDERR.puts "Usage: private-chef-ctl password <username> [--disable]"
     exit 1
   end
@@ -42,7 +42,7 @@ add_command "password", "Set a user's password or System Recovery Password.", 2 
     end 
 
     command << '--user-password'
-    command << "#{password}"
+    command << password
     if ldap_authentication_enabled?
       command << '--recovery-authentication-enabled'
       verbed = 'enabled for System Recovery'
