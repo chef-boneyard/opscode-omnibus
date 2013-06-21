@@ -25,7 +25,6 @@ module PrivateChef
   opscode_erchef Mash.new
   opscode_webui Mash.new
   lb Mash.new
-  mysql Mash.new
   postgresql Mash.new
   redis Mash.new
   opscode_authz Mash.new
@@ -51,7 +50,6 @@ module PrivateChef
 
   notification_email nil
   from_email nil
-  database_type nil
   role nil
   user Mash.new
 
@@ -110,7 +108,6 @@ module PrivateChef
       PrivateChef['rabbitmq']['password'] ||= generate_hex_if_bootstrap(50, ha_guard)
       PrivateChef['rabbitmq']['jobs_password'] ||= generate_hex_if_bootstrap(50, ha_guard)
       PrivateChef['opscode_webui']['cookie_secret'] ||= generate_hex_if_bootstrap(50, ha_guard)
-      PrivateChef['mysql']['sql_password'] ||= generate_hex_if_bootstrap(50, ha_guard)
       PrivateChef['postgresql']['sql_password'] ||= generate_hex_if_bootstrap(50, ha_guard)
       PrivateChef['postgresql']['sql_ro_password'] ||= generate_hex_if_bootstrap(50, ha_guard)
       PrivateChef['opscode_account']['session_secret_key'] ||= generate_hex_if_bootstrap(50, ha_guard)
@@ -131,9 +128,6 @@ module PrivateChef
               },
               'opscode_webui' => {
                 'cookie_secret' => PrivateChef['opscode_webui']['cookie_secret'],
-              },
-              'mysql' => {
-                'sql_password' => PrivateChef['mysql']['sql_password'],
               },
               'postgresql' => {
                 'sql_password' => PrivateChef['postgresql']['sql_password'],
@@ -176,7 +170,6 @@ module PrivateChef
         "opscode_erchef",
         "opscode_webui",
         "lb",
-        "mysql",
         "postgresql",
         "redis",
         "opscode_authz",
@@ -197,7 +190,6 @@ module PrivateChef
         rkey = key.gsub('_', '-')
         results['private_chef'][rkey] = PrivateChef[key]
       end
-      results['private_chef']['database_type'] = PrivateChef['database_type']
       results['private_chef']['notification_email'] = PrivateChef['notification_email']
       results['private_chef']['from_email'] = PrivateChef['from_email']
       results['private_chef']['role'] = PrivateChef['role']

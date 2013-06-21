@@ -13,7 +13,6 @@ default['private_chef']['flavor'] = "opc"
 
 default['private_chef']['notification_email'] = "pc-default@opscode.com"
 default['private_chef']['from_email'] = '"Opscode" <donotreply@opscode.com>'
-default['private_chef']['database_type'] = "postgresql"
 default['private_chef']['role'] = "standalone"
 
 ####
@@ -301,17 +300,6 @@ default['private_chef']['nginx']['keepalive_timeout'] = 65
 default['private_chef']['nginx']['client_max_body_size'] = '250m'
 default['private_chef']['nginx']['cache_max_size'] = '5000m'
 default['private_chef']['nginx']['enable_ipv6'] = false
-
-###
-# MySQL
-###
-default['private_chef']['mysql']['enable'] = false
-default['private_chef']['mysql']['sql_user'] = "opscode_chef"
-default['private_chef']['mysql']['sql_password'] = "snakepliskin"
-default['private_chef']['mysql']['vip'] = "127.0.0.1"
-default['private_chef']['mysql']['destructive_migrate'] = false
-default['private_chef']['mysql']['install_libs'] = true
-default['private_chef']['mysql']['mysql2_versions'] = IO.readlines("/opt/opscode/version-manifest.txt").detect { |l| l =~ /^mysql2/ }.gsub(/^mysql2\s+(\d.+)$/, '\1').chomp.strip.split("-")
 
 ###
 # PostgreSQL
