@@ -58,6 +58,8 @@
                ]},
   {oc_chef_authz, [
                 {authz_root_url, "http://<%= node['private_chef']['bifrost']['vip'] %>:<%= node['private_chef']['bifrost']['port'] %>" },
+                {authz_service, [{root_url, "http://<%= node['private_chef']['bifrost']['vip'] %>:<%= node['private_chef']['bifrost']['port'] %>" },
+                                 {timeout, 2000}]},
                 {couchdb_host, "<%= node['private_chef']['couchdb']['vip'] %>"},
                 {couchdb_port, <%= node['private_chef']['couchdb']['port'] %> },
                 {authz_superuser_id, <<"<%= node['private_chef']['bifrost']['superuser_id'] %>">>}
