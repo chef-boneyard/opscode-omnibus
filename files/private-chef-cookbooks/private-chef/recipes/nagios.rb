@@ -138,43 +138,18 @@ file File.join(nagios_etc_dir, "htpasswd") do
   mode "0644"
 end
 
-runit_service "nagios" do
-  down node['private_chef']['nagios']['ha']
-  options({
-    :log_directory => log_directory,
-    :svlogd_size => node['private_chef']['nagios']['log_rotation']['file_maxbytes'],
-    :svlogd_num  => node['private_chef']['nagios']['log_rotation']['num_to_keep']
-  }.merge(params))
+component_runit_service "nagios"
+component_runit_service "fcgiwrap" do
+  log_directory fcgiwrap_log_directory
+  svlogd_size node['private_chef']['nagios']['log_rotation']['file_maxbytes']
+  svlogd_num node['private_chef']['nagios']['log_rotation']['num_to_keep']
+  ha node['private_chef']['nagios']['ha']
 end
-
-runit_service "fcgiwrap" do
-  down node['private_chef']['nagios']['ha']
-  options({
-    :log_directory => fcgiwrap_log_directory,
-    :svlogd_size => node['private_chef']['nagios']['log_rotation']['file_maxbytes'],
-    :svlogd_num  => node['private_chef']['nagios']['log_rotation']['num_to_keep']
-  }.merge(params))
-end
-
-runit_service "php-fpm" do
-  down node['private_chef']['nagios']['ha']
-  options({
-    :log_directory => php_fpm_log_directory,
-    :svlogd_size => node['private_chef']['nagios']['log_rotation']['file_maxbytes'],
-    :svlogd_num  => node['private_chef']['nagios']['log_rotation']['num_to_keep']
-  }.merge(params))
-end
-
-if node['private_chef']['bootstrap']['enable']
-	execute "/opt/opscode/bin/private-chef-ctl start nagios" do
-		retries 20
-	end
-	execute "/opt/opscode/bin/private-chef-ctl start php-fpm" do
-		retries 20
-	end
-	execute "/opt/opscode/bin/private-chef-ctl start fcgiwrap" do
-		retries 20
-	end
+component_runit_service "php-fpm" do
+  log_directory php_fpm_log_directory
+  svlogd_size node['private_chef']['nagios']['log_rotation']['file_maxbytes']
+  svlogd_num node['private_chef']['nagios']['log_rotation']['num_to_keep']
+  ha node['private_chef']['nagios']['ha']
 end
 
 # log rotation

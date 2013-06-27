@@ -49,19 +49,6 @@ link "/opt/opscode/embedded/service/bookshelf/etc/app.config" do
   to bookshelf_config
 end
 
-runit_service "bookshelf" do
-  down node['private_chef']['bookshelf']['ha']
-  options({
-    :log_directory => bookshelf_log_dir,
-    :svlogd_size => node['private_chef']['bookshelf']['svlogd_size'],
-    :svlogd_num  => node['private_chef']['bookshelf']['svlogd_num']
-  }.merge(params))
-end
-
-if node['private_chef']['bootstrap']['enable']
-  execute "/opt/opscode/bin/private-chef-ctl start bookshelf" do
-    retries 20
-  end
-end
+component_runit_service "bookshelf"
 
 add_nagios_hostgroup("bookshelf")
