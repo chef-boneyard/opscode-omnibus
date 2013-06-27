@@ -31,7 +31,7 @@ template nrpe_config do
   group "root"
   mode "0644"
   variables(node['private_chef']['nrpe'].to_hash)
-  notifies :restart, 'service[nrpe]' if OmnibusHelper.should_notify?("nrpe")
+  notifies :restart, 'runit_service[nrpe]' if OmnibusHelper.should_notify?("nrpe")
 end
 
 template File.join(nrpe_bin_dir, "nrpe.sh") do

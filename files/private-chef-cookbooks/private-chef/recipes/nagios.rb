@@ -113,7 +113,7 @@ end
     mode "0644"
     variables(node['private_chef']['nagios'].to_hash)
     source "nagios/#{cfg_file}.erb"
-    notifies :restart, 'service[nagios]' if OmnibusHelper.should_notify?("nagios")
+    notifies :restart, 'runit_service[nagios]' if OmnibusHelper.should_notify?("nagios")
   end
 end
 
