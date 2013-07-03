@@ -119,7 +119,7 @@ template postgresql_config do
   owner node['private_chef']['postgresql']['username']
   mode "0644"
   variables(node['private_chef']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
+  notifies :restart, 'runit_service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
 end
 
 pg_hba_config = File.join(postgresql_data_dir, "pg_hba.conf")
@@ -129,26 +129,16 @@ template pg_hba_config do
   owner node['private_chef']['postgresql']['username']
   mode "0644"
   variables(node['private_chef']['postgresql'].to_hash)
-  notifies :restart, 'service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
+  notifies :restart, 'runit_service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
 end
 
 should_notify = OmnibusHelper.should_notify?("postgresql")
 
-runit_service "postgresql" do
-  down node['private_chef']['postgresql']['ha']
-  control(['t'])
-  options({
-    :log_directory => postgresql_log_dir,
-    :svlogd_size => node['private_chef']['postgresql']['log_rotation']['file_maxbytes'],
-    :svlogd_num  => node['private_chef']['postgresql']['log_rotation']['num_to_keep']
-  }.merge(params))
+component_runit_service "postgresql" do
+  control ['t']
 end
 
 if node['private_chef']['bootstrap']['enable']
-  execute "/opt/opscode/bin/private-chef-ctl start postgresql" do
-    retries 20
-  end
-
   ###
   # Create the database, migrate it, and create the users we need, and grant them
   # privileges.

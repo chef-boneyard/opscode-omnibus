@@ -31,7 +31,7 @@ template nrpe_config do
   group "root"
   mode "0644"
   variables(node['private_chef']['nrpe'].to_hash)
-  notifies :restart, 'service[nrpe]' if OmnibusHelper.should_notify?("nrpe")
+  notifies :restart, 'runit_service[nrpe]' if OmnibusHelper.should_notify?("nrpe")
 end
 
 template File.join(nrpe_bin_dir, "nrpe.sh") do
@@ -41,11 +41,4 @@ template File.join(nrpe_bin_dir, "nrpe.sh") do
   mode "4755"
 end
 
-runit_service "nrpe" do
-  options({
-    :log_directory => nrpe_log_dir,
-    :svlogd_size => node['private_chef']['nrpe']['log_rotation']['file_maxbytes'],
-    :svlogd_num  => node['private_chef']['nrpe']['log_rotation']['num_to_keep']
-  }.merge(params))
-end
-
+component_runit_service "nrpe"

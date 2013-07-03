@@ -114,7 +114,7 @@ nginx_vars = nginx_vars.merge({ :helper => NginxErb.new(node),
     group "root"
     mode "0644"
     variables(nginx_vars.merge({:server_proto => server_proto}))
-    notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
+    notifies :restart, 'runit_service[nginx]' if OmnibusHelper.should_notify?("nginx")
   end
 
 end
@@ -144,21 +144,7 @@ template File.join(nginx_addon_dir, "README.md") do
   mode "0644"
 end
 
-
-runit_service "nginx" do
-  down node['private_chef']['nginx']['ha']
-  options({
-    :log_directory => nginx_log_dir,
-    :svlogd_size => node['private_chef']['nginx']['log_rotation']['file_maxbytes'],
-    :svlogd_num  => node['private_chef']['nginx']['log_rotation']['num_to_keep']
-  }.merge(params))
-end
-
-if node['private_chef']['nginx']['bootstrap']
-        execute "/opt/opscode/bin/private-chef-ctl start nginx" do
-                retries 20
-        end
-end
+component_runit_service "nginx"
 
 add_nagios_hostgroup("nginx")
 
