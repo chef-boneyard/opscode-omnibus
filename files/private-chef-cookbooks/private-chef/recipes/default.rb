@@ -120,8 +120,8 @@ directory "/var/opt/opscode" do
   action :create
 end
 
-# Install our runit instance
-include_recipe "runit"
+# Configure and install our runit instance
+include_recipe "private-chef::runit"
 
 # Configure Services
 [
@@ -129,7 +129,6 @@ include_recipe "runit"
   "couchdb",
   "rabbitmq",
   "postgresql",
-  "mysql",
   "redis",
   "oc_bifrost",
   "opscode-certificate",
@@ -141,8 +140,6 @@ include_recipe "runit"
   "opscode-org-creator",
   "opscode-erchef",
   "opscode-webui",
-  "nagios",
-  "nrpe",
   "nginx",
 	"keepalived"
 ].each do |service|
