@@ -198,7 +198,7 @@ module PrivateChef
         "ldap",
         "user"
       ].each do |key|
-        rkey = key.gsub('_', '-')
+        rkey = key.gsub('_', '-') unless key =~ /^oc_/ # leave oc_* keys as is
         results['private_chef'][rkey] = PrivateChef[key]
       end
       results['private_chef']['database_type'] = PrivateChef['database_type']
