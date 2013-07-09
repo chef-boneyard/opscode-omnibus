@@ -28,12 +28,12 @@
               %% how many nodes are deserialized at a time in
               %% preparing a response.
               {bulk_fetch_batch_size, <%= @bulk_fetch_batch_size %>},
-              {custom_acls_always_for_modification, <%= node['private_chef']['opscode-authz']['custom_acls_always_for_modification'] %>},
+              {custom_acls_always_for_modification, <%= node['private_chef']['oc_bifrost']['custom_acls_always_for_modification'] %>},
 
-              {custom_acls_depsolver, <%= node['private_chef']['opscode-authz']['custom_acls_depsolver'] %>},
-              {custom_acls_data, <%= node['private_chef']['opscode-authz']['custom_acls_data'] %>},
-              {custom_acls_cookbooks, <%= node['private_chef']['opscode-authz']['custom_acls_cookbooks'] %>},
-              {custom_acls_roles, <%= node['private_chef']['opscode-authz']['custom_acls_roles'] %>},
+              {custom_acls_depsolver, <%= node['private_chef']['oc_bifrost']['custom_acls_depsolver'] %>},
+              {custom_acls_data, <%= node['private_chef']['oc_bifrost']['custom_acls_data'] %>},
+              {custom_acls_cookbooks, <%= node['private_chef']['oc_bifrost']['custom_acls_cookbooks'] %>},
+              {custom_acls_roles, <%= node['private_chef']['oc_bifrost']['custom_acls_roles'] %>},
 	      {superusers, [<<"pivotal">>]},
               %% metrics config
               {root_metric_key, "<%= @root_metric_key %>"},
@@ -51,18 +51,19 @@
   {chef_wm, [
              {server_version, "<%= node['private_chef']['version'] %>"},
              {health_ping_timeout, 400},
-             {health_ping_modules, [oc_chef_authz, chef_otto, chef_sql, chef_solr]}
+             {health_ping_modules, [oc_chef_authz, chef_otto, chef_sql, chef_solr]},
+             {bulk_fetch_batch_size, <%= @bulk_fetch_batch_size %>}
             ]},
   {chef_authn, [
                 {keyring, [{default, "/etc/opscode/webui_pub.pem"}]}
                ]},
   {oc_chef_authz, [
-                {authz_root_url, "http://<%= node['private_chef']['opscode-authz']['vip'] %>:<%= node['private_chef']['opscode-authz']['port'] %>" },
-                {authz_service, [{root_url, "http://<%= node['private_chef']['opscode-authz']['vip'] %>:<%= node['private_chef']['opscode-authz']['port'] %>" },
+                {authz_root_url, "http://<%= node['private_chef']['oc_bifrost']['vip'] %>:<%= node['private_chef']['oc_bifrost']['port'] %>" },
+                {authz_service, [{root_url, "http://<%= node['private_chef']['oc_bifrost']['vip'] %>:<%= node['private_chef']['oc_bifrost']['port'] %>" },
                                  {timeout, 2000}]},
                 {couchdb_host, "<%= node['private_chef']['couchdb']['vip'] %>"},
                 {couchdb_port, <%= node['private_chef']['couchdb']['port'] %> },
-                {authz_superuser_id, <<"<%= node['private_chef']['opscode-authz']['superuser_id'] %>">>}
+                {authz_superuser_id, <<"<%= node['private_chef']['oc_bifrost']['superuser_id'] %>">>}
                ]},
   {chef_db, [
              {bulk_fetch_batch_size, <%= @bulk_fetch_batch_size %>},
@@ -97,35 +98,23 @@
                {estatsd_port, <%= node['private_chef']['estatsd']['port'] %>}
               ]},
   {sqerl, [
-           %% The database system you are using (e.g., mysql, pgsql)
-           {db_type, <%= node['private_chef']['database_type'] == "postgresql" ? "pgsql" : "mysql" %> },
+           %% The database system you are using (e.g. pgsql)
+           {db_type, pgsql },
 
            %% Database connection parameters
-           {db_host, "<%= node['private_chef'][node['private_chef']['database_type']]['vip'] %>"},
-           {db_port, <%= node['private_chef']['database_type'] == "postgresql" ? 5432 : 3306 %>},
-           {db_user, "<%= node['private_chef'][node['private_chef']['database_type']]['sql_user'] %>"},
-           {db_pass, "<%= node['private_chef'][node['private_chef']['database_type']]['sql_password'] %>"},
+           {db_host, "<%= node['private_chef']['postgresql']['vip'] %>"},
+           {db_port, 5432},
+           {db_user, "<%= node['private_chef']['postgresql']['sql_user'] %>"},
+           {db_pass, "<%= node['private_chef']['postgresql']['sql_password'] %>"},
            {db_name, "opscode_chef" },
            {idle_check, 10000},
 
-           {prepared_statements, {oc_chef_sql, statements, [<%= node['private_chef']['database_type'] == "postgresql" ? "pgsql" : "mysql" %>]}},
+           {prepared_statements, {oc_chef_sql, statements, [pgsql]}},
            {column_transforms,
-           <%-if node['private_chef']['database_type'] == "mysql" %>
-                              [{<<"frozen">>,
-                                {sqerl_transformers, convert_integer_to_boolean}},
-                               {<<"validator">>,
-                                {sqerl_transformers, convert_integer_to_boolean}},
-                               {<<"admin">>,
-                                {sqerl_transformers, convert_integer_to_boolean}}
-                              ]
-           <%- elsif node['private_chef']['database_type'] == "postgresql" %>
                               [{<<"created_at">>,
                                 {sqerl_transformers, convert_YMDHMS_tuple_to_datetime}},
                                {<<"updated_at">>,
                                 {sqerl_transformers, convert_YMDHMS_tuple_to_datetime}}]
-           <% else %>
-                              undefined
-           <%- end %>
            }
           ]},
   {ibrowse, [

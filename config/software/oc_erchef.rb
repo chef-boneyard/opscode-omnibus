@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "0.21.8"
+version "cm/OC-8302-reindex"
 
 dependency "erlang"
 dependency "rebar"

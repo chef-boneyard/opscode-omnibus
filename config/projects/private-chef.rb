@@ -33,21 +33,16 @@ dependency "bookshelf"
 
 # the front-end services
 dependency "oc_erchef"
-dependency "opscode-chef"
 dependency "opscode-account"
 dependency "opscode-webui"
-dependency "opscode-authz"
+dependency "oc_bifrost"
 dependency "opscode-org-creator"
 dependency "opscode-certificate"
 dependency "opscode-platform-debug"
 dependency "opscode-test"
-dependency "mysql2"
 
-# monitoring
-dependency "nagios"
-dependency "nagios-plugins"
-dependency "opscode-nagios-plugins"
-dependency "nrpe"
+# log management
+dependency "logrotate"
 
 # oc-chef-pedant for integration/smoke testing
 dependency "oc-chef-pedant"

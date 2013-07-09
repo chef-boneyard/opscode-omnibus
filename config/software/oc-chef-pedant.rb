@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-version "1.0.12"
+version "cm/OC-8302-reindex"
 
 dependency "ruby"
 dependency "bundler"
