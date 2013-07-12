@@ -35,7 +35,7 @@ template authz_config do
   source "authz.config.erb"
   mode "644"
   variables(node['private_chef']['opscode-authz'].to_hash)
-  notifies :restart, 'service[opscode-authz]' if OmnibusHelper.should_notify?("opscode-authz")
+  notifies :restart, 'runit_service[opscode-authz]' if OmnibusHelper.should_notify?("opscode-authz")
 end
 
 link "/opt/opscode/embedded/service/opscode-authz/rel/authz/etc/app.config" do
@@ -48,7 +48,7 @@ template authz do
   source "authz.erb"
   mode "755"
   variables(node['private_chef']['opscode-authz'].to_hash)
-  notifies :restart, 'service[opscode-authz]' if OmnibusHelper.should_notify?("opscode-authz")
+  notifies :restart, 'runit_service[opscode-authz]' if OmnibusHelper.should_notify?("opscode-authz")
 end
 
 link "/opt/opscode/embedded/service/opscode-authz/rel/authz/bin/authz" do
@@ -61,31 +61,20 @@ template authz_ibrowse_config do
   source "ibrowse.config.erb"
   mode "0644"
   variables(node['private_chef']['opscode-authz'].to_hash)
-  notifies :restart, 'service[opscode-authz]' if OmnibusHelper.should_notify?("opscode-authz")
+  notifies :restart, 'runit_service[opscode-authz]' if OmnibusHelper.should_notify?("opscode-authz")
 end
 
 link "/opt/opscode/embedded/service/opscode-authz/rel/authz/etc/ibrowse/ibrowse.config" do
   to authz_ibrowse_config
 end
 
-runit_service "opscode-authz" do
-  down node['private_chef']['opscode-authz']['ha']
-  options({
-    :log_directory => opscode_authz_log_dir,
-    :svlogd_size => node['private_chef']['opscode-authz']['log_rotation']['file_maxbytes'],
-    :svlogd_num  => node['private_chef']['opscode-authz']['log_rotation']['num_to_keep']
-  }.merge(params))
-end
+component_runit_service "opscode-authz"
 
 if node['private_chef']['bootstrap']['enable']
-	execute "/opt/opscode/bin/private-chef-ctl start opscode-authz" do
-		retries 20
-	end
 
   execute "/opt/opscode/embedded/bin/rake design:load" do
     cwd "/opt/opscode/embedded/service/opscode-authz"
     not_if "curl http://#{node['private_chef']['couchdb']['vip']}:#{node['private_chef']['couchdb']['port']}/_all_dbs | grep authorization_design_documents"
   end
-end
 
-add_nagios_hostgroup("opscode-authz")
+end
