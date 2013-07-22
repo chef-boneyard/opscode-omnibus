@@ -37,7 +37,7 @@ add_command "password", "Set a user's password or System Recovery Password.", 2 
     end
     
     if password.length < 6
-      puts "Minimum password length is six characters."
+      STDERR.puts "Minimum password length is six characters."
       exit 1
     end 
 
