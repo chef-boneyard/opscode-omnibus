@@ -50,6 +50,7 @@ dependency "oc-chef-pedant"
 # partybus and upgrade scripts
 dependency "partybus"
 dependency "private-chef-upgrades"
+dependency "postgresql91" # for pg_upgrade
 
 # version manifest file
 dependency "version-manifest"
