@@ -1,5 +1,5 @@
 name "oc_authz_migrator"
-version "jpl/opc_adjustments"
+version "master"
 
 dependencies ["erlang", "rebar", "rsync"]
 
