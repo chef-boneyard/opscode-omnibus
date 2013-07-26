@@ -138,7 +138,8 @@ component_runit_service "postgresql" do
   control ['t']
 end
 
-if node['private_chef']['bootstrap']['enable']
+# idempotent and needed on upgrade.
+#if node['private_chef']['bootstrap']['enable']
   ###
   # Create the database, migrate it, and create the users we need, and grant them
   # privileges.
@@ -289,4 +290,4 @@ if node['private_chef']['bootstrap']['enable']
     # This can run each time, since the commands in the SQL file are all idempotent anyway
   end
 
-end
+#end #if node['private_chef']['bootstrap']['enable']
