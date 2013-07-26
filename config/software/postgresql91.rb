@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2013 Opscode, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ source :url => "http://ftp.postgresql.org/pub/source/v9.1.9/postgresql-9.1.9.tar
 relative_path "postgresql-9.1.9"
 
 configure_env = {
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+  "LDFLAGS" => "-Wl,-rpath,#{install_dir}/embedded/lib,-rpath,#{install_dir}/embedded/lib/postgresql91/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
 }
@@ -38,7 +38,9 @@ build do
   command ["./configure",
            "--prefix=#{install_dir}/embedded/lib/postgresql91",
            "--with-libedit-preferred",
-           "--with-openssl"].join(" "), :env => configure_env
+           "--with-openssl",
+           "--with-includes=#{install_dir}/embedded/include",
+           "--with-libraries=#{install_dir}/embedded/lib"].join(" "), :env => configure_env
   command "make -j #{max_build_jobs}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
   command "make install"
 end
