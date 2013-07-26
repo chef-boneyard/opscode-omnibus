@@ -29,10 +29,11 @@ define :component_runit_service, :log_directory => nil, :svlogd_size => nil, :sv
     end
   end
 
-  if node['private_chef']['bootstrap']['enable']
+  # idempotent and needed on upgrade
+  #if node['private_chef']['bootstrap']['enable']
     log "enable runit_service[#{component}]" do
       notifies :enable, "runit_service[#{component}]", :immediately
     end
-  end
+  #end
 
 end
