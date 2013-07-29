@@ -265,7 +265,7 @@ end
     # split bifrost's code and schema into separate repositories,
     # we'll need to deploy to a specific schema tag
 
-    command "/opt/opscode/embedded/bin/sqitch --engine pg --db-name bifrost --top-dir opt/opscode/embedded/service/oc_bifrost/db deploy --verify"
+    command "/opt/opscode/embedded/bin/sqitch --engine pg --db-name bifrost --top-dir /opt/opscode/embedded/service/oc_bifrost/db deploy --verify"
     user node['private_chef']['postgresql']['username']
 
     # If sqitch is deploying the first time, it'll return 0 on
