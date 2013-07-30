@@ -115,8 +115,6 @@ template pg_hba_config do
   notifies :restart, 'runit_service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
 end
 
-should_notify = OmnibusHelper.should_notify?("postgresql")
-
 component_runit_service "postgresql" do
   control ['t']
 end
