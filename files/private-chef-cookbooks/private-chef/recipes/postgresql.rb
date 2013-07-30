@@ -128,51 +128,9 @@ end
   #
   # oc_erchef
   #
-  erchef_database_exists = "/opt/opscode/embedded/bin/chpst -u #{node['private_chef']['postgresql']['username']} /opt/opscode/embedded/bin/psql -d 'template1' -c 'select datname from pg_database' -x|grep opscode_chef"
-  erchef_user_exists     = "/opt/opscode/embedded/bin/chpst -u #{node['private_chef']['postgresql']['username']} /opt/opscode/embedded/bin/psql -d 'template1' -c 'select usename from pg_user' -x|grep #{node['private_chef']['postgresql']['sql_user']}"
-  erchef_ro_user_exists  = "/opt/opscode/embedded/bin/chpst -u #{node['private_chef']['postgresql']['username']} /opt/opscode/embedded/bin/psql -d 'template1' -c 'select usename from pg_user' -x|grep #{node['private_chef']['postgresql']['sql_ro_user']}"
-
-  execute "/opt/opscode/embedded/bin/createdb -T template0 -E UTF-8 opscode_chef" do
-    user node['private_chef']['postgresql']['username']
-    not_if erchef_database_exists
-    retries 30
-    notifies :run, "execute[migrate_database]", :immediately
-  end
-
-  execute "migrate_database" do
-    command "/opt/opscode/embedded/bin/bundle exec /opt/opscode/embedded/bin/rake pg:remigrate"
-    cwd "/opt/opscode/embedded/service/chef-sql-schema"
-    user node['private_chef']['postgresql']['username']
-    action :nothing
-  end
-
-  execute "/opt/opscode/embedded/bin/psql -d 'opscode_chef' -c \"CREATE USER #{node['private_chef']['postgresql']['sql_user']} WITH SUPERUSER ENCRYPTED PASSWORD '#{node['private_chef']['postgresql']['sql_password']}'\"" do
-    cwd "/opt/opscode/embedded/service/chef-sql-schema"
-    user node['private_chef']['postgresql']['username']
-    notifies :run, "execute[grant opscode_chef privileges]", :immediately
-    not_if erchef_user_exists
-  end
-
-  execute "grant opscode_chef privileges" do
-    command "/opt/opscode/embedded/bin/psql -d 'opscode_chef' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_chef TO #{node['private_chef']['postgresql']['sql_user']}\""
-    user node['private_chef']['postgresql']['username']
-    action :nothing
-  end
-
-  execute "/opt/opscode/embedded/bin/psql -d 'opscode_chef' -c \"CREATE USER #{node['private_chef']['postgresql']['sql_ro_user']} WITH SUPERUSER ENCRYPTED PASSWORD '#{node['private_chef']['postgresql']['sql_ro_password']}'\"" do
-    cwd "/opt/opscode/embedded/service/chef-sql-schema"
-    user node['private_chef']['postgresql']['username']
-    notifies :run, "execute[grant opscode_chef_ro privileges]", :immediately
-    not_if erchef_ro_user_exists
-  end
-
-  execute "grant opscode_chef_ro privileges" do
-    command "/opt/opscode/embedded/bin/psql -d 'opscode_chef' -c \"GRANT ALL PRIVILEGES ON DATABASE opscode_chef TO #{node['private_chef']['postgresql']['sql_ro_user']}\""
-    user node['private_chef']['postgresql']['username']
-    action :nothing
-  end
 
 
+include_recipe "private-chef::erchef_database"
 include_recipe "private-chef::bifrost_database"
 
 #end #if node['private_chef']['bootstrap']['enable']
