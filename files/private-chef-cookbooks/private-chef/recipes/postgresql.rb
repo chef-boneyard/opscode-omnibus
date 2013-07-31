@@ -36,18 +36,8 @@ end
 
 directory postgresql_dir do
   owner node['private_chef']['postgresql']['username']
-  mode "0700"
-end
-
-directory postgresql_data_dir do
-  owner node['private_chef']['postgresql']['username']
-  mode "0700"
   recursive true
-end
-
-link postgresql_data_dir_symlink do
-  to postgresql_data_dir
-  not_if { postgresql_data_dir == postgresql_data_dir_symlink }
+  mode "0700"
 end
 
 file File.join(node['private_chef']['postgresql']['home'], ".profile") do
@@ -92,6 +82,11 @@ end
 
 
 private_chef_pg_cluster postgresql_data_dir
+
+link postgresql_data_dir_symlink do
+  to postgresql_data_dir
+  not_if { postgresql_data_dir == postgresql_data_dir_symlink }
+end
 
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
 
