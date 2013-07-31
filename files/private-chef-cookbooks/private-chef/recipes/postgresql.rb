@@ -92,18 +92,5 @@ component_runit_service "postgresql" do
   control ['t']
 end
 
-# idempotent and needed on upgrade.
-#if node['private_chef']['bootstrap']['enable']
-  ###
-  # Create the database, migrate it, and create the users we need, and grant them
-  # privileges.
-
-  #
-  # oc_erchef
-  #
-
-
 include_recipe "private-chef::erchef_database"
 include_recipe "private-chef::bifrost_database"
-
-#end #if node['private_chef']['bootstrap']['enable']
