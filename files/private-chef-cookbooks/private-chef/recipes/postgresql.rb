@@ -88,26 +88,6 @@ link postgresql_data_dir_symlink do
   not_if { postgresql_data_dir == postgresql_data_dir_symlink }
 end
 
-postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
-
-template postgresql_config do
-  source "postgresql.conf.erb"
-  owner node['private_chef']['postgresql']['username']
-  mode "0644"
-  variables(node['private_chef']['postgresql'].to_hash)
-  notifies :restart, 'runit_service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
-end
-
-pg_hba_config = File.join(postgresql_data_dir, "pg_hba.conf")
-
-template pg_hba_config do
-  source "pg_hba.conf.erb"
-  owner node['private_chef']['postgresql']['username']
-  mode "0644"
-  variables(node['private_chef']['postgresql'].to_hash)
-  notifies :restart, 'runit_service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
-end
-
 component_runit_service "postgresql" do
   control ['t']
 end
