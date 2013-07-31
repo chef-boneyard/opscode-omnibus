@@ -90,10 +90,8 @@ else
   end
 end
 
-execute "/opt/opscode/embedded/bin/initdb -D #{postgresql_data_dir}" do
-  user node['private_chef']['postgresql']['username']
-  not_if { File.exists?(File.join(postgresql_data_dir, "PG_VERSION")) }
-end
+
+private_chef_pg_cluster postgresql_data_dir
 
 postgresql_config = File.join(postgresql_data_dir, "postgresql.conf")
 
