@@ -23,11 +23,32 @@ postgresql_data_dir = node['private_chef']['postgresql']['data_dir']
 postgresql_data_dir_symlink = File.join(postgresql_dir, "data")
 postgresql_log_dir = node['private_chef']['postgresql']['log_directory']
 
+# Postgres User Setup
 user node['private_chef']['postgresql']['username'] do
   system true
   shell node['private_chef']['postgresql']['shell']
   home node['private_chef']['postgresql']['home']
 end
+
+# TODO: Currently this is set up to be a parent directory of
+# node['private_chef']['postgresql']['dir'].  Is it necessary that
+# this is exposed as a settable attribute, or can we make some
+# simplifying assumptions about our directory structure?
+directory node['private_chef']['postgresql']['home'] do
+  owner node['private_chef']['postgresql']['username']
+  recursive true
+  mode "0700"
+end
+
+file File.join(node['private_chef']['postgresql']['home'], ".profile") do
+  owner node['private_chef']['postgresql']['username']
+  mode "0644"
+  content <<-EOH
+    PATH=#{node['private_chef']['postgresql']['user_path']}
+  EOH
+end
+
+####
 
 directory postgresql_log_dir do
   owner node['private_chef']['user']['username']
@@ -40,13 +61,7 @@ directory postgresql_dir do
   mode "0700"
 end
 
-file File.join(node['private_chef']['postgresql']['home'], ".profile") do
-  owner node['private_chef']['postgresql']['username']
-  mode "0644"
-  content <<-EOH
-PATH=#{node['private_chef']['postgresql']['user_path']}
-EOH
-end
+####
 
 if File.directory?("/etc/sysctl.d") && File.exists?("/etc/init.d/procps")
   # smells like ubuntu...
@@ -79,7 +94,6 @@ else
     not_if "egrep '^kernel.shmmax = ' /etc/sysctl.conf"
   end
 end
-
 
 private_chef_pg_cluster postgresql_data_dir
 
