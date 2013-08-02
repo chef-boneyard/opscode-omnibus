@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2012-2013 Opscode, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,20 +29,18 @@ source :url => "http://ftp.postgresql.org/pub/source/v9.2.4/postgresql-9.2.4.tar
 relative_path "postgresql-9.2.4"
 
 configure_env = {
-  "LDFLAGS" => "-Wl,-rpath,#{install_dir}/embedded/lib,-rpath,#{install_dir}/embedded/lib/postgresql92/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+  "LDFLAGS" => "-Wl,-rpath,#{install_dir}/embedded/lib,-rpath,#{install_dir}/embedded/postgresql/9.2/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
   "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
 }
 
 build do
   command ["./configure",
-           "--prefix=#{install_dir}/embedded/lib/postgresql92",
+           "--prefix=#{install_dir}/embedded/postgresql/9.2",
            "--with-libedit-preferred",
            "--with-openssl",
            "--with-includes=#{install_dir}/embedded/include",
            "--with-libraries=#{install_dir}/embedded/lib"].join(" "), :env => configure_env
   command "make world -j #{max_build_jobs}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
   command "make install-world"
-  # link binaries to embedded/bin/
-  command "sh -c 'for F in #{install_dir}/embedded/lib/postgresql92/bin/*; do ln -s $F #{install_dir}/embedded/bin/; done'"
 end
