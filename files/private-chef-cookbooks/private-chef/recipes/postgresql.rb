@@ -95,7 +95,12 @@ else
   end
 end
 
-private_chef_pg_cluster postgresql_data_dir
+# Upgrade the cluster if you gotta
+private_chef_pg_upgrade "upgrade_if_necessary"
+
+private_chef_pg_cluster postgresql_data_dir do
+  notifies :restart, 'runit_service[postgresql]' if OmnibusHelper.should_notify?("postgresql")
+end
 
 link postgresql_data_dir_symlink do
   to postgresql_data_dir
