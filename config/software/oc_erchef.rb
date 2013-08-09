@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "0.21.13"
+version "of/gen_server_call_timeout"
 
 dependency "erlang"
 dependency "rebar"
