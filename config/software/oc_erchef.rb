@@ -1,5 +1,6 @@
 name "oc_erchef"
-version "0.21.16"
+
+version "of/upgrade_sqerl"
 
 dependency "erlang"
 dependency "rebar"
