@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -e /usr/bin/private-chef-ctl ]; then
+   echo -e "\033[1mYou are about to upgrade Private Chef!\033[0m"
+   echo
+   echo "To ensure the process goes as smoothly as possible, we"
+   echo "will be shutting down all Private Chef-related services"
+   echo "on this machine before the new installer runs."
+   echo
+   /usr/bin/private-chef-ctl stop
+   echo
+fi
