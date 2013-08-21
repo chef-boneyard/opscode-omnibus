@@ -32,7 +32,7 @@ build do
   # the application and its dependencies. For this not to effect the
   # ruby environment from which we run omnbius, we must clear the
   # currently set bundler environment variables. BUNDLER BUSTER does this.
-  command "make rel", :env => env.merge(Omnibus::Builder::BUNDLER_BUSTER)
+  command "make rel", :env => env.merge(Omnibus::Builder::BUNDLER_BUSTER).merge('GECODE_PREFIX' => '/opt/opscode/embedded')
   command "mkdir -p #{install_dir}/embedded/service/opscode-erchef"
   command "#{install_dir}/embedded/bin/rsync -a --delete ./rel/oc_erchef/ #{install_dir}/embedded/service/opscode-erchef/"
   # TODO: git cleanup in opscode-erchef service directory
