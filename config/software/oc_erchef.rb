@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "0.21.21"
+version "ma/oc-9601/depsolver-gecode"
 
 dependency "erlang"
 dependency "rebar"

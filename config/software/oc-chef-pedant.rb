@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-version "1.0.14"
+version "ma/oc-9601/depsolver-gecode"
 
 dependency "ruby"
 dependency "bundler"
