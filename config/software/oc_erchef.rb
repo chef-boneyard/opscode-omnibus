@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "0.21.21"
+version "sf/bulk-bifrost"
 
 dependency "erlang"
 dependency "rebar"
