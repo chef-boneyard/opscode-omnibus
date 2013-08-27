@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "0.21.24"
+version "sd/remove-sql-switching"
 
 dependency "erlang"
 dependency "rebar"

@@ -1,5 +1,5 @@
 name "opscode-account"
-version "rel-1.34.1"
+version "sd/remove-sql-switching"
 
 dependency "ruby"
 dependency "bundler"
