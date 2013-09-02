@@ -1,5 +1,5 @@
 name "opscode-org-creator"
-version "rel-1.1.0"
+version "cm/remove-script" # "rel-1.1.0"
 
 dependency "erlang"
 dependency "rebar"
