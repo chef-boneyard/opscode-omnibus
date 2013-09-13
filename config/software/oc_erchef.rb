@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "0.21.27"
+version "hh/CHEF-4086/vhost-base-uri"
 
 dependency "erlang"
 dependency "rebar"

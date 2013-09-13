@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-version "1.0.17"
+version "hh/CHEF-4086/vhost-base-uri"
 
 dependency "ruby"
 dependency "bundler"
