@@ -14,11 +14,19 @@ case node["platform_family"]
 when "debian"
   include_recipe "private-chef::runit_upstart"
 when "rhel"
-  if node['platform_version'] =~ /^6/
+  case node['platform']
+  when "amazon"
+    # TODO: platform_version check for old distro version without upstart
     include_recipe "private-chef::runit_upstart"
   else
-    include_recipe "private-chef::runit_sysvinit"
+    if node['platform_version'] =~ /^5/
+      include_recipe "private-chef::runit_sysvinit"
+    else
+      include_recipe "private-chef::runit_upstart"
+    end
   end
+when "fedora"
+  include_recipe "private-chef::runit_upstart"
 else
   include_recipe "private-chef::runit_sysvinit"
 end
