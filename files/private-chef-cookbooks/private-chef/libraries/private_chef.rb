@@ -43,6 +43,7 @@ module PrivateChef
   dark_launch Mash.new
   oc_chef_pedant Mash.new
   opscode_chef_mover Mash.new
+  oc_chef_pedant Mash.new
 
   servers Mash.new
   backend_vips Mash.new
