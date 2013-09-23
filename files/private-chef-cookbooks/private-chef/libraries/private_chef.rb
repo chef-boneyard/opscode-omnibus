@@ -40,6 +40,7 @@ module PrivateChef
   log_retention Mash.new
   log_rotation Mash.new
   dark_launch Mash.new
+  oc_chef_pedant Mash.new
 
   servers Mash.new
   backend_vips Mash.new
@@ -201,6 +202,7 @@ module PrivateChef
         rkey = key.gsub('_', '-') unless key =~ /^oc_/ # leave oc_* keys as is
         results['private_chef'][rkey] = PrivateChef[key]
       end
+      results['private_chef']['oc-chef-pedant'] = PrivateChef['oc_chef_pedant']
       results['private_chef']['notification_email'] = PrivateChef['notification_email']
       results['private_chef']['from_email'] = PrivateChef['from_email']
       results['private_chef']['role'] = PrivateChef['role']
