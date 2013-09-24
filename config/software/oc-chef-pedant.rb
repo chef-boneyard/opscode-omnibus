@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-version "1.0.18"
+version "of/order_independence_arrays"
 
 dependency "ruby"
 dependency "bundler"
