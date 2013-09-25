@@ -204,7 +204,13 @@ module PrivateChef
         "ldap",
         "user"
       ].each do |key|
-        rkey = key.gsub('_', '-') unless key =~ /^oc_/ # leave oc_* keys as is
+        # @todo: Just pick a naming convention and adhere to it
+        # consistently
+        rkey = if key =~ /^oc_/
+                 key # leave oc_* keys as is
+               else
+                 key.gsub('_', '-')
+               end
         results['private_chef'][rkey] = PrivateChef[key]
       end
       results['private_chef']['oc-chef-pedant'] = PrivateChef['oc_chef_pedant']
