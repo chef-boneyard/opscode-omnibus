@@ -146,7 +146,7 @@ include_recipe "private-chef::runit"
 
 # Configure Services
 [
-        "drbd",
+  "drbd",
   "couchdb",
   "rabbitmq",
   "postgresql",
