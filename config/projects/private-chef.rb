@@ -20,6 +20,7 @@ dependency "private-chef-scripts" # assorted scripts used by installed instance
 dependency "private-chef-ctl" # additional project-specific private-chef-ctl subcommands
 dependency "private-chef-administration"
 dependency "openresty"
+dependency "lpeg"  # lua-based routing
 dependency "runit"
 dependency "unicorn"
 
