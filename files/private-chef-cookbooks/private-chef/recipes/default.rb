@@ -68,11 +68,17 @@ end
 # Create the Chef User
 include_recipe "private-chef::users"
 
+# Merge dark_launch and load balancer darklaunch values to determine
+# what is persisted to dark_launch_features below.
+dark_launch = node['private_chef']['dark_launch']
+lb_xdarklaunch = node['private_chef']['lb']['xdl_defaults']
+dl_values = dark_launch.merge(lb_xdarklaunch)
+
 file "/etc/opscode/dark_launch_features.json" do
   owner node["private_chef"]["user"]["username"]
   group "root"
   mode "0644"
-  content Chef::JSONCompat.to_json_pretty(node['private_chef']['dark_launch'].to_hash)
+  content Chef::JSONCompat.to_json_pretty(dl_values.to_hash)
 end
 
 webui_key = OpenSSL::PKey::RSA.generate(2048) unless File.exists?('/etc/opscode/webui_pub.pem')
@@ -160,8 +166,9 @@ include_recipe "private-chef::runit"
   "opscode-erchef",
   "opscode-webui",
   "opscode-chef-mover",
+  "redis",
   "nginx",
-        "keepalived"
+  "keepalived"
 ].each do |service|
   if node["private_chef"][service]["enable"]
     include_recipe "private-chef::#{service}"
