@@ -16,5 +16,5 @@ lua_dir = "#{install_dir}/embedded/luajit/include/luajit-2.0"
 
 build do
   command "make LUADIR=#{lua_dir}", :env => env
-  command "install -p -m 0644 lpeg.so #{install_dir}/embedded/lualib"
+  command "install -p -m 0755 lpeg.so #{install_dir}/embedded/lualib"
 end
