@@ -42,6 +42,7 @@ module PrivateChef
   log_rotation Mash.new
   dark_launch Mash.new
   oc_chef_pedant Mash.new
+  opscode_chef_mover Mash.new
 
   servers Mash.new
   backend_vips Mash.new
@@ -194,6 +195,7 @@ module PrivateChef
         "oc_bifrost",
         "opscode_certificate",
         "opscode_org_creator",
+        "opscode_chef_mover",
         "opscode_account",
         "bookshelf",
         "bootstrap",
@@ -299,7 +301,7 @@ module PrivateChef
       PrivateChef["redis"]["bind"] ||= "0.0.0.0"
       PrivateChef["opscode_account"]["worker_processes"] ||= 4
 
-      PrivateChef["opscode-chef-mover"]["enable"] = !!bootstrap
+      PrivateChef["opscode_chef_mover"]["enable"] = !!bootstrap
       PrivateChef["bootstrap"]["enable"] = !!bootstrap
     end
 
@@ -322,6 +324,7 @@ module PrivateChef
       PrivateChef["lb"]["cache_cookbook_files"] ||= true
       PrivateChef["lb"]["upstream"] = Mash.new
       PrivateChef["lb"]["upstream"]["bookshelf"] ||= [ PrivateChef["backend_vips"]["ipaddress"] ]
+      PrivateChef["opscode_chef_mover"]["enable"] = false
       PrivateChef["bootstrap"]["enable"] = false
     end
 
