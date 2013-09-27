@@ -10,6 +10,7 @@ nginx_etc_dir = File.join(nginx_dir, "etc")
 nginx_cache_dir = File.join(nginx_dir, "cache")
 nginx_cache_tmp_dir = File.join(nginx_dir, "cache-tmp")
 nginx_html_dir = File.join(nginx_dir, "html")
+nginx_scripts_dir = File.join(nginx_etc_dir, "scripts")
 nginx_ca_dir = File.join(nginx_dir, "ca")
 nginx_log_dir = node['private_chef']['nginx']['log_directory']
 nginx_d_dir = File.join(nginx_etc_dir, "nginx.d")
@@ -21,6 +22,7 @@ nginx_addon_dir = File.join(nginx_etc_dir, "addon.d")
   nginx_cache_dir,
   nginx_cache_tmp_dir,
   nginx_html_dir,
+  nginx_scripts_dir,
   nginx_ca_dir,
   nginx_log_dir,
   nginx_d_dir,
@@ -96,24 +98,40 @@ end
 nginx_config = File.join(nginx_etc_dir, "nginx.conf")
 chef_lb_configs = {
   :chef_https_config => File.join(nginx_etc_dir, "chef_https_lb.conf"),
-  :chef_http_config => File.join(nginx_etc_dir, "chef_http_lb.conf")
+  :chef_http_config => File.join(nginx_etc_dir, "chef_http_lb.conf"),
+  :script_path => nginx_scripts_dir
 }
 
 nginx_vars = node['private_chef']['nginx'].to_hash
 nginx_vars = nginx_vars.merge({ :helper => NginxErb.new(node),
                                 :allowed_webui_subnets => PrivateChef.allowed_webui_subnets})
-
 # Chef API lb config for HTTPS and HTTP
+# TODO ['lb']['redis']
+lbconf = node['private_chef']['lb'].to_hash
+lbconf.merge(nginx_vars).merge({
+  :redis_host => node['private_chef']['redis']['vip'],
+  :redis_port => node['private_chef']['redis']['port']
+})
+
+["config.lua", "dispatch.lua", "resolver.lua", "route_checks.lua", "routes.lua"].each do |script|
+     template File.join(nginx_scripts_dir, script) do
+       source "nginx/scripts/#{script}.erb"
+       owner "root"
+       group "root"
+       mode "0644"
+       variables lbconf
+     end
+end
 ["https", "http"].each do |server_proto|
   config_key = "chef_#{server_proto}_config".to_sym
   lb_config = chef_lb_configs[config_key]
 
   template lb_config do
-    source "nginx_chef_api_lb.conf.erb"
+    source "nginx/nginx_chef_api_lb.conf.erb"
     owner "root"
     group "root"
     mode "0644"
-    variables(nginx_vars.merge({:server_proto => server_proto}))
+    variables(lbconf.merge({:server_proto => server_proto}))
     notifies :restart, 'runit_service[nginx]' if OmnibusHelper.should_notify?("nginx")
   end
 
@@ -121,7 +139,7 @@ end
 
 # top-level and internal load balancer config
 template nginx_config do
-  source "nginx.conf.erb"
+  source "nginx/nginx.conf.erb"
   owner "root"
   group "root"
   mode "0644"
@@ -130,7 +148,7 @@ template nginx_config do
 end
 
 template File.join(nginx_addon_dir, "README.md") do
-  source "nginx-addons.README.erb"
+  source "nginx/nginx-addons.README.erb"
   owner "root"
   group "root"
   mode "0644"
