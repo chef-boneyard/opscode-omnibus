@@ -183,6 +183,7 @@ module PrivateChef
     def generate_hash
       results = { "private_chef" => {} }
       [
+        "opscode_chef",
         "couchdb",
         "rabbitmq",
         "opscode_solr",
