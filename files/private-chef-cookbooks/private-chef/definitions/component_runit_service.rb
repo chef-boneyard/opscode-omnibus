@@ -28,16 +28,12 @@ define :component_runit_service, :log_directory => nil, :svlogd_size => nil, :sv
     )
   end
 
-  if (params[:ha].nil? ? node['private_chef'][component]['ha'] : params[:ha])
-    log "bring runit_service[#{component}] down" do
-      notifies :down, "runit_service[#{component}]", :immediately
-    end
-  end
-
-  if enable and node['private_chef']['bootstrap']['bootstrap_server']
-    log "enable runit_service[#{component}]" do
-      notifies :enable, "runit_service[#{component}]", :immediately
-    end
+  # If a service is supposed to be enabled on a backend or frontend
+  # box, the appropriate recipe will be loaded in that box's run list.
+  # Keepalived will handle shutting down services on the backend
+  # slave.
+  log "enable runit_service[#{component}]" do
+    notifies :enable, "runit_service[#{component}]", :immediately
   end
 
 end

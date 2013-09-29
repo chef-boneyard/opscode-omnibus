@@ -1,10 +1,47 @@
 require 'mixlib/shellout'
 
 class OmnibusHelper
+
+  # Return true if the node is the master for data storage replication
+  # purposes.  Frontend machines are not, by definition.  HA backend
+  # slaves are not, either.
+  #
+  # Basically, if you're a standalone EC server, or an HA backend
+  # kepalived master, this returns true.
+  #
+  # @param node [Node] needs to be passed in to access kepalive
+  #   directory path information
+  def self.is_data_master?(node)
+    topology = PrivateChef['topology']
+    role = PrivateChef['role']
+
+    case topology
+    when "standalone"
+      true # by definition
+    when "tier"
+      role == "backend"
+    when "ha"
+      if (role == "backend")
+        dir = node['private_chef']['keepalived']['dir']
+        cluster_status_file = "#{dir}/current_cluster_status"
+        File.exists?(cluster_status_file) && File.open(cluster_status_file).read.chomp == "master"
+      else
+        false # frontends can't be masters, by definition
+      end
+    end
+  end
+
+
   def self.should_notify?(service_name)
     File.symlink?("/opt/opscode/service/#{service_name}") && check_status(service_name)
   end
 
+  # Note that this WON'T WORK on a non-bootstrap backend server,
+  # because private-chef-ctl status will return 0 when there are no
+  # services to query.
+  #
+  # This cannot be used as a check for a service being up on a backend
+  # slave :(
   def self.check_status(service_name)
     o = Mixlib::ShellOut.new("/opt/opscode/bin/private-chef-ctl status #{service_name}")
     o.run_command

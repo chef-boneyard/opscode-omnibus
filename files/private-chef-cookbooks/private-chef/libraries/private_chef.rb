@@ -198,7 +198,13 @@ module PrivateChef
         "ldap",
         "user"
       ].each do |key|
-        rkey = key.gsub('_', '-') unless key =~ /^oc_/ # leave oc_* keys as is
+        # @todo: Just pick a naming convention and adhere to it
+        # consistently
+        rkey = if key =~ /^oc_/
+                 key # leave oc_* keys as is
+               else
+                 key.gsub('_', '-')
+               end
         results['private_chef'][rkey] = PrivateChef[key]
       end
       results['private_chef']['notification_email'] = PrivateChef['notification_email']
@@ -278,11 +284,8 @@ module PrivateChef
       PrivateChef["postgresql"]["listen_address"] ||= "0.0.0.0"
       PrivateChef["postgresql"]["md5_auth_cidr_addresses"] ||= ["0.0.0.0/0", "::0/0"]
       PrivateChef["opscode_account"]["worker_processes"] ||= 4
-      if bootstrap
-        PrivateChef["bootstrap"]["enable"] = true
-      else
-        PrivateChef["bootstrap"]["enable"] = false
-      end
+
+      PrivateChef["bootstrap"]["enable"] = !!bootstrap
     end
 
     def gen_frontend
@@ -342,12 +345,10 @@ module PrivateChef
       when "standalone","manual"
         PrivateChef[:api_fqdn] ||= node_name
         gen_api_fqdn
-      when "ha","tier"
-        if PrivateChef['topology'] == "ha"
-          gen_redundant(node_name, true)
-        else
-          gen_redundant(node_name, false)
-        end
+      when "ha"
+        gen_redundant(node_name, true)
+      when "tier"
+        gen_redundant(node_name, false)
       else
         Chef::Log.fatal("I do not understand topology #{PrivateChef.topology} - try standalone, manual, ha or tier.")
         exit 55
