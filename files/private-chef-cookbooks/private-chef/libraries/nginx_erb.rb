@@ -74,13 +74,13 @@ location ~ "#{path}" {
 EOS
   end
 
-  def xdarklaunch_sql?(resource)
-    !!node['private_chef']['dark_launch']["sql_#{resource}"]
+  def xdarklaunch_couchdb?(resource)
+    node['private_chef']['dark_launch']["couchdb_#{resource}"]
   end
 
   def xdarklaunch_header
-    %w(users containers groups).map do |resource|
-      "couchdb_#{resource}=#{xdarklaunch_sql?(resource) ? 0 : 1}"
+    %w(containers groups).map do |resource|
+      "couchdb_#{resource}=#{xdarklaunch_couchdb?(resource) ? 1 : 0}"
     end.join(';')
   end
 

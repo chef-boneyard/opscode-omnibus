@@ -64,7 +64,7 @@
       set $dl_header "";
 
       rewrite_by_lua '
-        ngx.req.set_header("X-Ops-DarkLaunch", "couchdb_containers=1;couchdb_users=1")
+        ngx.req.set_header("X-Ops-DarkLaunch", "")
 
         -- set ngx.ctx.dl_config
         -- Not currently used, but leaving it in as a "hook" for future use
