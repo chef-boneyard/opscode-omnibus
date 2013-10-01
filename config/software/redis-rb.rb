@@ -14,11 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-name "redis"
+name "redis-rb"
+version "3.0.4"
 
 dependency "ruby"
 dependency "rubygems"
 
 build do
-  gem "install #{name} -n #{install_dir}/bin --no-rdoc --no-ri -v #{version}"
+  gem "install redis -n #{install_dir}/bin --no-rdoc --no-ri -v #{version}"
 end
