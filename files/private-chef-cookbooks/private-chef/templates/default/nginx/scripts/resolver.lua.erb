@@ -5,7 +5,6 @@ local upstream_resolver = { }
 upstream_resolver.chef = "opscode_chef"
 upstream_resolver.erchef = "opscode_erchef"
 upstream_resolver.acct = "opscode_account"
-upstream_resolver.reports = "opscode_reporting"
 
 -- Resolve an upstream, applying any necessary darklaunch controls.
 -- Once we have an upstream name, modify it if the upstream
@@ -24,13 +23,11 @@ end
 -- alter the upstream name to the appropriate tarpit
 upstream_resolver.tarpitify = function(route_id, org_config, internal)
   local upstream = upstream_resolver[route_id]
-  -- TODO internal non-API lbs don't tarpit - but does this make sense?
-  -- seems like we'd want it across the board.
+  -- internal non-API lbs don't tarpit
   if internal then
     return upstream
   end
 
-  -- TODO this can be done more cleanly now
   tarpitid = org_config["tarpit_" .. route_id]
   if tarpitid then
     return upstream .. "_tarpit" .. tarpitid

@@ -22,17 +22,24 @@ end
 local userid = ngx.var.http_x_ops_userid or ""
 local uri = ngx.var.uri
 
--- TODO this should onyl be present in OPC.
-if userid == "" then
-  -- TODO config.is_whitelisted(webui, addr)
-  ngx.var.upstream = "opscode_webui"
-  return
-end
-
 
 -- A couple of early-exit validations that are specific
 -- to an api vhost:
 if mode == "api" then
+  -- For EC the same LB supports both webui and
+  -- api - if user id is not present, then treat
+  -- this as a webui request.
+  if userid == "" then
+    -- is this client permitted to access webui?
+    local res = ngx.location.capture("/webui-access-check")
+    if (not res.status == ngx.HTTP_OK) then
+      ngx.exit(res.status)
+    end
+
+    ngx.var.upstream = "opscode_webui"
+    return
+  end
+
   -- Internal API does not validate chef version
   if not internal then
     -- Exit early: If they don't have the right chef version, send them packing.
@@ -106,7 +113,3 @@ for k, v in pairs(route.org_config) do dl_header = dl_header .. k .. "=" .. v ..
 ngx.req.set_header("X-Ops-DarkLaunch", dl_header)
 
 
--- Some differences:
--- API host:
---   * if chef client version is missing, assume the request belongs to webui and respond appropriately.
---   *

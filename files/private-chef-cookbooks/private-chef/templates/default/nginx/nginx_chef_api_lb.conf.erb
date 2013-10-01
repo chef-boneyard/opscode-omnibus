@@ -55,17 +55,12 @@
     # Include external routes for addons
     include <%= node['private_chef']['nginx']['dir'] %>/etc/addon.d/*_external.conf;
 
-    location ~ "^/(?:stylesheets|javascripts|images|facebox|css|favicon|robots|humans)/{0,1}.*$" {
-      if ($http_x_chef_version ~* "^(\d+\.\d+?)\..+$") {
-        error_page 400 =400 /400-chef_client_manage.json;
-        return 400;
-      }
-
+    # This internal location is used to verify that any request that is to
+    # is permitted to go there by ip/subnet.
+    location "/webui-access-check" {
+      internal;
       # When configured to allow webui access to only certain subnets,
       # create "allow" rules for them, followed by deny all.
-      # NOTE: This snippet is duplicated for the "/" location below.
-      # Copy changes you make here down there as well.
-      # TODO access_by_lua: config.is_whitelisted('webui', remote_addr)
       <% if @allowed_webui_subnets && !@allowed_webui_subnets.empty? %>
         <% @allowed_webui_subnets.each do |subnet| %>
       allow <%= subnet %>;
@@ -73,9 +68,15 @@
       deny all;
       <% end %>
 
-      proxy_pass http://opscode_webui;
+    }
 
-      # TODO Note the difference: cache controls, headers off only for these objects
+    location ~ "^/(?:stylesheets|javascripts|images|facebox|css|favicon|robots|humans)/{0,1}.*$" {
+      if ($http_x_chef_version ~* "^(\d+\.\d+?)\..+$") {
+        error_page 400 =400 /400-chef_client_manage.json;
+        return 400;
+      }
+
+      proxy_pass http://opscode_webui;
       proxy_pass_request_headers off;
       proxy_cache webui-cache;
       proxy_cache_valid 200 302 300m;
@@ -83,10 +84,9 @@
     }
 
     location / {
-      # TODO recipe attrs for these things?
       set $mode "api";
       set $upstream "";
-      rewrite_by_lua_file '/etc/nginx/scripts/dispatch.lua';
+      rewrite_by_lua_file '<%=@script_path%>/dispatch.lua';
 
       proxy_pass http://$upstream;
       proxy_redirect http://$upstream /;

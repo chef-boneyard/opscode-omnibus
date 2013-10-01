@@ -137,10 +137,10 @@ end
 
 -- return true if the given address is maintenance mode
 -- whitelist
-function config.is_addr_whitelisted(remote_addr)
+function config.is_addr_whitelisted(component, remote_addr)
   local maint = ngx.shared.maint_data
   refresh_expiring_set(maint, "maint_data", maint_refresh_interval)
-  return maint:get(string.match(remote_addr, "%d+.%d+.%d+")) or
+  return maint:get(string.match(component .. "-" .. remote_addr, "%d+.%d+.%d+")) or
          maint:get(remote_addr)
 end
 
@@ -182,7 +182,6 @@ function config.org_config(org)
   return org_config
 end
 
--- Specificaly for dev-mode tests.
 function set_ban_refresh_interval(interval)
   ban_refresh_interval = interval
 end

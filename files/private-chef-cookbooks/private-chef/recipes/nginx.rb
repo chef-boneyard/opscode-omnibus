@@ -105,10 +105,9 @@ chef_lb_configs = {
 nginx_vars = node['private_chef']['nginx'].to_hash
 nginx_vars = nginx_vars.merge({ :helper => NginxErb.new(node),
                                 :allowed_webui_subnets => PrivateChef.allowed_webui_subnets})
+
 # Chef API lb config for HTTPS and HTTP
-# TODO ['lb']['redis']
-lbconf = node['private_chef']['lb'].to_hash
-lbconf.merge(nginx_vars).merge({
+lbconf = node['private_chef']['lb'].to_hash.merge(nginx_vars).merge({
   :redis_host => node['private_chef']['redis']['vip'],
   :redis_port => node['private_chef']['redis']['port']
 })
@@ -120,8 +119,13 @@ lbconf.merge(nginx_vars).merge({
        group "root"
        mode "0644"
        variables lbconf
+       # Note that due to JIT compile of lua resources, any
+       # changes to them will require a full restart to be picked up.
+       # This includes any embedded lua.
+       notifies :restart, 'runit_service[nginx]' if OmnibusHelper.should_notify?("nginx")
      end
 end
+
 ["https", "http"].each do |server_proto|
   config_key = "chef_#{server_proto}_config".to_sym
   lb_config = chef_lb_configs[config_key]
@@ -131,10 +135,10 @@ end
     owner "root"
     group "root"
     mode "0644"
-    variables(lbconf.merge({:server_proto => server_proto}))
+    variables(lbconf.merge({:server_proto => server_proto,
+                            :script_path => nginx_scripts_dir }))
     notifies :restart, 'runit_service[nginx]' if OmnibusHelper.should_notify?("nginx")
   end
-
 end
 
 # top-level and internal load balancer config
@@ -143,7 +147,7 @@ template nginx_config do
   owner "root"
   group "root"
   mode "0644"
-  variables(nginx_vars.merge(chef_lb_configs))
+  variables(lbconf.merge(chef_lb_configs))
   notifies :restart, 'service[nginx]' if OmnibusHelper.should_notify?("nginx")
 end
 

@@ -28,7 +28,6 @@ http {
   include /opt/opscode/embedded/conf/mime.types;
 
   lua_package_path "<%=@script_path %>/?.lua;$prefix/?.lua;;";
-  #lua_package_cpath   "/usr/lib/lua/5.1/?.so;;";
   lua_shared_dict maint_data 1m;
   lua_shared_dict banned_ips 1m;
 
@@ -105,7 +104,7 @@ http {
     location "/" {
       set $upstream "";
       set $mode "internal_chef";
-      rewrite_by_lua_file '/etc/nginx/scripts/dispatch.lua';
+      rewrite_by_lua_file '<%=@script_path%>/dispatch.lua';
 
       proxy_redirect http://$upstream /;
       proxy_pass http://$upstream;
@@ -135,7 +134,7 @@ http {
     location / {
       set $upstream "";
       set $mode "internal_acct";
-      rewrite_by_lua_file '/etc/nginx/scripts/dispatch.lua';
+      rewrite_by_lua_file '<%=@script_path%>/dispatch.lua';
 
       proxy_redirect http://$upstream /;
       proxy_pass http://$upstream;
