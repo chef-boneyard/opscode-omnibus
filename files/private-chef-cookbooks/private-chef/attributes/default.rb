@@ -1,4 +1,4 @@
-#
+
 # Author:: Adam Jacob (<adam@opscode.com>)
 # Copyright:: Copyright (c) 2012 Opscode, Inc.
 #
@@ -204,30 +204,33 @@ default['private_chef']['oc-chef-pedant']['debug_org_creation'] = false
 ###
 default['private_chef']['redis']['enable'] = true
 default['private_chef']['redis']['ha'] = false
-default['private_chef']['redis']['dir'] = "/var/opt/opscode/redis"
-default['private_chef']['redis']['log_directory'] = "/var/log/opscode/redis"
+default['private_chef']['redis']['dir'] = "/var/opt/opscode/redis-lb"
+default['private_chef']['redis']['log_directory'] = "/var/log/opscode/redis-lb"
 default['private_chef']['redis']['log_rotation']['file_maxbytes'] = 1000000
 default['private_chef']['redis']['log_rotation']['num_to_keep'] = 10
-default['private_chef']['redis']['port'] = "6379"
+default['private_chef']['redis']['port'] = "16379"
 default['private_chef']['redis']['bind'] = "127.0.0.1"
 default['private_chef']['redis']['vip'] = "127.0.0.1"
 default['private_chef']['redis']['timeout'] = "300"
 default['private_chef']['redis']['loglevel'] = "notice"
 default['private_chef']['redis']['databases'] = "16"
 default['private_chef']['redis']['appendonly'] = "no"
-default['private_chef']['redis']['appendfsync'] = "everysec"
-default['private_chef']['redis']['vm']['enabled'] = "no"
-default['private_chef']['redis']['vm']['max_memory'] = "0"
-default['private_chef']['redis']['vm']['page_size'] = "32"
-default['private_chef']['redis']['vm']['pages'] = "134217728"
-default['private_chef']['redis']['vm']['max_threads'] = "4"
-default['private_chef']['redis']['root'] = '/var/opt/opscode/redis'
-default['private_chef']['redis']['maxmemory'] = "64m"
-default['private_chef']['redis']['maxmemory_policy'] = "volatile-lru"
+default['private_chef']['redis']['appendfsync'] = "always"
+default['private_chef']['redis']['activerehashing'] = "no"
+default['private_chef']['redis']['aof_rewrite_percent'] = "50"
+default['private_chef']['redis']['aof_rewrite_min_size'] = "16mb"
+default['private_chef']['redis']['maxmemory'] = "8m"
+default['private_chef']['redis']['maxmemory_policy'] = "noeviction"
+
+default['private_chef']['redis']['save_frequency'] = {
+  "900" => "1",
+  "300" => "10",
+  "60" => "1000"
+}
 
 ###
 # Load Balancer
-###
+###g
 default['private_chef']['lb']['enable'] = true
 default['private_chef']['lb']['vip'] = "127.0.0.1"
 default['private_chef']['lb']['api_fqdn'] = node['fqdn']
@@ -240,15 +243,26 @@ default['private_chef']['lb']['upstream']['opscode-webui'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['oc_bifrost'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['opscode-solr'] = [ "127.0.0.1" ]
 default['private_chef']['lb']['upstream']['bookshelf'] = [ "127.0.0.1" ]
-default['private_chef']['lb']['redis_connection_timeout'] = 60
-default['private_chef']['lb']['redis_connection_pool_size'] = 250
-default['private_chef']['lb']['maint_refresh_interval'] = 600
-default['private_chef']['lb']['ban_refresh_interval'] = 600
 default['private_chef']['lb_internal']['enable'] = true
 default['private_chef']['lb_internal']['vip'] = "127.0.0.1"
 default['private_chef']['lb_internal']['chef_port'] = 9680
 default['private_chef']['lb_internal']['account_port'] = 9685
 default['private_chef']['lb_internal']['oc_bifrost_port'] = 9683
+default['private_chef']['lb']['redis_connection_timeout'] = 60
+default['private_chef']['lb']['redis_connection_pool_size'] = 250
+default['private_chef']['lb']['maint_refresh_interval'] = 600
+default['private_chef']['lb']['ban_refresh_interval'] = 600
+default['private_chef']['lb']['chef_min_version'] = 10
+default['private_chef']['lb']['chef_max_version'] = 11
+
+###
+# Load balancer route configuration
+###
+default['private_chef']['lb']['xdl_defaults']['503_mode'] = false
+default['private_chef']['lb']['xdl_defaults']['couchdb_containers'] = true
+default['private_chef']['lb']['xdl_defaults']['couchdb_groups'] = true
+default['private_chef']['lb']['xdl_defaults']['couchdb_acls'] = true
+
 
 ####
 # Nginx
@@ -430,9 +444,6 @@ default['private_chef']['opscode-org-creator']['port'] = 4369
 default['private_chef']['dark_launch']["quick_start"] = false
 default['private_chef']['dark_launch']["new_theme"] = true
 default['private_chef']['dark_launch']["private-chef"] = true
-default['private_chef']['dark_launch']["sql_users"] = true
-default['private_chef']['dark_launch']["couchdb_containers"] = true
-default['private_chef']['dark_launch']["couchdb_groups"] = true
 default['private_chef']['dark_launch']["add_type_and_bag_to_items"] = true
 default['private_chef']['dark_launch']["erlang_user_endpoint"] = false
 default['private_chef']['dark_launch']["reporting"] = true
@@ -553,6 +564,7 @@ default['private_chef']['keepalived']['service_order'] = [
   { "key" => "opscode-org-creator", "service_name" => "opscode-org-creator" },
   { "key" => "opscode-erchef", "service_name" => "opscode-erchef" },
   { "key" => "opscode-webui", "service_name" => "opscode-webui" },
+  { "key" => "redis", "service_name" => "redis" },
   { "key" => "nginx", "service_name" => "nginx" }
 ]
 
