@@ -32,10 +32,9 @@ if mode == "api" then
   if userid == "" then
     -- is this client permitted to access webui?
     local res = ngx.location.capture("/webui-access-check")
-    if (not res.status == ngx.HTTP_OK) then
+    if not (res.status == ngx.HTTP_OK) then
       ngx.exit(res.status)
     end
-
     ngx.var.upstream = "opscode_webui"
     return
   end
@@ -44,18 +43,12 @@ if mode == "api" then
   if not internal then
     -- Exit early: If they don't have the right chef version, send them packing.
     local version = ngx.var.http_x_chef_version
-    if version then
-      if not routes.is_client_version_valid(version, min_version, max_version) then
-        ngx.status = ngx.HTTP_BAD_REQUEST
-        ngx.say('{"error": "400 - Bad Request: Chef Client version between ' ..
-                min_version .. ' and  ' .. max_version ..
-                '" required. Your version of Chef is ' .. version .. '."}')
-        ngx.exit(ngx.HTTP_OK)
-      end
-    else
-      -- the request did not originate with a chef client, we'll give something
-      -- more friendly to web browsers.
-      return ngx.exec("/index.html")
+    if not routes.is_client_version_valid(version, min_version, max_version) then
+      ngx.status = ngx.HTTP_BAD_REQUEST
+      ngx.say('{"error": "400 - Bad Request: Chef Client version between ' ..
+              min_version .. ' and  ' .. max_version ..
+              '" required. Your version of Chef is ' .. version .. '."}')
+      ngx.exit(ngx.HTTP_OK)
     end
   end
 

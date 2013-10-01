@@ -67,7 +67,8 @@
         <% end %>
       deny all;
       <% end %>
-
+      # Need to emit some content to prevent a 404
+      echo "";
     }
 
     location ~ "^/(?:stylesheets|javascripts|images|facebox|css|favicon|robots|humans)/{0,1}.*$" {
@@ -75,6 +76,13 @@
         error_page 400 =400 /400-chef_client_manage.json;
         return 400;
       }
+
+      rewrite_by_lua '
+        local res = ngx.location.capture("/webui-access-check")
+        if not (res.status == ngx.HTTP_OK) then
+          ngx.exit(res.status)
+        end
+      ';
 
       proxy_pass http://opscode_webui;
       proxy_pass_request_headers off;
