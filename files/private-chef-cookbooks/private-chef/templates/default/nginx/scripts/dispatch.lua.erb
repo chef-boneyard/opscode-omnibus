@@ -30,12 +30,7 @@ if mode == "api" then
   -- api - if user id is not present, then treat
   -- this as a webui request.
   if userid == "" then
-    -- is this client permitted to access webui?
-    local res = ngx.location.capture("/webui-access-check")
-    if not (res.status == ngx.HTTP_OK) then
-      ngx.exit(res.status)
-    end
-    ngx.var.upstream = "opscode_webui"
+     ngx.var.upstream = "opscode_webui"
     return
   end
 
