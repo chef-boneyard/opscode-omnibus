@@ -160,8 +160,9 @@ include_recipe "private-chef::runit"
   "opscode-erchef",
   "opscode-webui",
   "opscode-chef-mover",
+  "redis",
   "nginx",
-        "keepalived"
+  "keepalived"
 ].each do |service|
   if node["private_chef"][service]["enable"]
     include_recipe "private-chef::#{service}"
