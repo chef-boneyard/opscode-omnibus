@@ -36,6 +36,7 @@ module PrivateChef
   drbd Mash.new
   keepalived Mash.new
   estatsd Mash.new
+  redis Mash.new
   nginx Mash.new
   log_retention Mash.new
   log_rotation Mash.new
@@ -51,10 +52,13 @@ module PrivateChef
   from_email nil
   role nil
   user Mash.new
-
   ldap Mash.new
 
   allowed_webui_subnets []
+  banned_ips []
+  maint_mode_whitelist_ips []
+
+
 
   class << self
 
@@ -184,6 +188,7 @@ module PrivateChef
         "opscode_expander",
         "opscode_erchef",
         "opscode_webui",
+        "redis",
         "lb",
         "postgresql",
         "oc_bifrost",
@@ -267,6 +272,7 @@ module PrivateChef
       PrivateChef["opscode_certificate"]["ha"] ||= true
       PrivateChef["opscode_org_creator"]["ha"] ||= true
       PrivateChef["opscode_account"]["ha"] ||= true
+      PrivateChef["redis"]["ha"] ||= true
       PrivateChef["nginx"]["ha"] ||= true
     end
 
@@ -279,6 +285,7 @@ module PrivateChef
       PrivateChef["opscode_webui"]["worker_processes"] ||= 2
       PrivateChef["postgresql"]["listen_address"] ||= "0.0.0.0"
       PrivateChef["postgresql"]["md5_auth_cidr_addresses"] ||= ["0.0.0.0/0", "::0/0"]
+      PrivateChef["redis"]["bind"] ||= "0.0.0.0"
       PrivateChef["opscode_account"]["worker_processes"] ||= 4
       if bootstrap
         PrivateChef["bootstrap"]["enable"] = true
@@ -300,6 +307,8 @@ module PrivateChef
       PrivateChef["opscode_expander"]["enable"] ||= false
       PrivateChef["opscode_org_creator"]["enable"] ||= false
       PrivateChef["postgresql"]["enable"] ||= false
+      PrivateChef["redis"]["enable"] ||= true
+      PrivateChef["redis"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["postgresql"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["lb"]["cache_cookbook_files"] ||= true
       PrivateChef["lb"]["upstream"] = Mash.new
