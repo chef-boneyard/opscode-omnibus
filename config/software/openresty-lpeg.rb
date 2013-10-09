@@ -1,4 +1,4 @@
-name "lpeg"
+name "openresty-lpeg"
 version "0.12"
 
 dependency "openresty"

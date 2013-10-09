@@ -22,7 +22,7 @@ dependency "private-chef-administration"
 dependency "openresty"
 dependency "redis" # dynamic routing controls
 dependency "redis-rb" # gem for interacting with redis
-dependency "lpeg"  # lua-based routing
+dependency "openresty-lpeg"  # lua-based routing
 dependency "runit"
 dependency "unicorn"
 
