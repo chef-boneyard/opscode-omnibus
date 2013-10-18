@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-version "1.0.19"
+version 'OC-10238/fix-orgs-index'
 
 dependency "ruby"
 dependency "bundler"

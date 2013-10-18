@@ -1,5 +1,5 @@
 name "opscode-account"
-version "rel-1.35.0"
+version 'OC-10238/fix-orgs-index'
 
 dependency "ruby"
 dependency "bundler"
