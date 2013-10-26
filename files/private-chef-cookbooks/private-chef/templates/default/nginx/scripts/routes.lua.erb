@@ -143,18 +143,18 @@ local uri_resolvers = {
   -- over any other identifiers which may be in the url.
   api = (p_acl_endpoint * c_acct) +
         (p_erchef * c_erchef) +
-        (p_dl_acct_erchef * c_acct) +
+        -- (p_dl_acct_erchef * c_acct) +
         -- Enable below and remove above if we need to have redis configuration
         -- flags determine routing between acct/erchef.
         -- Make the same change to internal_acct,, below.
-        -- (p_dl_acct_erchef * c_acct_erchef) +
+        (p_dl_acct_erchef * c_acct_erchef) +
 
         (p_acct * c_acct),
 
   -- This one is easy - everything passes through, though we'll still need to capture components
   -- (org name, object name, endpoint name) where we can, so that post-route hooks can be applied.
-  internal_acct = (p_dl_acct_erchef * c_acct) +
-                  -- (p_dl_acct_erchef * c_acct_erchef)
+  internal_acct = -- (p_dl_acct_erchef * c_acct) +
+                  (p_dl_acct_erchef * c_acct_erchef) +
                   (p_acl_endpoint * c_acct) +
                   -- As described above, w eneed to keep routes of migrated components in place so that
                   -- webui1 requests sent directly to internal acct land in the right place.
