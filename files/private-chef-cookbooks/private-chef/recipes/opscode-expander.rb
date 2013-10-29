@@ -29,7 +29,7 @@ template expander_config do
   options = node['private_chef']['opscode-expander'].to_hash
   options['reindexer'] = false
   variables(options)
-  notifies :restart, 'runit_service[opscode-expander]' if OmnibusHelper.should_notify?("opscode-expander")
+  notifies :restart, 'runit_service[opscode-expander]' if is_data_master?
 end
 
 link "/opt/opscode/embedded/service/opscode-expander/conf/opscode-expander.rb" do
@@ -44,13 +44,12 @@ template reindexer_config do
   options = node['private_chef']['opscode-expander'].to_hash
   options['reindexer'] = true
   variables(options)
-  notifies :restart, 'runit_service[opscode-expander-reindexer]' if OmnibusHelper.should_notify?("opscode-expander-reindexer")
+  notifies :restart, 'runit_service[opscode-expander-reindexer]' if is_data_master?
 end
 
 component_runit_service "opscode-expander"
 component_runit_service "opscode-expander-reindexer" do
   log_directory expander_reindexer_log_dir
-  enable node['private_chef']['opscode-expander']['enable']
   svlogd_size node['private_chef']['opscode-expander']['log_rotation']['file_maxbytes']
   svlogd_num node['private_chef']['opscode-expander']['log_rotation']['num_to_keep']
   ha node['private_chef']['opscode-expander']['ha']

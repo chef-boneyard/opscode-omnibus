@@ -41,7 +41,7 @@ template redis_config do
   group "root"
   mode "0644"
   variables(redis_data.to_hash)
-  notifies :restart, 'service[redis]' if OmnibusHelper.should_notify?("redis")
+  notifies :restart, 'service[redis]' if is_data_master?
 end
 
 component_runit_service "redis"
