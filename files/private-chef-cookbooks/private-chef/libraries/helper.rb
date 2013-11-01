@@ -1,14 +1,20 @@
 require 'mixlib/shellout'
 
 class OmnibusHelper
-  def self.should_notify?(service_name)
-    File.symlink?("/opt/opscode/service/#{service_name}") && check_status(service_name)
+
+  # This file is touched once initial bootstrapping of the system is
+  # done.
+  def self.bootstrap_sentinel_file
+    "/var/opt/opscode/bootstrapped"
   end
 
-  def self.check_status(service_name)
-    o = Mixlib::ShellOut.new("/opt/opscode/bin/private-chef-ctl status #{service_name}")
-    o.run_command
-    o.exitstatus == 0 ? true : false
+  # Use the presence of a sentinel file as an indicator for whether
+  # the server has already had initial bootstrapping performed.
+  #
+  # @todo: Is there a more robust way to determine this, i.e., based
+  #   on some functional aspect of the system?
+  def self.has_been_bootstrapped?
+    File.exists?(bootstrap_sentinel_file)
   end
 
   # generate a certificate signed by the opscode ca key

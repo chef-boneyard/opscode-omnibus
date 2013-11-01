@@ -42,6 +42,7 @@ module PrivateChef
   log_rotation Mash.new
   dark_launch Mash.new
   oc_chef_pedant Mash.new
+  opscode_chef_mover Mash.new
 
   servers Mash.new
   backend_vips Mash.new
@@ -182,6 +183,7 @@ module PrivateChef
     def generate_hash
       results = { "private_chef" => {} }
       [
+        "opscode_chef",
         "couchdb",
         "rabbitmq",
         "opscode_solr",
@@ -194,6 +196,7 @@ module PrivateChef
         "oc_bifrost",
         "opscode_certificate",
         "opscode_org_creator",
+        "opscode_chef_mover",
         "opscode_account",
         "bookshelf",
         "bootstrap",
@@ -204,13 +207,22 @@ module PrivateChef
         "ldap",
         "user"
       ].each do |key|
-        rkey = key.gsub('_', '-') unless key =~ /^oc_/ # leave oc_* keys as is
+        # @todo: Just pick a naming convention and adhere to it
+        # consistently
+        rkey = if key =~ /^oc_/
+                 key # leave oc_* keys as is
+               else
+                 key.gsub('_', '-')
+               end
         results['private_chef'][rkey] = PrivateChef[key]
       end
       results['private_chef']['oc-chef-pedant'] = PrivateChef['oc_chef_pedant']
       results['private_chef']['notification_email'] = PrivateChef['notification_email']
       results['private_chef']['from_email'] = PrivateChef['from_email']
       results['private_chef']['role'] = PrivateChef['role']
+      results['private_chef']['topology'] = PrivateChef['topology']
+      results['private_chef']['servers'] = PrivateChef['servers']
+      results['private_chef']['backend_vips'] = PrivateChef['backend_vips']
       results['private_chef']['logs'] = {}
       results['private_chef']['logs']['log_retention'] = PrivateChef['log_retention']
       results['private_chef']['logs']['log_rotation'] = PrivateChef['log_rotation']
@@ -231,7 +243,12 @@ module PrivateChef
       PrivateChef['bookshelf']['data_dir'] = "/var/opt/opscode/drbd/data/bookshelf"
       PrivateChef["rabbitmq"]["data_dir"] ||= "/var/opt/opscode/drbd/data/rabbitmq"
       PrivateChef["opscode_solr"]["data_dir"] ||= "/var/opt/opscode/drbd/data/opscode-solr"
-      PrivateChef["postgresql"]["data_dir"] ||= "/var/opt/opscode/drbd/data/postgresql"
+
+      # The postgresql data directory is scoped to the current version;
+      # changes in the directory trigger upgrades from an old PostgreSQL
+      # version to a newer one
+      PrivateChef["postgresql"]["data_dir"] ||= "/var/opt/opscode/drbd/data/postgresql_#{node['private_chef']['postgresql']['version']}"
+
       PrivateChef["drbd"]["enable"] ||= true
       # Need old path for cookbook migration
       PrivateChef['opscode_chef']['checksum_path'] ||= "/var/opt/opscode/drbd/data/opscode-chef/checksum"
@@ -287,11 +304,9 @@ module PrivateChef
       PrivateChef["postgresql"]["md5_auth_cidr_addresses"] ||= ["0.0.0.0/0", "::0/0"]
       PrivateChef["redis"]["bind"] ||= "0.0.0.0"
       PrivateChef["opscode_account"]["worker_processes"] ||= 4
-      if bootstrap
-        PrivateChef["bootstrap"]["enable"] = true
-      else
-        PrivateChef["bootstrap"]["enable"] = false
-      end
+
+      PrivateChef["opscode_chef_mover"]["enable"] = !!bootstrap
+      PrivateChef["bootstrap"]["enable"] = !!bootstrap
     end
 
     def gen_frontend
@@ -302,6 +317,11 @@ module PrivateChef
       PrivateChef["couchdb"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["rabbitmq"]["enable"] ||= false
       PrivateChef["rabbitmq"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
+
+      PrivateChef["opscode_certificate"]["enable"] ||= false
+      # Why is this even needed?
+      PrivateChef["opscode_certificate"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
+
       PrivateChef["opscode_solr"]["enable"] ||= false
       PrivateChef["opscode_solr"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["opscode_expander"]["enable"] ||= false
@@ -313,6 +333,7 @@ module PrivateChef
       PrivateChef["lb"]["cache_cookbook_files"] ||= true
       PrivateChef["lb"]["upstream"] = Mash.new
       PrivateChef["lb"]["upstream"]["bookshelf"] ||= [ PrivateChef["backend_vips"]["ipaddress"] ]
+      PrivateChef["opscode_chef_mover"]["enable"] = false
       PrivateChef["bootstrap"]["enable"] = false
     end
 
@@ -353,12 +374,10 @@ module PrivateChef
       when "standalone","manual"
         PrivateChef[:api_fqdn] ||= node_name
         gen_api_fqdn
-      when "ha","tier"
-        if PrivateChef['topology'] == "ha"
-          gen_redundant(node_name, true)
-        else
-          gen_redundant(node_name, false)
-        end
+      when "ha"
+        gen_redundant(node_name, true)
+      when "tier"
+        gen_redundant(node_name, false)
       else
         Chef::Log.fatal("I do not understand topology #{PrivateChef.topology} - try standalone, manual, ha or tier.")
         exit 55

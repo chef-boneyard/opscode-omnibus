@@ -6,6 +6,8 @@
 require 'uuidtools'
 require 'openssl'
 
+# Ensure that all our Omnibus-ed binaries are the ones that get used;
+# much better than having to specify this on each resource!
 ENV['PATH'] = "/opt/opscode/bin:/opt/opscode/embedded/bin:#{ENV['PATH']}"
 
 # Capture old node attribute values (if there are any, that is) in
@@ -56,13 +58,10 @@ else
   node.consume_attributes(PrivateChef.generate_config(node['fqdn']))
 end
 
-# the bootstrap_server attribute is set to signify that this node is
-# cofigured to be the bootstrap server. If bootstrap#enable is set in
-# the OPC config, then we know we should be the bootstrap server.
-node.set['private_chef']['bootstrap']['bootstrap_server'] = node['private_chef']['bootstrap']['enable']
-
-if File.exists?("/var/opt/opscode/bootstrapped")
-        node.set['private_chef']['bootstrap']['enable'] = false
+# @todo: This seems like it might belong in the PrivateChef helper;
+#   many other attributes like are set automatically there as well.
+if OmnibusHelper.has_been_bootstrapped?
+  node.set['private_chef']['bootstrap']['enable'] = false
 end
 
 # Create the Chef User
@@ -146,12 +145,11 @@ directory "/var/opt/opscode" do
   action :create
 end
 
-# Configure and install our runit instance
-include_recipe "private-chef::runit"
+include_recipe "enterprise::runit"
 
 # Configure Services
 [
-        "drbd",
+  "drbd",
   "couchdb",
   "rabbitmq",
   "postgresql",
@@ -161,9 +159,9 @@ include_recipe "private-chef::runit"
   "opscode-solr",
   "opscode-expander",
   "bookshelf",
-  "bootstrap",
   "opscode-org-creator",
   "opscode-erchef",
+  "bootstrap",
   "opscode-webui",
   "opscode-chef-mover",
   "redis",
@@ -173,7 +171,34 @@ include_recipe "private-chef::runit"
   if node["private_chef"][service]["enable"]
     include_recipe "private-chef::#{service}"
   else
-    include_recipe "private-chef::#{service}_disable"
+    # All non-enabled services get disabled; couchdb and
+    # opscode-expander get additional special treatment
+    #
+    # drbd and bootstrap aren't really services, though, so there's
+    # nothing to disable, really.
+    unless ["drbd", "bootstrap"].include?(service)
+
+      runit_service service do
+        action :disable
+      end
+
+      case service
+      when "couchdb"
+        %w[couchdb_bounce couchdb_compact couchdb_compact_major_offenders].each do |file_name|
+          file File.join("/etc/cron.d/", file_name) do
+            action :delete
+          end
+        end
+      when "opscode-expander"
+        runit_service "opscode-expander-reindexer" do
+          action :disable
+        end
+      else
+        # nothing to see, move along
+      end
+
+    end # unless
+
   end
 end
 
@@ -186,5 +211,7 @@ file "/etc/opscode/chef-server-running.json" do
   owner node["private_chef"]["user"]["username"]
   group "root"
   mode "0600"
-  content Chef::JSONCompat.to_json_pretty({ "private_chef" => node['private_chef'].to_hash, "run_list" => node.run_list })
+  content Chef::JSONCompat.to_json_pretty({ "private_chef" => node['private_chef'].to_hash,
+                                            "run_list" => node.run_list,
+                                            "runit" => node['runit'].to_hash})
 end
