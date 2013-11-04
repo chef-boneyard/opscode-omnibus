@@ -28,6 +28,7 @@ dependency "couchdb"
 dependency "postgresql92"
 dependency "rabbitmq"
 dependency "opscode-solr"
+dependency "opscode-solr4"
 dependency "opscode-expander"
 
 # We are transitioning away from Sequel toward Sqitch for managing
