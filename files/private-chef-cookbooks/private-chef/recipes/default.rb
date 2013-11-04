@@ -151,6 +151,7 @@ include_recipe "enterprise::runit"
   "opscode-certificate",
   "opscode-account",
   "opscode-solr",
+  "opscode-solr4",
   "opscode-expander",
   "bookshelf",
   "opscode-org-creator",
