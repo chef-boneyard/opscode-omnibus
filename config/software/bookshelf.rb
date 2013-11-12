@@ -1,5 +1,5 @@
 name "bookshelf"
-version "1.0.2"
+version "kas/raw_mode"
 
 dependency "erlang"
 dependency "rebar"
