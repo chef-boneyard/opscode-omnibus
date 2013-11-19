@@ -297,14 +297,17 @@ module PrivateChef
       PrivateChef["nginx"]["enable_ipv6"] = PrivateChef["use_ipv6"]
       PrivateChef["opscode_solr"]["ip_address"] ||= PrivateChef["default_listen_address"]
       PrivateChef["opscode_webui"]["worker_processes"] ||= 2
-      PrivateChef["postgresql"]["listen_address"] ||= PrivateChef["default_listen_address"]
+      # pgsql listens on all ipv4 and ipv6 interface for now. Longer
+      # term we will want to properly configure backend-opscode account
+      # to use the ipv6 address, at which point we'll use the
+      # default_listen_address
+      PrivateChef["postgresql"]["listen_address"] ||=  "*" #||= PrivateChef["default_listen_address"]
 
       authaddr = []
-      authaddr << "0.0.0.0/0" if PrivateChef["use_ipv4"]
-      authaddr << "::/0" if PrivateChef["use_ipv6"]
+      authaddr << "0.0.0.0/0" # if PrivateChef["use_ipv4"]
+      authaddr << "::/0" # if PrivateChef["use_ipv6"]
       PrivateChef["postgresql"]["md5_auth_cidr_addresses"] ||= authaddr
       PrivateChef["opscode_account"]["worker_processes"] ||= 4
-
       PrivateChef["opscode_chef_mover"]["enable"] = !!bootstrap
       PrivateChef["bootstrap"]["enable"] = !!bootstrap
     end
