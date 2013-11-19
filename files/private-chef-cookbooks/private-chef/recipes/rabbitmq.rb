@@ -84,7 +84,7 @@ if node['private_chef']['bootstrap']['enable']
     retries 10
   end
 
-  [ rabbitmq['vhost'], rabbitmq['reindexer_vhost'], rabbitmq['jobs_vhost'] ].each do |vhost|
+  [ rabbitmq['vhost'], rabbitmq['reindexer_vhost'], rabbitmq['jobs_vhost'] rabbitmq['aux_vhost'] ].each do |vhost|
     execute "#{rmq_ctl} add_vhost #{vhost}" do
       user opc_username
       not_if "#{rmq_ctl_chpost} list_vhosts| grep #{vhost}"

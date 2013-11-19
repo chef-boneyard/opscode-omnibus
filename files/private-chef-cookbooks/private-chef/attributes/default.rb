@@ -65,6 +65,7 @@ default['private_chef']['rabbitmq']['log_directory'] = "/var/log/opscode/rabbitm
 default['private_chef']['rabbitmq']['log_rotation']['file_maxbytes'] = 104857600
 default['private_chef']['rabbitmq']['log_rotation']['num_to_keep'] = 10
 default['private_chef']['rabbitmq']['vhost'] = '/chef'
+default['private_chef']['rabbitmq']['aux_vhost'] = '/chef-solr4'
 default['private_chef']['rabbitmq']['user'] = 'chef'
 default['private_chef']['rabbitmq']['password'] = 'chefrocks'
 default['private_chef']['rabbitmq']['reindexer_vhost'] = '/reindexer'

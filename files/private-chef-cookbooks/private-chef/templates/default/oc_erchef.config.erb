@@ -73,6 +73,9 @@
                 {rabbitmq_user, <<"<%= node['private_chef']['rabbitmq']['user'] %>">>},
                 {rabbitmq_password, <<"<%= node['private_chef']['rabbitmq']['password'] %>">>},
                 {rabbitmq_vhost, <<"<%= node['private_chef']['rabbitmq']['vhost'] %>">>},
+                {rabbitmq_vhosts, [<<"<%= node['private_chef']['rabbitmq']['vhost'] %>">>,
+                                   <<"<%= node['private_chef']['rabbitmq']['aux_vhost'] %>">>
+                                  ]},
                 {rabbitmq_exchange, <<"">>},
                 {solr_url, "http://<%= node['private_chef']['opscode-solr']['vip'] %>:<%= node['private_chef']['opscode-solr']['port'] %>/solr"}
                ]},
