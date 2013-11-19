@@ -89,7 +89,7 @@ default['private_chef']['jetty']['log_directory'] = "/var/opt/opscode/opscode-so
 ####
 # Chef Solr
 ####
-default['private_chef']['opscode-solr']['enable'] = false
+default['private_chef']['opscode-solr']['enable'] = true
 default['private_chef']['opscode-solr']['ha'] = false
 default['private_chef']['opscode-solr']['dir'] = "/var/opt/opscode/opscode-solr"
 default['private_chef']['opscode-solr']['data_dir'] = "/var/opt/opscode/opscode-solr/data"
@@ -128,10 +128,10 @@ default['private_chef']['opscode-solr4']['log_rotation']['num_to_keep'] = 10
 default['private_chef']['opscode-solr4']['heap_size'] = nil
 default['private_chef']['opscode-solr4']['new_size'] = nil
 default['private_chef']['opscode-solr4']['java_opts'] = ""
-default['private_chef']['opscode-solr4']['url'] = "http://localhost:8983"
+default['private_chef']['opscode-solr4']['url'] = "http://localhost:18983"
 default['private_chef']['opscode-solr4']['ip_address'] = '127.0.0.1'
 default['private_chef']['opscode-solr4']['vip'] = '127.0.0.1'
-default['private_chef']['opscode-solr4']['port'] = 8983
+default['private_chef']['opscode-solr4']['port'] = 18983
 default['private_chef']['opscode-solr4']['ram_buffer_size'] = 200
 default['private_chef']['opscode-solr4']['merge_factor'] = 25
 default['private_chef']['opscode-solr4']['max_merge_docs'] = 2147483647
