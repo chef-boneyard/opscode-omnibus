@@ -84,7 +84,7 @@ if node['private_chef']['bootstrap']['enable']
     retries 10
   end
 
-  [ rabbitmq['vhost'], rabbitmq['reindexer_vhost'], rabbitmq['jobs_vhost'] rabbitmq['aux_vhost'] ].each do |vhost|
+  [ rabbitmq['vhost'], rabbitmq['reindexer_vhost'], rabbitmq['jobs_vhost'], rabbitmq['aux_vhost'] ].each do |vhost|
     execute "#{rmq_ctl} add_vhost #{vhost}" do
       user opc_username
       not_if "#{rmq_ctl_chpost} list_vhosts| grep #{vhost}"
@@ -112,6 +112,12 @@ if node['private_chef']['bootstrap']['enable']
   execute "#{rmq_ctl} set_permissions -p #{rabbitmq['vhost']} #{rabbitmq['user']} \".*\" \".*\" \".*\"" do
     user opc_username
     not_if "#{rmq_ctl_chpost} list_user_permissions #{rabbitmq['user']}|grep #{rabbitmq['vhost']}"
+    retries 10
+  end
+
+  execute "#{rmq_ctl} set_permissions -p #{rabbitmq['aux_vhost']} #{rabbitmq['user']} \".*\" \".*\" \".*\"" do
+    user opc_username
+    not_if "#{rmq_ctl_chpost} list_user_permissions #{rabbitmq['user']}|grep #{rabbitmq['aux_vhost']}"
     retries 10
   end
 
