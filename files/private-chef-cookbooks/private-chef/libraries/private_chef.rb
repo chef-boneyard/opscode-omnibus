@@ -299,10 +299,15 @@ module PrivateChef
       PrivateChef["rabbitmq"]["node_ip_address"] ||= PrivateChef["default_listen_address"]
       PrivateChef["nginx"]["enable_ipv6"] = PrivateChef["use_ipv6"]
       PrivateChef["opscode_solr"]["ip_address"] ||= PrivateChef["default_listen_address"]
+      PrivateChef["opscode_solr"]["vip"] ||= PrivateChef["default_listen_address"]
       PrivateChef["opscode_webui"]["worker_processes"] ||= 2
       PrivateChef["postgresql"]["listen_address"] ||= '*' #PrivateChef["default_listen_address"]
 
+
+      # Vip won't work here in HA?, must be on listen address?
       PrivateChef["opscode_certificate"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
+      PrivateChef["rabbitmq"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
+      PrivateChef["couchdb"]["vip"]  ||= PrivateChef["backend_vips"]["ipaddress"]
 
       authaddr = []
       authaddr << "0.0.0.0/0" # if PrivateChef["use_ipv4"]
@@ -312,6 +317,12 @@ module PrivateChef
 
       PrivateChef["opscode_chef_mover"]["enable"] = !!bootstrap
       PrivateChef["bootstrap"]["enable"] = !!bootstrap
+      PrivateChef["lb"]["upstream"] = Mash.new
+      if PrivateChef["use_ipv6"]
+        PrivateChef["lb"]["upstream"]["bookshelf"] ||= [ "[#{PrivateChef["backend_vips"]["ipaddress"]}]" ]
+      else
+        PrivateChef["lb"]["upstream"]["bookshelf"] ||= [ PrivateChef["backend_vips"]["ipaddress"] ]
+      end
     end
 
     def gen_frontend

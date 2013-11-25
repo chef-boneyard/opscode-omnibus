@@ -26,7 +26,7 @@ org_creator_config = File.join(opscode_org_creator_etc_dir, "app.config")
 template org_creator_config do
   source "opscode-org-creator.config.erb"
   mode "644"
-  variables(node['private_chef']['opscode-org-creator'].to_hash)
+  variables(node['private_chef']['opscode-org-creator'].to_hash.merge({:helper => OmnibusHelper.new(node)}))
   notifies :restart, 'runit_service[opscode-org-creator]' if is_data_master?
 end
 
