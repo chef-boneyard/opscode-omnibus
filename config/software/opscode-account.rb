@@ -1,5 +1,5 @@
 name "opscode-account"
-version "rel-1.38.0"
+version "sf/keygen"
 
 dependency "ruby"
 dependency "bundler"
