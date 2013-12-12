@@ -1,6 +1,5 @@
 name "oc_erchef"
-version "0.22.1"
-
+version "sf/keygen"
 
 dependency "erlang"
 dependency "rebar"
