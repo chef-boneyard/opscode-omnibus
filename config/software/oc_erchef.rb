@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "sf/solr4"
+version "sd/solr4"
 
 dependency "erlang"
 dependency "rebar"

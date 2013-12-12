@@ -20,8 +20,19 @@
                                     {date, "$D0"},
                                     {count, <%= @log_rotation['num_to_keep'] %>},
                                     {formatter_config, [date, " ", time, " [", severity, "] ", message, "\n"]}
+                                   ]},
+              {lager_file_backend, [
+                                    {file, "<%= File.join(@log_directory, 'solr.log') %>"},
+                                    {level, none},
+                                    {size, <%= @log_rotation['file_maxbytes'] %>},
+                                    {date, "$D0"},
+                                    {count, <%= @log_rotation['num_to_keep'] %>}
                                    ]}
               ]},
+
+          {traces, [
+              {{lager_file_backend, "<%= File.join(@log_directory, 'solr.log') %>"}, [{solr_diff, chef_wm_search}], debug}
+          ]},
 
           %% Whether to write a crash log, and where.
           %% Commented/omitted/undefined means no crash logger.
