@@ -153,6 +153,7 @@ include_recipe "enterprise::runit"
   "opscode-solr",
   "opscode-solr4",
   "opscode-expander",
+  "opscode-expander-solr4",
   "bookshelf",
   "opscode-org-creator",
   "opscode-erchef",
@@ -185,6 +186,10 @@ include_recipe "enterprise::runit"
         end
       when "opscode-expander"
         runit_service "opscode-expander-reindexer" do
+          action :disable
+        end
+      when "opscode-expander-solr4"
+        runit_service "opscode-expander-reindexer-solr4" do
           action :disable
         end
       else

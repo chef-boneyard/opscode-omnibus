@@ -144,12 +144,19 @@ default['private_chef']['opscode-solr4']['poll_seconds'] = 20 # slave -> master 
 # Chef Expander
 ####
 default['private_chef']['opscode-expander']['enable'] = true
+default['private_chef']['opscode-expander-solr4']['enable'] = true
 default['private_chef']['opscode-expander']['ha'] = false
+default['private_chef']['opscode-expander-solr4']['ha'] = false
 default['private_chef']['opscode-expander']['dir'] = "/var/opt/opscode/opscode-expander"
+default['private_chef']['opscode-expander-solr4']['dir'] = "/var/opt/opscode/opscode-expander-solr4"
 default['private_chef']['opscode-expander']['log_directory'] = "/var/log/opscode/opscode-expander"
+default['private_chef']['opscode-expander-solr4']['log_directory'] = "/var/log/opscode/opscode-expander-solr4"
 default['private_chef']['opscode-expander']['log_rotation']['file_maxbytes'] = 104857600
+default['private_chef']['opscode-expander-solr4']['log_rotation']['file_maxbytes'] = 104857600
 default['private_chef']['opscode-expander']['log_rotation']['num_to_keep'] = 10
+default['private_chef']['opscode-expander-solr4']['log_rotation']['num_to_keep'] = 10
 default['private_chef']['opscode-expander']['reindexer_log_directory'] = "/var/log/opscode/opscode-expander-reindexer"
+default['private_chef']['opscode-expander-solr4']['reindexer_log_directory'] = "/var/log/opscode/opscode-expander-reindexer-solr4"
 default['private_chef']['opscode-expander']['consumer_id'] = "default"
 default['private_chef']['opscode-expander']['nodes'] = 2
 

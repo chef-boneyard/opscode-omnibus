@@ -1,5 +1,5 @@
 name "opscode-expander"
-version "pc-rel-1.0.0.1"
+version "master"
 
 dependency "ruby"
 dependency "bundler"
