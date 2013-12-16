@@ -26,7 +26,8 @@
                                     {level, none},
                                     {size, <%= @log_rotation['file_maxbytes'] %>},
                                     {date, "$D0"},
-                                    {count, <%= @log_rotation['num_to_keep'] %>}
+                                    {count, <%= @log_rotation['num_to_keep'] %>},
+                                    {formatter_config, [date, " ", time, " ", message, "\n"]}
                                    ]}
               ]},
 
