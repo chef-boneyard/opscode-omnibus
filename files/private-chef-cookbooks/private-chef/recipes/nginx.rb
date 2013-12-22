@@ -109,7 +109,8 @@ nginx_vars = nginx_vars.merge({ :helper => NginxErb.new(node),
 # Chef API lb config for HTTPS and HTTP
 lbconf = node['private_chef']['lb'].to_hash.merge(nginx_vars).merge({
   :redis_host => node['private_chef']['redis']['vip'],
-  :redis_port => node['private_chef']['redis']['port']
+  :redis_port => node['private_chef']['redis']['port'],
+  :omnihelper => OmnibusHelper.new(node)
 })
 
 ["config.lua", "dispatch.lua", "resolver.lua", "route_checks.lua", "routes.lua"].each do |script|

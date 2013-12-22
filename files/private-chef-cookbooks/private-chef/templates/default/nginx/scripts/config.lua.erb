@@ -39,7 +39,7 @@ local function connect_redis()
   local red = redis:new()
   local results
   red:set_timeout(<%=@redis_connection_timeout%>)
-  local ok, err = red:connect("<%=@redis_host%>", <%=@redis_port%>)
+  local ok, err = red:connect("<%= @omnihelper.vip_for_uri('redis') %>", <%=@redis_port%>)
   if not ok then
     ngx.log(ngx.ERR, "failed to connect redis: ", err)
   end
