@@ -23,7 +23,7 @@ build do
   command "#{install_dir}/embedded/bin/rsync -a --delete ./rel/mover/ #{install_dir}/embedded/service/opscode-chef-mover/"
   command "rm -rf #{install_dir}/embedded/service/opscode-chef-mover/log"
   command "mkdir -p #{install_dir}/embedded/service/opscode-chef-mover/scripts"
-  command "cp scripts/migrate #{install_dir}/embedded/service/opscode-chef-mover/scripts"
+  command "cp scripts/migrate* #{install_dir}/embedded/service/opscode-chef-mover/scripts"
   command "chmod ugo+x #{install_dir}/embedded/service/opscode-chef-mover/scripts/migrate"
   command "cp scripts/check_logs.rb #{install_dir}/embedded/service/opscode-chef-mover/scripts"
   command "chmod ugo+x #{install_dir}/embedded/service/opscode-chef-mover/scripts/check_logs.rb"
