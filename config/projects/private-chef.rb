@@ -53,7 +53,6 @@ dependency "opscode-account"
 dependency "opscode-webui"
 dependency "oc_bifrost"
 dependency "opscode-org-creator"
-dependency "opscode-certificate"
 dependency "opscode-platform-debug"
 dependency "opscode-test"
 

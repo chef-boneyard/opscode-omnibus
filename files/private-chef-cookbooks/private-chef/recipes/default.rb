@@ -149,7 +149,6 @@ include_recipe "private-chef::sysctl-updates"
   "rabbitmq",
   "postgresql",
   "oc_bifrost",
-  "opscode-certificate",
   "opscode-account",
   "opscode-solr",
   "opscode-expander",

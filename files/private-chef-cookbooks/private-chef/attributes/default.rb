@@ -409,20 +409,6 @@ default['private_chef']['bookshelf']['secret_access_key'] = "generated-by-defaul
 default['private_chef']['bookshelf']['external_url'] = :host_header
 
 ###
-# Opscode Certificate
-###
-default['private_chef']['opscode-certificate']['enable'] = true
-default['private_chef']['opscode-certificate']['ha'] = false
-default['private_chef']['opscode-certificate']['dir'] = "/var/opt/opscode/opscode-certificate"
-default['private_chef']['opscode-certificate']['log_directory'] = "/var/log/opscode/opscode-certificate"
-default['private_chef']['opscode-certificate']['log_rotation']['file_maxbytes'] = 104857600
-default['private_chef']['opscode-certificate']['log_rotation']['num_to_keep'] = 10
-default['private_chef']['opscode-certificate']['port'] = 5140
-default['private_chef']['opscode-certificate']['vip'] = '127.0.0.1'
-default['private_chef']['opscode-certificate']['num_workers'] = '2'
-default['private_chef']['opscode-certificate']['num_certificates_per_worker'] = '50'
-
-###
 # Opscode Organization Creator
 ###
 default['private_chef']['opscode-org-creator']['enable'] = true

@@ -63,7 +63,8 @@
              {couchdb_port, <%= node['private_chef']['couchdb']['port'] %> }
             ]},
   {chef_objects, [
-                  {certificate_root_url, "http://<%= @helper.vip_for_uri('opscode-certificate') %>:<%= node['private_chef']['opscode-certificate']['port'] %>/certificates"},
+                  %% this needs to be removed, by updating to latest chef_objects and relocking mover
+                  {certificate_root_url, "http://<%= @helper.vip_for_uri('opscode-erchef') %>:<%= node['private_chef']['opscode-erchef']['port'] %>/key_pair"},
                   {s3_access_key_id, "<%= node['private_chef']['bookshelf']['access_key_id'] %>"},
                   {s3_secret_key_id, "<%= node['private_chef']['bookshelf']['secret_access_key'] %>"},
                   {s3_url, "<%= node['private_chef']['nginx']['x_forwarded_proto'] %>://<%= @helper.vip_for_uri('bookshelf') %>"},
