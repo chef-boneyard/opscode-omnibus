@@ -9,7 +9,6 @@ define_upgrade do
                      'bookshelf',
                      'oc_bifrost',
                      'opscode-account',
-                     'opscode-certificate',
                      'opscode-erchef',
                      'opscode-expander',
                      'opscode-expander-reindexer',
