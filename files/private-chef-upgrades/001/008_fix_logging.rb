@@ -23,7 +23,6 @@ define_upgrade do
     redis
     opscode-authz
     bookshelf
-    opscode-certificate
     opscode-org-creator
     opscode-account
     nagios

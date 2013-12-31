@@ -33,7 +33,6 @@ module PrivateChef
   postgresql Mash.new
   redis_lb Mash.new
   oc_bifrost Mash.new
-  opscode_certificate Mash.new
   opscode_org_creator Mash.new
   opscode_account Mash.new
   bookshelf Mash.new
@@ -213,7 +212,6 @@ module PrivateChef
         "lb_internal",
         "postgresql",
         "oc_bifrost",
-        "opscode_certificate",
         "opscode_org_creator",
         "opscode_chef_mover",
         "opscode_account",
@@ -309,7 +307,6 @@ module PrivateChef
       PrivateChef["postgresql"]["ha"] ||= true
       PrivateChef["redis_lb"]["ha"] ||= true
       PrivateChef["oc_bifrost"]["ha"] ||= true
-      PrivateChef["opscode_certificate"]["ha"] ||= true
       PrivateChef["opscode_org_creator"]["ha"] ||= true
       PrivateChef["opscode_account"]["ha"] ||= true
       PrivateChef["nginx"]["ha"] ||= true
@@ -325,7 +322,6 @@ module PrivateChef
       PrivateChef["opscode_solr"]["ip_address"] ||= PrivateChef["default_listen_address"]
       PrivateChef["opscode_webui"]["worker_processes"] ||= 2
       PrivateChef["postgresql"]["listen_address"] ||= '*' #PrivateChef["default_listen_address"]
-      PrivateChef["opscode_certificate"]["vip"] ||= '127.0.0.1'
 
       authaddr = []
       authaddr << "0.0.0.0/0" # if PrivateChef["use_ipv4"]
@@ -348,10 +344,6 @@ module PrivateChef
       PrivateChef["rabbitmq"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["redis_lb"]["enable"] ||= false
       PrivateChef["redis_lb"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
-
-      # move certgen back to front ends; the backend canna handle the load
-      PrivateChef["opscode_certificate"]["enable"] ||= true
-      PrivateChef["opscode_certificate"]["vip"] ||= '127.0.0.1'
 
       PrivateChef["opscode_solr"]["enable"] ||= false
       PrivateChef["opscode_solr"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
