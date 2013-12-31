@@ -33,6 +33,10 @@ module PrivateChef
   postgresql Mash.new
   redis_lb Mash.new
   oc_bifrost Mash.new
+  # even though opscode-certificate is no-more, keeping the Mash is
+  # helpful so that opscode-certificate config found in
+  # /etc/opscode/private-chef.rb does not result in an error.
+  opscode_certificate Mash.new
   opscode_org_creator Mash.new
   opscode_account Mash.new
   bookshelf Mash.new
