@@ -163,6 +163,15 @@ default['private_chef']['opscode-erchef']['depsolver_timeout'] = 5000
 default['private_chef']['opscode-erchef']['max_request_size'] = 1000000
 default['private_chef']['opscode-erchef']['enable_actionlog'] = false
 
+# The number of key pairs to keep in the key cache for user and client creation.
+default['private_chef']['opscode-erchef']['keygen_cache_size'] = 100
+# Block erchef startup until this many keys are available in the cache
+default['private_chef']['opscode-erchef']['keygen_start_size'] = 2
+# Amount of time to allow for openssl to generate a key pair
+default['private_chef']['opscode-erchef']['keygen_timeout'] = 1500
+# Number of concurrent key generating workers
+default['private_chef']['opscode-erchef']['keygen_cache_workers'] = [1, node['cpu']['total'].to_i / 2].max
+
 ###
 # Legacy path (required for cookbok migration)
 ###

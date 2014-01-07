@@ -91,6 +91,10 @@
             ]},
   {chef_authn, [
                 {keyring, [{default, "/etc/opscode/webui_pub.pem"}]}
+                , {keygen_cache_size,    <%= node['private_chef']['opscode-erchef']['keygen_cache_size'] %>}
+                , {keygen_start_size,    <%= node['private_chef']['opscode-erchef']['keygen_start_size'] %>}
+                , {keygen_timeout,       <%= node['private_chef']['opscode-erchef']['keygen_timeout'] %>}
+                , {keygen_cache_workers, <%= node['private_chef']['opscode-erchef']['keygen_cache_workers'] %>}
                ]},
   {oc_chef_authz, [
                 {authz_root_url, "http://<%= @helper.vip_for_uri('oc_bifrost') %>:<%= node['private_chef']['oc_bifrost']['port'] %>" },
