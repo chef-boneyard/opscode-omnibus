@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/opscode/omnibus-software.git
-  revision: 8dddc1b8f63e2c4438974837777207f7b755f152
-  branch: master
+  revision: 1ca30fbff94ea23a5d9b54390b22216e9d0e03cc
+  branch: cm/cpan-config
   specs:
     omnibus-software (0.0.1)
 
