@@ -1,5 +1,5 @@
 name "opscode-chef-mover"
-version "hh/OC-10841/bcrypt-upgrade"
+version "hh/OC-10841/bcrypt-upgrade-r1"
 
 dependency "erlang"
 dependency "rebar"
