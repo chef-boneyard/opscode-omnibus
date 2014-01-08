@@ -484,6 +484,8 @@ default['private_chef']['opscode-chef-mover']['cache_ttl'] = '3600'
 default['private_chef']['opscode-chef-mover']['db_pool_size'] = '5'
 default['private_chef']['opscode-chef-mover']['ibrowse_max_sessions'] = 256
 default['private_chef']['opscode-chef-mover']['ibrowse_max_pipeline_size'] = 1
+default['private_chef']['opscode-chef-mover']['bcrypt_worker_count'] = 6
+default['private_chef']['opscode-chef-mover']['bcrypt_encryption_rounds'] = 12
 
 ###
 # Opscode Test
