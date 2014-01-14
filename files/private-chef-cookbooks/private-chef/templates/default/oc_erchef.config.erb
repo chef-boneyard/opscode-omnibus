@@ -134,9 +134,7 @@
                {estatsd_port, <%= node['private_chef']['estatsd']['port'] %>}
               ]},
   {sqerl, [
-           %% The database system you are using (e.g. pgsql)
-           {db_type, pgsql },
-
+           {db_driver_mod, sqerl_pgsql_client},
            {ip_mode, [ <%=PrivateChef['use_ipv6'] ? "ipv6,ipv4" : "ipv4" %> ] },
            %% Database connection parameters
            {db_host, "<%= node['private_chef']['postgresql']['vip'] %>"},
@@ -159,7 +157,7 @@
                        {file, "<%= File.join(@log_directory, 'requests.log') %>"},
                        {file_size, <%= (@log_rotation['file_maxbytes'].to_f/1024/1024).round %>},  %% Size in MB
                        {files, <%= @log_rotation['num_to_keep'] %>},
-                       {annotations, [req_id, org_name, msg, darklaunch, perf_stats]}
+                       {annotations, [req_id, org_name, msg, darklaunch, perf_stats, user]}
                        ]
                       }]}]
       },

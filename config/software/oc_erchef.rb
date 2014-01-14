@@ -1,5 +1,5 @@
 name "oc_erchef"
-version "0.22.1"
+version "sf/remove_db_type"
 
 dependency "erlang"
 dependency "rebar"
