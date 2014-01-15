@@ -13,12 +13,5 @@ define_upgrade do
     # so we'll go ahead and upgrade thos as well.
     run_command("sqitch --db-user opscode-pgsql deploy --to-target @2.2.3",
                 :cwd => "/opt/opscode/embedded/service/enterprise-chef-server-schema")
-
-    # Restart chef-mover for the duration of the migration
-    run_command("private-chef-ctl restart opscode-chef-mover")
-    sleep(60)
-
-    # Perform the actual migration
-    run_command("/opt/opscode/embedded/bin/escript /opt/opscode/embedded/service/opscode-chef-mover/scripts/migrate-to-bcrypt-users")
   end
 end
