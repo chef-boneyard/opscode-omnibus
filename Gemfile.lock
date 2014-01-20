@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/opscode/omnibus-software.git
-  revision: b899b8aa021b565708237486c3cb71566dc661eb
-  branch: master
+  revision: 776bedd1bf790b9fb404a0d14f29d57cf58317c2
+  branch: hh/OC-10470/pcc-status
   specs:
     omnibus-software (0.0.1)
 
@@ -11,13 +11,13 @@ GEM
     addressable (2.3.5)
     arr-pm (0.0.8)
       cabin (> 0)
-    backports (3.3.5)
+    backports (3.4.0)
     cabin (0.6.1)
-    childprocess (0.3.9)
+    childprocess (0.4.0)
       ffi (~> 1.0, >= 1.0.11)
     clamp (0.6.3)
     ffi (1.9.3)
-    fpm (1.0.0)
+    fpm (1.0.2)
       arr-pm (~> 0.0.8)
       backports (>= 2.6.2)
       cabin (>= 0.6.0)
@@ -26,7 +26,7 @@ GEM
       ffi
       ftw (~> 0.0.30)
       json (>= 1.7.7)
-    ftw (0.0.37)
+    ftw (0.0.39)
       addressable
       backports (>= 2.6.2)
       cabin (> 0)
@@ -55,12 +55,12 @@ GEM
       rake (>= 0.9)
       thor (>= 0.16.0)
       uber-s3
-    rake (10.1.0)
+    rake (10.1.1)
     systemu (2.5.2)
     thor (0.18.1)
     uber-s3 (0.2.4)
       mime-types (~> 1.17)
-    yajl-ruby (1.1.0)
+    yajl-ruby (1.2.0)
 
 PLATFORMS
   ruby
