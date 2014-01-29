@@ -1,5 +1,5 @@
 name "bookshelf"
-version "1.1.1"
+version "sd/process-leak-bench"
 
 dependency "erlang"
 dependency "rebar"
