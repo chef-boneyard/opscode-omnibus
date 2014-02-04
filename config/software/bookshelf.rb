@@ -1,5 +1,5 @@
 name "bookshelf"
-version "1.1.2"
+version "ma/enable-raw-file-io"
 
 dependency "erlang"
 dependency "rebar"
