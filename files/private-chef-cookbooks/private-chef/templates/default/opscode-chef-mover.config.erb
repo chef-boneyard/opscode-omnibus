@@ -62,6 +62,16 @@
              {couchdb_host, "<%= node['private_chef']['couchdb']['vip'] %>"},
              {couchdb_port, <%= node['private_chef']['couchdb']['port'] %> }
             ]},
+  {chef_index, [
+                {ip_mode, [ <%=PrivateChef['use_ipv6'] ? "ipv6,ipv4" : "ipv4" %> ] },
+                {rabbitmq_host, "<%= node['private_chef']['rabbitmq']['vip'] %>"},
+                {rabbitmq_port, <%= node['private_chef']['rabbitmq']['node_port'] %> },
+                {rabbitmq_user, <<"<%= node['private_chef']['rabbitmq']['user'] %>">>},
+                {rabbitmq_password, <<"<%= node['private_chef']['rabbitmq']['password'] %>">>},
+                {rabbitmq_vhost, <<"<%= node['private_chef']['rabbitmq']['vhost'] %>">>},
+                {rabbitmq_exchange, <<"">>},
+                {solr_url, "http://<%= @helper.vip_for_uri('opscode-solr') %>:<%= node['private_chef']['opscode-solr']['port'] %>/solr"}
+               ]},
   {chef_objects, [
                   {certificate_root_url, "http://<%= @helper.vip_for_uri('opscode-certificate') %>:<%= node['private_chef']['opscode-certificate']['port'] %>/certificates"},
                   {s3_access_key_id, "<%= node['private_chef']['bookshelf']['access_key_id'] %>"},
@@ -91,7 +101,7 @@
            {db_pass, "<%= node['private_chef']['postgresql']['sql_password'] %>"},
            {db_name, "opscode_chef" },
            {idle_check, 10000},
-           {prepared_statements, {chef_sql, opc_statements, [pgsql]}},
+           {prepared_statements, {chef_sql, statements, []}},
            {column_transforms,
                               [{<<"created_at">>,
                                 {sqerl_transformers, convert_YMDHMS_tuple_to_datetime}},
@@ -135,6 +145,17 @@
           % a connection to redis, nor attempt to update redis with org migration
           % results.
           {dry_run, true},
+
+          % bcrypt_worker_count refers to the number of bcrypt workers running
+          % simultaneously during bcrypt migration.
+          {bcrypt_worker_count, <%= node['private_chef']['opscode-chef-mover']['bcrypt_worker_count'] %>},
+
+          % bcrypt encryption_rounds refer to the number of bcrypt hashing iteration
+          % to use. This number of rounds is logrithmic. This number should be tuned
+          % to the node actually performing the authentication. (e.g. more powerful
+          % systems can handle a higher number of rounds).
+          % See: http://security.stackexchange.com/a/6415
+          {bcrypt_encryption_rounds, <%= node['private_chef']['opscode-chef-mover']['bcrypt_encryption_rounds'] %>},
 
           % If dry_run is true, eredis host and port will be ignored.
           {eredis_host, "127.0.0.1"},

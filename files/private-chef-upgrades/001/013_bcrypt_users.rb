@@ -13,8 +13,5 @@ define_upgrade do
     # so we'll go ahead and upgrade thos as well.
     run_command("sqitch --db-user opscode-pgsql deploy --to-target @2.2.3",
                 :cwd => "/opt/opscode/embedded/service/enterprise-chef-server-schema")
-
-
-    ## Add chef-mover upgrade here
   end
 end
