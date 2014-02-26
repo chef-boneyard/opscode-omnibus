@@ -1,5 +1,5 @@
 name "opscode-account"
-version "rel-1.43.0"
+version "sd/couchdb-create-speedup"
 
 dependency "ruby"
 dependency "bundler"
