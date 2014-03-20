@@ -103,6 +103,11 @@ local p_erchef_direct = (Cendpoint(p_erchef_endpoint) * ((p_sep * c_identifier) 
 -- Everything that gets sent to erchef
 local p_erchef = p_named_org_prefix * p_erchef_direct
 
+-- erchef routing rules for chef_internal, which includes an additional
+-- principals endpoint not exposed via the api rules
+local p_erchef_int = p_erchef +
+                    (p_named_org_prefix * Cendpoint(p_principals) * p_maybe_sep)
+
 -- /users endpoints for account
 local p_acct_users = (p_sep * Cendpoint(p_users) * (p_sep * c_identifier)^-1 * p_trailing_sep) +
                      (p_sep * p_users * p_sep * c_identifier) *
@@ -165,9 +170,8 @@ local uri_resolvers = {
                   ((p_acct +
                    (p_named_org + p_sep)) * c_acct),
 
-   -- Anything that routes to erchef is handled here.  In EC, this is the same
-   -- as API chef routing
-  internal_chef = c_erchef
+   -- Anything that routes to erchef or reporting is handled here.
+  internal_chef = (p_erchef_int * c_erchef)
 }
 
 -- caller should bypass this client version check if caller is internal lb
