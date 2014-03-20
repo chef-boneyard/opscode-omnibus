@@ -264,8 +264,8 @@ default['private_chef']['lb']['chef_max_version'] = 11
 # Load balancer route configuration
 ###
 default['private_chef']['lb']['xdl_defaults']['503_mode'] = false
-default['private_chef']['lb']['xdl_defaults']['couchdb_containers'] = true
-default['private_chef']['lb']['xdl_defaults']['couchdb_groups'] = true
+default['private_chef']['lb']['xdl_defaults']['couchdb_containers'] = false
+default['private_chef']['lb']['xdl_defaults']['couchdb_groups'] = false
 
 ####
 # Nginx
@@ -448,8 +448,8 @@ default['private_chef']['dark_launch']["quick_start"] = false
 default['private_chef']['dark_launch']["new_theme"] = true
 default['private_chef']['dark_launch']["private-chef"] = true
 default['private_chef']['dark_launch']["sql_users"] = true
-default['private_chef']['dark_launch']["couchdb_containers"] = true
-default['private_chef']['dark_launch']["couchdb_groups"] = true
+default['private_chef']['dark_launch']["couchdb_containers"] = false
+default['private_chef']['dark_launch']["couchdb_groups"] = false
 default['private_chef']['dark_launch']["add_type_and_bag_to_items"] = true
 default['private_chef']['dark_launch']["erlang_user_endpoint"] = false
 default['private_chef']['dark_launch']["reporting"] = true
