@@ -29,6 +29,8 @@ template pedant_config do
   mode  "0755"
   variables({
     :api_url  => node['private_chef']['nginx']['url'],
-    :solr_url => "http://#{helper.vip_for_uri('opscode-solr')}:#{node['private_chef']['opscode-solr']['port']}"
+    :solr_url => "http://#{helper.vip_for_uri('opscode-solr')}:#{node['private_chef']['opscode-solr']['port']}",
+    :ldap_enabled => ldap_authentication_enabled?,
+    :ldap => node['private_chef']['ldap'],
   }.merge(node['private_chef']['oc-chef-pedant'].to_hash))
 end
