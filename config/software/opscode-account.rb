@@ -1,5 +1,5 @@
 name "opscode-account"
-version "rel-1.43.0"
+version "tc/fix-groups-darklaunch-for-org-associations-test"
 
 dependency "ruby"
 dependency "bundler"
