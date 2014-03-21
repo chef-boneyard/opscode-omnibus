@@ -41,7 +41,6 @@ local p_system_recovery = P"system_recovery"
 local p_acl = P"/_acl"
 local p_search = P"search"
 local p_nodes = P"nodes"
-local p_reports = P"reports"
 local p_cookbooks = P"cookbooks"
 local p_data = P"data"
 local p_roles = P"roles"
@@ -84,7 +83,6 @@ local p_chef_version = Cg(p_numeric^1, "major") * p_dot * Cg(p_numeric^1, "minor
 local c_acct = Crt("acct")
 local c_erchef = Crt("erchef")
 local c_acct_erchef = Crt("acct_erchef")
-local c_reports = Crt("reports")
 
 -- The "valid identifier" capture is used for any object name such
 -- as node name, user name, etc.
@@ -143,7 +141,7 @@ local uri_resolvers = {
   api = (p_acl_endpoint * c_acct) +
         (p_erchef * c_erchef) +
         (p_acct * c_acct) +
-        (p_dl_acct_erchef * c_acct_erchef)
+        (p_dl_acct_erchef * c_acct_erchef),
 
 
   -- This one is easy - everything passes through, though we'll still need to capture components
