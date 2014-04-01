@@ -173,7 +173,7 @@ template "/etc/opscode/logrotate.d/nginx" do
   group "root"
   mode "0644"
   variables(node['private_chef']['nginx'].to_hash.merge(
-    'postrotate' => "/opt/opscode/embedded/sbin/nginx -s reopen",
+    'postrotate' => 'kill -USR1 `cat /opt/opscode/service/nginx/supervise/pid`',
     'owner' => 'root',
     'group' => 'root'
   ))
