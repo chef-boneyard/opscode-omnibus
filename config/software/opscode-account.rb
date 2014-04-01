@@ -1,5 +1,5 @@
 name "opscode-account"
-default_version "rel-1.46.0"
+default_version "tc/fix-org-creation-sql"
 
 dependency "ruby"
 dependency "bundler"
