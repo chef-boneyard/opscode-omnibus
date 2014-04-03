@@ -27,7 +27,9 @@
 * add oc_chef_action to oc_erchef (support for opscode-analytics actions
   package)
 
-### opscode-account 1.46.0
+### opscode-account 1.47.0
+* fix USAG and organization creation for sql
+* fix bug where billing-admins creation crashed for sql
 * speed up internal org-creation by removing Couchdb _all_dbs call
 * check org _route endpoint for groups darklaunch during org creation
 * fix shema constraint bug during LDAP user creation
@@ -44,6 +46,13 @@
 
 ### private-chef-ctl
 * Remove incorrect mention of `heartbeat_device` from `ha-status` output.
+
+### chef-pedant 1.0.25
+* added CLI options for running /internal-organization endpoint tests
+* added tag for running organization tests
+
+### oc-chef-pedant 1.0.26
+* added test coverage for /organization and /internal-organization endpoints
 
 ## 11.1.2 (2014-02-28)
 
