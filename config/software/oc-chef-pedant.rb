@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-default_version "1.0.25"
+default_version "tc/better-org-spec-test"
 
 dependency "ruby"
 dependency "bundler"
