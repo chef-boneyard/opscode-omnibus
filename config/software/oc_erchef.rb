@@ -1,5 +1,5 @@
 name "oc_erchef"
-default_version "0.24.2"
+default_version "sd/dbi-create-solr-garbage"
 
 dependency "erlang"
 dependency "rebar"
