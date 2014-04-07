@@ -27,12 +27,13 @@
 * add oc_chef_action to oc_erchef (support for opscode-analytics actions
   package)
 
-### opscode-account 1.47.0
+### opscode-account 1.48.0
 * fix USAG and organization creation for sql
 * fix bug where billing-admins creation crashed for sql
+* gracefully fail association request if org is in 504 mode
 * speed up internal org-creation by removing Couchdb _all_dbs call
 * check org _route endpoint for groups darklaunch during org creation
-* fix shema constraint bug during LDAP user creation
+* fix schema constraint bug during LDAP user creation
 
 ### opscode-webui 3.8.13
 * Ruby on Rails security updates
