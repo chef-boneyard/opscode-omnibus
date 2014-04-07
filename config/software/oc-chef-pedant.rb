@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-default_version "1.0.26"
+default_version "tc/update-docs"
 
 dependency "ruby"
 dependency "bundler"
