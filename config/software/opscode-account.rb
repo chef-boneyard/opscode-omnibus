@@ -1,5 +1,5 @@
 name "opscode-account"
-default_version "tc/handle-503-association-wtf"
+default_version "tc/handle-503-association"
 
 dependency "ruby"
 dependency "bundler"
