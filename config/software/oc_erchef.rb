@@ -1,5 +1,5 @@
 name "oc_erchef"
-default_version "0.24.2"
+default_version "of/handle_solr_errors"
 
 dependency "erlang"
 dependency "rebar"
