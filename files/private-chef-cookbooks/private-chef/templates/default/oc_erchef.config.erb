@@ -91,6 +91,10 @@
             ]},
   {chef_authn, [
                 {keyring, [{default, "/etc/opscode/webui_pub.pem"}]}
+                , {keygen_cache_size,    <%= node['private_chef']['opscode-erchef']['keygen_cache_size'] %>}
+                , {keygen_start_size,    <%= node['private_chef']['opscode-erchef']['keygen_start_size'] %>}
+                , {keygen_timeout,       <%= node['private_chef']['opscode-erchef']['keygen_timeout'] %>}
+                , {keygen_cache_workers, <%= node['private_chef']['opscode-erchef']['keygen_cache_workers'] %>}
                ]},
   {oc_chef_authz, [
                 {authz_root_url, "http://<%= @helper.vip_for_uri('oc_bifrost') %>:<%= node['private_chef']['oc_bifrost']['port'] %>" },
@@ -125,7 +129,6 @@
                 {solr_url, "http://<%= @helper.vip_for_uri('opscode-solr') %>:<%= node['private_chef']['opscode-solr']['port'] %>/solr"}
                ]},
   {chef_objects, [
-                  {certificate_root_url, "http://<%= @helper.vip_for_uri('opscode-certificate') %>:<%= node['private_chef']['opscode-certificate']['port'] %>/certificates"},
                   {s3_access_key_id, "<%= node['private_chef']['bookshelf']['access_key_id'] %>"},
                   {s3_secret_key_id, "<%= node['private_chef']['bookshelf']['secret_access_key'] %>"},
                   {s3_url, "<%= node['private_chef']['nginx']['x_forwarded_proto'] %>://<%= @helper.vip_for_uri('bookshelf') %>"},

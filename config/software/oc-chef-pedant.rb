@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-default_version "1.0.28"
+default_version "sd/keygen"
 
 dependency "ruby"
 dependency "bundler"

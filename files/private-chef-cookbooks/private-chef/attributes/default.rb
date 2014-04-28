@@ -163,6 +163,15 @@ default['private_chef']['opscode-erchef']['depsolver_timeout'] = 5000
 default['private_chef']['opscode-erchef']['max_request_size'] = 1000000
 default['private_chef']['opscode-erchef']['enable_actionlog'] = false
 
+# The number of key pairs to keep in the key cache for user and client creation.
+default['private_chef']['opscode-erchef']['keygen_cache_size'] = 100
+# Block erchef startup until this many keys are available in the cache
+default['private_chef']['opscode-erchef']['keygen_start_size'] = 2
+# Amount of time to allow for openssl to generate a key pair
+default['private_chef']['opscode-erchef']['keygen_timeout'] = 1500
+# Number of concurrent key generating workers
+default['private_chef']['opscode-erchef']['keygen_cache_workers'] = [1, node['cpu']['total'].to_i / 2].max
+
 ###
 # Legacy path (required for cookbok migration)
 ###
@@ -411,20 +420,6 @@ default['private_chef']['bookshelf']['access_key_id'] = "generated-by-default"
 default['private_chef']['bookshelf']['secret_access_key'] = "generated-by-default"
 # Default: set to Host: header. Override to hardcode a url, "http://..."
 default['private_chef']['bookshelf']['external_url'] = :host_header
-
-###
-# Opscode Certificate
-###
-default['private_chef']['opscode-certificate']['enable'] = true
-default['private_chef']['opscode-certificate']['ha'] = false
-default['private_chef']['opscode-certificate']['dir'] = "/var/opt/opscode/opscode-certificate"
-default['private_chef']['opscode-certificate']['log_directory'] = "/var/log/opscode/opscode-certificate"
-default['private_chef']['opscode-certificate']['log_rotation']['file_maxbytes'] = 104857600
-default['private_chef']['opscode-certificate']['log_rotation']['num_to_keep'] = 10
-default['private_chef']['opscode-certificate']['port'] = 5140
-default['private_chef']['opscode-certificate']['vip'] = '127.0.0.1'
-default['private_chef']['opscode-certificate']['num_workers'] = '2'
-default['private_chef']['opscode-certificate']['num_certificates_per_worker'] = '50'
 
 ###
 # Opscode Organization Creator
