@@ -8,25 +8,7 @@ build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
 # overrides
-override :bzip2, version: "1.0.6"
-override :cacerts, version: "2014.04.22"
-override :couchdb, version: "1.0.3"
-override :curl, version: "7.36.0"
-override :gdbm, version: "1.9.1"
-override :jre, version: "7u3-b04"
-override :libffi, version: "3.0.13"
-override :libyaml, version: "0.1.6"
-override :makedepend, version: "1.0.5"
-override :nagios-plugins, version: "1.4.15"
-override :nginx, version: "1.4.4"
-override :pip, version: "1.3"
-override :pkg-config, version: "0.28"
 override :postgresql, version: "9.1.9"
-override :python, version: "2.7.5"
-override :ruby, version: "1.9.3-p484"
-override :setuptools, version: "0.7.7"
-override :util-macros, version: "1.18.0"
-override :xproto, version: "7.0.25"
 
 # global
 dependency "preparation" # creates required build directories
