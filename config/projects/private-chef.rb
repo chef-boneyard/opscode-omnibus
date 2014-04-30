@@ -21,18 +21,6 @@ override :setuptools, version: "0.7.7"
 override :util-macros, version: "1.18.0"
 override :xproto, version: "7.0.25"
 
-# from omnibus-software
-dependency "bzip2"
-dependency "cacerts"
-dependency "curl"
-dependency "gdbm"
-dependency "libffi"
-dependency "python"
-dependency "ruby"
-dependency "setuptools"
-dependency "util-macros"
-dependency "xproto"
-
 # global
 dependency "preparation" # creates required build directories
 dependency "chef-gem" # for embedded chef-solo
