@@ -9,6 +9,7 @@ build_iteration 1
 
 # overrides
 override :postgresql, version: "9.1.9"
+override :chef-gem, version: "11.4.0"
 
 # global
 dependency "preparation" # creates required build directories
