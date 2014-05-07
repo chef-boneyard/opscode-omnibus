@@ -10,6 +10,15 @@ build_iteration 1
 # overrides
 override :postgresql, version: "9.1.9"
 override "chef-gem", version: "11.4.0"
+override :bundler, version: "9.1.9"
+override :cacerts, version: "2014.01.28"
+override :erlang, version: "R15B02"
+override :gecode, version: "3.7.1"
+override :keepalived, version: "1.1.20"
+override :libpng, version: "1.5.13"
+override "omnibus-ctl", version: "0.0.6"
+override :preparation, version: "1.4.9"
+override :redis, version: "2.4.7"
 
 # global
 dependency "preparation" # creates required build directories
