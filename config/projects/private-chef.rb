@@ -10,7 +10,7 @@ build_iteration 1
 # overrides
 override :postgresql, version: "9.1.9"
 override "chef-gem", version: "11.4.0"
-override :bundler, version: "9.1.9"
+override :bundler, version: "1.1.5"
 override :cacerts, version: "2014.01.28"
 override :erlang, version: "R15B02"
 override :gecode, version: "3.7.1"
