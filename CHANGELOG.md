@@ -21,6 +21,10 @@
 * Containers and groups migration from couchDB to postgreSQL
 * TODO: solr4 migration details
 
+### enterprise-chef-server-schema 2.2.4
+* Updates org_migration_state table with migration_type and verification
+* Cleans up reporting schema info table
+
 ### oc-chef-pedant 1.0.29
 * Add tests for superuser password authentication
 
