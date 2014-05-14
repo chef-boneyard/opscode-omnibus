@@ -17,6 +17,10 @@
 
 ## 11.1.4 (2014-05-07)
 
+### chef-mover 2.2.3
+* Containers and groups migration from couchDB to postgreSQL
+* TODO: solr4 migration details
+
 ### oc-chef-pedant 1.0.29
 * Add tests for superuser password authentication
 
