@@ -25,6 +25,10 @@
 * Updates org_migration_state table with migration_type and verification
 * Cleans up reporting schema info table
 
+### oc_erchef
+* TODO: https://github.com/opscode/oc_erchef/compare/0.24.2...0.24.5
+* oc_chef_authz fix to avoid deep fetch during `fetch_group_authz_id_sql` call
+
 ### oc-chef-pedant 1.0.29
 * Add tests for superuser password authentication
 
