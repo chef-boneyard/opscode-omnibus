@@ -66,12 +66,6 @@ define_upgrade do
     run_command("private-chef-ctl restart opscode-chef-mover")
     sleep(60)
 
-    # Run phase_2_prep_migration with a env sleep_time of 0 milliseconds.
-    # This will put all orgs in into 'holding' state for phase_2_migration.
-    log "Preping the migration of containers and groups..."
-    run_command("/opt/opscode/embedded/bin/escript " \
-                "/opt/opscode/embedded/service/opscode-chef-mover/scripts/phase_2_migrate phase_2_prep_migration 1 0")
-
     # Run phase_2_migration
     log "Migrating containers and groups..."
     run_command("/opt/opscode/embedded/bin/escript " \
@@ -79,6 +73,10 @@ define_upgrade do
 
     # We don't need chef-mover anymore
     run_command("private-chef-ctl stop opscode-chef-mover")
+
+    # Clean up chef_*.couch files, we don't need them anymore! (should already be backed up too)
+    log "Cleaning up containers and groups from couchDB..."
+    run_command("rm /var/opt/opscode/couchdb/db/chef_*.couch")
 
     # Bring everything back up
     log "Restarting chef services..."
