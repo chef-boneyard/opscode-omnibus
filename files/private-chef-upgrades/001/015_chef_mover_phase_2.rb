@@ -57,19 +57,10 @@ define_upgrade do
     run_command("private-chef-ctl restart opscode-chef-mover")
     sleep(60)
 
-    # Reload the account dets
-    log "Loading data..."
-    run_command("/opt/opscode/embedded/bin/escript /opt/opscode/embedded/service/opscode-chef-mover/scripts/create_account_dets")
-
-    # Restart chef-mover to load updated account dets
-    log "Restarting chef-mover after loading data, this could take a minute..."
-    run_command("private-chef-ctl restart opscode-chef-mover")
-    sleep(60)
-
     # Run phase_2_migration
     log "Migrating containers and groups..."
     run_command("/opt/opscode/embedded/bin/escript " \
-                "/opt/opscode/embedded/service/opscode-chef-mover/scripts/phase_2_migrate phase_2_migration 8 5000")
+                "/opt/opscode/embedded/service/opscode-chef-mover/scripts/migrate mover_phase_2_migration_callback normal")
 
     # We don't need chef-mover anymore
     run_command("private-chef-ctl stop opscode-chef-mover")
@@ -77,6 +68,7 @@ define_upgrade do
     # Clean up chef_*.couch files, we don't need them anymore! (should already be backed up too)
     log "Cleaning up containers and groups from couchDB..."
     run_command("rm /var/opt/opscode/couchdb/db/chef_*.couch")
+    run_command("rm -rf /var/opt/opscode/couchdb/db/.chef_*_design")
 
     # Bring everything back up
     log "Restarting chef services..."
