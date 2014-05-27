@@ -67,7 +67,7 @@ define_upgrade do
 
     # Clean up chef_*.couch files, we don't need them anymore! (should already be backed up too)
     log "Cleaning up containers and groups from couchDB..."
-    run_command("rm /var/opt/opscode/couchdb/db/chef_*.couch")
+    run_command("find /var/opt/opscode/couchdb/db -name chef_*.couch | xargs rm")
     run_command("rm -rf /var/opt/opscode/couchdb/db/.chef_*_design")
 
     # Bring everything back up
