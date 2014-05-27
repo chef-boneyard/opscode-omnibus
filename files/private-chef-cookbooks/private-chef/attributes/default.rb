@@ -162,6 +162,7 @@ default['private_chef']['opscode-erchef']['root_metric_key'] = "chefAPI"
 default['private_chef']['opscode-erchef']['depsolver_worker_count'] = 5
 default['private_chef']['opscode-erchef']['depsolver_timeout'] = 5000
 default['private_chef']['opscode-erchef']['max_request_size'] = 1000000
+default['private_chef']['opscode-erchef']['cleanup_batch_size'] = 0
 
 ###
 # Legacy path (required for cookbok migration)
@@ -382,7 +383,6 @@ default['private_chef']['oc_bifrost']['sql_ro_password'] = "foreveralone"
 # Enable extended performance logging data for bifrost.  Setting this to false
 # will cut bifrost request log size approximately in half.
 default['private_chef']['oc_bifrost']['extended_perf_log'] = true
-default['private_chef']['oc_bifrost']['cleanup_batch_size'] = 0
 
 ####
 # Authz
