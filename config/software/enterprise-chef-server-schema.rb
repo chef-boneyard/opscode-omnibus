@@ -1,5 +1,5 @@
 name "enterprise-chef-server-schema"
-default_version "f6185e3a280446669b1b49d6c4420457a30a40ef"
+default_version "49554c24aad8a6ef333035aad665bab65bbf0eb9"
 
 source :git => "git@github.com:opscode/enterprise-chef-server-schema.git"
 
