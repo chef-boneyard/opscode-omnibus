@@ -115,6 +115,13 @@ default['private_chef']['opscode-solr']['max_field_length'] = 100000
 default['private_chef']['opscode-solr']['max_commit_docs'] = 1000
 default['private_chef']['opscode-solr']['commit_interval'] = 60000 # in ms
 default['private_chef']['opscode-solr']['poll_seconds'] = 20 # slave -> master poll interval in seconds, max of 60 (see solrconfig.xml.erb)
+default['private_chef']['opscode-solr']['solr_timeout'] = 30000
+default['private_chef']['opscode-solr']['solr_http_init_count'] = 25
+default['private_chef']['opscode-solr']['solr_http_max_count'] = 100
+default['private_chef']['opscode-solr']['solr_http_cull_interval'] = "{1, min}"
+default['private_chef']['opscode-solr']['solr_http_max_age'] = "{70, sec}"
+default['private_chef']['opscode-solr']['solr_http_max_connection_duration'] = "{70,sec}"
+default['private_chef']['opscode-solr']['solr_ibrowse_options'] = "[{connect_timeout, 10000}]"
 
 ####
 # Chef Expander
