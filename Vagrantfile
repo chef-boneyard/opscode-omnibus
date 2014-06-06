@@ -31,6 +31,16 @@ Vagrant.configure('2') do |config|
       c.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_#{platform}_chef-provisionerless.box"
     end
 
+  # fix issue where Natty can't get updates from the main Ubuntu servers anymore
+  if platform == 'ubuntu-11.04'
+    config.vm.provision :shell, :inline => <<-NATTY_FIX
+if ! [ -f /etc/apt/sources.list.bak ]; then
+  sed -i.bak 's,http://.*ubuntu.com,http://old-releases.ubuntu.com,g' /etc/apt/sources.list
+  apt-get -y update
+fi
+    NATTY_FIX
+  end
+
   end
 
   config.vm.provider :virtualbox do |vb|
