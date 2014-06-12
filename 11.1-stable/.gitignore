@@ -1,0 +1,8 @@
+.vagrant
+pkg/*
+omnibus.rb
+.bundle
+bin/*
+files/private-chef-cookbooks/cache/
+vendor/bundle
+vendor/cookbooks
