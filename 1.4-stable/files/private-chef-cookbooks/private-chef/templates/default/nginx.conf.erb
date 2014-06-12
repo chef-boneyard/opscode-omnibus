@@ -1,0 +1,234 @@
+user <%= node['private_chef']['user']['username'] %> <%= node['private_chef']['user']['username']%>;
+worker_processes <%= @worker_processes %>;
+error_log /var/log/opscode/nginx/error.log<%= node['private_chef']['lb']['debug'] ? " debug" : "" %>;
+
+daemon off;
+
+events {
+  worker_connections <%= @worker_connections %>;
+}
+
+http {
+  log_format opscode '$remote_addr - $remote_user [$time_local]  '
+                    '"$request" $status "$request_time" $body_bytes_sent '
+                    '"$http_referer" "$http_user_agent" "$upstream_addr" "$upstream_status" "$upstream_response_time" "$http_x_chef_version" "$http_x_ops_sign" "$http_x_ops_userid" "$http_x_ops_timestamp" "$http_x_ops_content_hash" $request_length';
+
+  sendfile <%= @sendfile %>;
+  tcp_nopush <%= @tcp_nopush %>;
+  tcp_nodelay <%= @tcp_nodelay %>;
+
+  keepalive_timeout <%= @keepalive_timeout %>;
+
+  gzip <%= @gzip %>;
+  gzip_http_version <%= @gzip_http_version %>;
+  gzip_comp_level <%= @gzip_comp_level %>;
+  gzip_proxied <%= @gzip_proxied %>;
+  gzip_types <%= @gzip_types.join(' ') %>;
+
+  include /opt/opscode/embedded/conf/mime.types;
+
+  <%- node['private_chef']['lb']['upstream'].each do |uname, servers| -%>
+  upstream <%= uname.sub(/-/, '_') %> {
+    <%- servers.each do |server| -%>
+    server <%= server %>:<%= node['private_chef'][uname]['port'] %>;
+    <%- end -%>
+  }
+  <%- end -%>
+
+  # Include upstream definitions for addons
+  include <%= node['private_chef']['nginx']['dir'] %>/etc/addon.d/*_upstreams.conf;
+
+  # external lb config for Chef API
+  <%- if node['private_chef']['lb']['enable'] -%>
+    proxy_cache_path  <%= File.join(@dir, "cache") %> levels=1:2 keys_zone=webui-cache:50m max_size=<%= @cache_max_size %> inactive=600m;
+    proxy_temp_path <%= File.join(@dir, "cache-tmp") %>;
+
+    # We support three options: serve nothing on non_ssl_port (80),
+    # redirect to https, or actually serve the API.
+    <%- if @non_ssl_port -%>
+      <%- if @enable_non_ssl -%>
+        include <%= @chef_http_config %>;
+      <%- else -%>
+          server {
+            listen <%= @non_ssl_port %>;
+            server_name <%= @server_name %>;
+            access_log /var/log/opscode/nginx/rewrite-port-80.log;
+            rewrite ^(.*) https://$server_name$1 permanent;
+          }
+      <%- end -%>
+    <%-  end %>
+
+    # Chef HTTPS API
+    include <%= @chef_https_config %>;
+  <%- end -%>
+
+  # internal lb config for Chef API Services
+  <%- if node['private_chef']['lb_internal']['enable'] -%>
+  server {
+    listen <%= node['private_chef']['lb_internal']['chef_port'] %>;
+    # The name doesn't matter; this is the only listener on this port
+    server_name <%= node['fqdn'] %>;
+
+		client_max_body_size <%= @client_max_body_size %>;
+    proxy_set_header        Host            $host;
+    proxy_set_header        X-Real-IP       $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto http;
+    proxy_set_header        X-Forwarded-Host $http_host;
+    proxy_pass_request_headers on;
+    proxy_connect_timeout   90;
+    proxy_send_timeout      90;
+    proxy_read_timeout      90;
+
+    access_log /var/log/opscode/nginx/internal-chef.access.log opscode;
+    error_log  /var/log/opscode/nginx/internal-chef.error.log<%= node['private_chef']['lb']['debug'] ? " debug" : "" %>;
+
+    location /checksum/ {
+      internal;
+      root <%= node['private_chef']['opscode-chef']['checksum_path'].gsub('checksum', '') %>;
+    }
+
+    # search requests
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/(?:search)/.+$") %>
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/(?:search)/?$") %>
+
+    <% if node['private_chef']['dark_launch']['couchdb_cookbooks'] %>
+    # backwards compatible for Chef 0.9.x and below clients
+    # the nodes/:node_name/cookbooks is still handled by Ruby-Chef
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/nodes/[^/]+/cookbooks$", :ruby) %>
+    <% end %>
+
+    # nodes and environments/*/nodes go to erchef
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/nodes/{0,1}.*$") %>
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/environments/[^/]+/nodes$") %>
+
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/roles/{0,1}.*$", 'couchdb_roles') %>
+
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/data/{0,1}.*$", 'couchdb_data') %>
+
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/environments/{0,1}.*$", 'couchdb_environments') %>
+
+    # principals go to erchef
+    <%= @helper.chef_api("^/organizations/[a-z0-9\-_]+?/principals/{0,1}.*$") %>
+
+    # no caching of cookbook files for internal-lb
+
+    # cookbook uploads and sandboxes, specialized for internal-lb
+    <%= @helper.make_location("^/organizations/[a-z0-9\-_]+?/(?:cookbooks|sandboxes)/{0,1}.*$",
+                              "#{node['private_chef']['opscode-chef']['upload_internal_vip']}:#{node['private_chef']['opscode-chef']['upload_internal_port']}",
+                              "opscode_webui",
+                              node['private_chef']['opscode-chef']['upload_internal_proto']) %>
+
+    # Include internal routes for addons
+    include <%= node['private_chef']['nginx']['dir'] %>/etc/addon.d/*_internal.conf;
+
+
+    location / {
+      proxy_redirect http://opscode_chef /;
+      proxy_pass http://opscode_chef;
+    }
+  }
+
+  # internal service access for opscode-account
+  server {
+    listen <%= node['private_chef']['lb_internal']['account_port'] %>;
+    # The name doesn't matter; this is the only listener on this port
+    server_name <%= node['fqdn'] %>;
+
+		client_max_body_size <%= @client_max_body_size %>;
+    proxy_set_header        Host            $host;
+    proxy_set_header        X-Real-IP       $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto http;
+    proxy_set_header        X-Forwarded-Host $http_host;
+    proxy_pass_request_headers on;
+    proxy_connect_timeout   90;
+    proxy_send_timeout      90;
+    proxy_read_timeout      90;
+
+    access_log /var/log/opscode/nginx/internal-account.access.log opscode;
+    error_log  /var/log/opscode/nginx/internal-account.error.log<%= node['private_chef']['lb']['debug'] ? " debug" : "" %>;
+
+    location / {
+      proxy_pass http://opscode_account;
+    }
+  }
+
+  # internal service access for opscode-authz
+  server {
+    listen <%= node['private_chef']['lb_internal']['authz_port'] %>;
+    server_name <%= node['fqdn'] %>;
+
+		client_max_body_size <%= @client_max_body_size %>;
+    proxy_set_header        Host            $host;
+    proxy_set_header        X-Real-IP       $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto http;
+    proxy_set_header        X-Forwarded-Host $http_host;
+    proxy_pass_request_headers on;
+
+    proxy_connect_timeout   90;
+    proxy_send_timeout      90;
+    proxy_read_timeout      90;
+
+    access_log /var/log/opscode/nginx/internal-authz.access.log opscode;
+    error_log  /var/log/opscode/nginx/internal-authz.error.log<%= node['private_chef']['lb']['debug'] ? " debug" : "" %>;
+
+    location / {
+      proxy_pass http://opscode_authz;
+    }
+  }
+  <%- end -%>
+  <%- if node['private_chef']['nagios']['enable'] -%>
+  # nagios server
+  server {
+    listen   <%= node['private_chef']['nagios']['port'] %>;
+    server_name <%= node['fqdn'] %>;
+
+    access_log /var/log/opscode/nginx/nagios.access.log;
+    error_log  /var/log/opscode/nginx/nagios.error.log<%= node['private_chef']['lb']['debug'] ? " debug" : "" %>;
+
+    auth_basic            "Private Chef Nagios";
+    auth_basic_user_file  <%= File.join(node['private_chef']['nagios']['dir'], "etc", "htpasswd") %>;
+
+    location / {
+      root   /opt/opscode/embedded/nagios/share/;
+      index  index.php;
+    }
+
+    location /nagios {
+      index index.php;
+      alias /opt/opscode/embedded/nagios/share/;
+    }
+
+    location /cgi-bin {
+      alias /opt/opscode/embedded/nagios/sbin;
+    }
+
+    location ~ ^/nagios/(.*\.php)$ {
+      alias /opt/opscode/embedded/nagios/share/$1;
+      include <%= File.join(@dir, "etc", "fastcgi.conf") %>;
+      fastcgi_pass 127.0.0.1:<%= node['private_chef']['nagios']['php_fpm_port'] %>;
+    }
+
+    location ~ \.cgi$ {
+      root /opt/opscode/embedded/nagios/sbin;
+      rewrite ^/nagios/cgi-bin/(.*)\.cgi /$1.cgi break;
+      include <%= File.join(@dir, "etc", "fastcgi.conf") %>;
+      fastcgi_param AUTH_USER $remote_user;
+      fastcgi_param REMOTE_USER $remote_user;
+      fastcgi_param DOCUMENT_ROOT  /opt/opscode/embedded/nagios/sbin;
+      fastcgi_param SCRIPT_FILENAME    $fastcgi_script_name;
+      fastcgi_pass 127.0.0.1:<%= node['private_chef']['nagios']['fcgiwrap_port'] %>;
+    }
+
+    location ~ \.php$ {
+      include <%= File.join(@dir, "etc", "fastcgi.conf") %>;
+      fastcgi_pass 127.0.0.1:<%= node['private_chef']['nagios']['php_fpm_port'] %>;
+    }
+
+  }
+  <%- end -%>
+
+  include <%= node['private_chef']['nginx']['dir'] %>/etc/nginx.d/*.conf;
+}
