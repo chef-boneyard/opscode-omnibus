@@ -249,22 +249,24 @@ module PrivateChef
       PrivateChef["nginx"]["url"] ||= "https://#{PrivateChef['api_fqdn']}"
     end
 
-    def gen_drbd
+    def gen_hapaths
       PrivateChef["couchdb"]["data_dir"] ||= "/var/opt/opscode/drbd/data/couchdb"
       PrivateChef['bookshelf']['data_dir'] = "/var/opt/opscode/drbd/data/bookshelf"
       PrivateChef["rabbitmq"]["data_dir"] ||= "/var/opt/opscode/drbd/data/rabbitmq"
       PrivateChef["opscode_solr"]["data_dir"] ||= "/var/opt/opscode/drbd/data/opscode-solr"
       PrivateChef["redis_lb"]["data_dir"] ||= "/var/opt/opscode/drbd/data/redis_lb"
-
       # The postgresql data directory is scoped to the current version;
       # changes in the directory trigger upgrades from an old PostgreSQL
       # version to a newer one
       PrivateChef["postgresql"]["data_dir"] ||= "/var/opt/opscode/drbd/data/postgresql_#{node['private_chef']['postgresql']['version']}"
-
-      PrivateChef["drbd"]["enable"] ||= true
-      PrivateChef["drbd"]["ipv6_on"] = PrivateChef["use_ipv6"]
       # Need old path for cookbook migration
       PrivateChef['opscode_chef']['checksum_path'] ||= "/var/opt/opscode/drbd/data/opscode-chef/checksum"
+    end
+
+    def gen_drbd
+      gen_hapaths
+      PrivateChef["drbd"]["enable"] ||= true
+      PrivateChef["drbd"]["ipv6_on"] = PrivateChef["use_ipv6"]
       drbd_role = "primary"
       PrivateChef['servers'].each do |k, v|
         next unless v['role'] == "backend"
@@ -367,6 +369,7 @@ module PrivateChef
       when "backend"
         gen_backend(me['bootstrap'])
         gen_drbd if topology == 'ha'
+        gen_hapaths if topology == 'customha'
         gen_keepalived(node_name) if ['ha', 'customha'].include?(topology)
         gen_api_fqdn
       when "frontend"
