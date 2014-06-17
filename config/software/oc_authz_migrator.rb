@@ -1,5 +1,5 @@
 name "oc_authz_migrator"
-default_version "0.0.2"
+default_version "of/lock_jiffy_to_tag"
 
 dependencies ["erlang", "rebar", "rsync"]
 
