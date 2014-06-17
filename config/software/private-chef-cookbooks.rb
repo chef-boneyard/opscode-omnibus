@@ -1,6 +1,6 @@
 name "private-chef-cookbooks"
 
-dependency "berkshelf2"
+dependency "berkshelf"
 
 project_name = project.name
 
@@ -8,8 +8,8 @@ source :path => File.expand_path("files/#{project_name}-cookbooks/#{project_name
 
 build do
   gem "install uuidtools --no-rdoc --no-ri -v 2.1.3"
-  command "mkdir -p #{install_dir}/embedded/cookbooks"
-  command "#{install_dir}/embedded/bin/berks install --berksfile=./Berksfile --path=#{install_dir}/embedded/cookbooks",
+  command "rm -rf #{install_dir}/embedded/cookbooks"
+  command "#{install_dir}/embedded/bin/berks vendor #{install_dir}/embedded/cookbooks --berksfile=./Berksfile",
           :env => { "RUBYOPT"         => nil,
                     "BUNDLE_BIN_PATH" => nil,
                     "BUNDLE_GEMFILE"  => nil,
