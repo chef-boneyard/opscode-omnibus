@@ -42,4 +42,14 @@ template File.join(keepalived_bin_dir, "cluster.sh") do
   notifies :restart, 'runit_service[keepalived]'
 end
 
+if PrivateChef.ha_provider
+  script_dir = "/opt/chef-ha/bin"
+  ['custom_backend_ip', 'custom_backend_storage'].each do |script|
+    link "#{keepalived_bin_dir}/#{script}" do
+      to "#{script_dir}/#{script}_#{PrivateChef.ha_provider}"
+      only_if { File.exist?("#{script_dir}/#{script}_#{PrivateChef.ha_provider}") }
+    end
+  end
+end
+
 component_runit_service "keepalived"
