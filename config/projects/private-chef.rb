@@ -7,6 +7,7 @@ install_path    "/opt/opscode"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
 
+override :berkshelf, version: "v3.1.3"
 override :rebar, version: "2.0.0"
 
 # creates required build directories
