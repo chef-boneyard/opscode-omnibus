@@ -7,7 +7,7 @@
 
 require 'securerandom'
 
-opscode_test_dir = "/opt/opscode/embedded/service/opscode-test"
+opscode_test_dir = default['private_chef']['opscode-test']['dir']
 opscode_test_config_dir = "/opt/opscode/embedded/service/opscode-test/bootstrapper-config"
 
 template File.join(opscode_test_config_dir, "config.rb") do
@@ -31,6 +31,13 @@ end
 execute "/opt/opscode/bin/private-chef-ctl start" do
   not_if { OmnibusHelper.has_been_bootstrapped? }
   retries 20
+end
+
+template "#{opscode_test_dir}/opscode-test.yml" do
+  source "opscode-test.yml.erb"
+  owner "root"
+  group "root"
+  mode "644"
 end
 
 execute "bootstrap-platform" do

@@ -488,6 +488,7 @@ default['private_chef']['opscode-chef-mover']['solr_ibrowse_options'] = "[{conne
 # Opscode Test
 ###
 default['private_chef']['bootstrap']['enable'] = true
+default['private_chef']['opscode-test']['dir'] = default['private_chef']['user']['home'] + "/service/opscode-test"
 
 ###
 # Estatsd
