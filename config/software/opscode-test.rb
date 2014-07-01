@@ -1,5 +1,5 @@
 name "opscode-test"
-default_version "0.3.1"
+default_version "d06c22cb834a4162e89be1391cc462c9fd2eb52e"
 
 dependency "ruby"
 dependency "libxml2"
