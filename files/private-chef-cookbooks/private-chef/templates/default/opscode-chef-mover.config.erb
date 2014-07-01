@@ -120,7 +120,7 @@
            {purge_backup, false},
            {purge_auth, false},
            {purge_backup_dir, ""},
-	    {osc_org_id, <<"<%= node['private_chef']['default_placeholder_org_id'] %>">>}
+	    {osc_org_id, <<"<%= node['private_chef']['global_placeholder_org_id'] %>">>}
            ]},
  {mover, [
           % Duration to sleep between marking an org unavailable

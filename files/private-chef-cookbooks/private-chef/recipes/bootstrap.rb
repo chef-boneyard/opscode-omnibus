@@ -7,7 +7,7 @@
 
 require 'securerandom'
 
-opscode_test_dir = default['private_chef']['opscode-test']['dir']
+opscode_test_dir = "/opt/opscode/embedded/service/opscode-test"
 opscode_test_config_dir = "/opt/opscode/embedded/service/opscode-test/bootstrapper-config"
 
 template File.join(opscode_test_config_dir, "config.rb") do
