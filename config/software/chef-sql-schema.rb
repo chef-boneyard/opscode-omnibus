@@ -14,11 +14,11 @@ relative_path "chef-sql-schema"
 # does) we need to have the pg_config binary on the PATH so the
 # correct library and header locations can be found
 env = {
-  'PATH' => "#{install_dir}/embedded/bin:#{ENV['PATH']}"
+  'PATH' => "#{install_path}/embedded/bin:#{ENV['PATH']}"
 }
 
 build do
   bundle "install --path=/opt/opscode/embedded/service/gem", :env => env
-  command "mkdir -p #{install_dir}/embedded/service/chef-sql-schema"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/chef-sql-schema/"
+  command "mkdir -p #{install_path}/embedded/service/chef-sql-schema"
+  command "#{install_path}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_path}/embedded/service/chef-sql-schema/"
 end

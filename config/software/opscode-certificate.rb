@@ -9,10 +9,10 @@ source :git => "git@github.com:opscode/opscode-cert-erlang"
 relative_path "opscode-certificate"
 
 env = {
-  "PATH" => "#{install_dir}/embedded/bin:#{ENV["PATH"]}",
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
+  "PATH" => "#{install_path}/embedded/bin:#{ENV["PATH"]}",
+  "LDFLAGS" => "-L#{install_path}/embedded/lib -I#{install_path}/embedded/include",
+  "CFLAGS" => "-I#{install_path}/embedded/include",
+  "LD_RUN_PATH" => "#{install_path}/embedded/lib"
 }
 
 build do
@@ -20,6 +20,6 @@ build do
   # or do we?
   command "make clean", :env => env
   command "make", :env => env
-  command "mkdir -p #{install_dir}/embedded/service/opscode-certificate"
-  command "#{install_dir}/embedded/bin/rsync -a --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/opscode-certificate/"
+  command "mkdir -p #{install_path}/embedded/service/opscode-certificate"
+  command "#{install_path}/embedded/bin/rsync -a --exclude=.git/*** --exclude=.gitignore ./ #{install_path}/embedded/service/opscode-certificate/"
 end

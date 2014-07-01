@@ -28,14 +28,14 @@ relative_path "uuid-1.6.2"
 
 build do
   env = {
-    "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-    "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-    "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
+    "LDFLAGS" => "-L#{install_path}/embedded/lib -I#{install_path}/embedded/include",
+    "CFLAGS" => "-L#{install_path}/embedded/lib -I#{install_path}/embedded/include",
+    "LD_RUN_PATH" => "#{install_path}/embedded/lib"
   }
   command(["./configure",
-           "--prefix=#{install_dir}/embedded",
+           "--prefix=#{install_path}/embedded",
            ].join(" "),
           :env => env)
-  command "make -j #{max_build_jobs}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/bin"}
-  command "make install", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/bin"}
+  command "make -j #{max_build_jobs}", :env => {"LD_RUN_PATH" => "#{install_path}/embedded/bin"}
+  command "make install", :env => {"LD_RUN_PATH" => "#{install_path}/embedded/bin"}
 end

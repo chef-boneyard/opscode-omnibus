@@ -13,15 +13,15 @@ source :git => "git@github.com:opscode/opscode-test"
 # does) we need to have the pg_config binary on the PATH so the
 # correct library and header locations can be found
 env = {
-  'PATH' => "#{install_dir}/embedded/bin:#{ENV['PATH']}"
+  'PATH' => "#{install_path}/embedded/bin:#{ENV['PATH']}"
 }
 
-bundle_path = "#{install_dir}/embedded/service/gem"
+bundle_path = "#{install_path}/embedded/service/gem"
 
 build do
   bundle "install --without dev --path=#{bundle_path}", :env => env
-  command "mkdir -p #{install_dir}/embedded/service/opscode-test"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/opscode-test/"
+  command "mkdir -p #{install_path}/embedded/service/opscode-test"
+  command "#{install_path}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_path}/embedded/service/opscode-test/"
 
   # cleanup the .git directories in the bundle path before commiting
   # them as submodules to the git cache

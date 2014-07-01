@@ -11,6 +11,6 @@ relative_path "opscode-expander"
 
 build do
   bundle "install --path=/opt/opscode/embedded/service/gem"
-  command "mkdir -p #{install_dir}/embedded/service/opscode-expander"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/opscode-expander/"
+  command "mkdir -p #{install_path}/embedded/service/opscode-expander"
+  command "#{install_path}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_path}/embedded/service/opscode-expander/"
 end

@@ -9,12 +9,12 @@ source :url => "http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-#{version}.tar.gz",
 relative_path "lpeg-#{version}"
 
 env = {
-  "PATH" => "#{install_dir}/embedded/bin:#{ENV["PATH"]}",
+  "PATH" => "#{install_path}/embedded/bin:#{ENV["PATH"]}",
 }
 
-lua_dir = "#{install_dir}/embedded/luajit/include/luajit-2.0"
+lua_dir = "#{install_path}/embedded/luajit/include/luajit-2.0"
 
 build do
   command "make LUADIR=#{lua_dir}", :env => env
-  command "install -p -m 0755 lpeg.so #{install_dir}/embedded/lualib"
+  command "install -p -m 0755 lpeg.so #{install_path}/embedded/lualib"
 end

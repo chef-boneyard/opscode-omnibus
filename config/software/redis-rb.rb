@@ -21,5 +21,5 @@ dependency "ruby"
 dependency "rubygems"
 
 build do
-  gem "install redis -n #{install_dir}/bin --no-rdoc --no-ri -v #{version}"
+  gem "install redis -n #{install_path}/bin --no-rdoc --no-ri -v #{version}"
 end

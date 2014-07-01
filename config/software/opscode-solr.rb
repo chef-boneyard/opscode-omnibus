@@ -8,7 +8,7 @@ source :git => "git://github.com/opscode/chef"
 
 relative_path "chef"
 
-service_dir = "#{install_dir}/embedded/service/opscode-solr"
+service_dir = "#{install_path}/embedded/service/opscode-solr"
 
 build do
   # TODO: when we upgrade solr to > 1.4.1, we should think about
@@ -18,9 +18,9 @@ build do
 
   # copy solr jetty
   command "mkdir -p #{service_dir}/jetty"
-  command "#{install_dir}/embedded/bin/rsync -a chef-solr/solr/solr-jetty/ #{service_dir}/jetty/"
+  command "#{install_path}/embedded/bin/rsync -a chef-solr/solr/solr-jetty/ #{service_dir}/jetty/"
 
   # copy solr home
   command "mkdir -p #{service_dir}/home"
-  command "#{install_dir}/embedded/bin/rsync -a chef-solr/solr/solr-home/ #{service_dir}/home/"
+  command "#{install_path}/embedded/bin/rsync -a chef-solr/solr/solr-home/ #{service_dir}/home/"
 end
