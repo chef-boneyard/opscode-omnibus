@@ -1,5 +1,5 @@
 name "oc_erchef"
-default_version "0.25.5"
+default_version "sd/fix-concurrent-cookbook-uploads"
 
 dependency "erlang"
 dependency "rebar"
