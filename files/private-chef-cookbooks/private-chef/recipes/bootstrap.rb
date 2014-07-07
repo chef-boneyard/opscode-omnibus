@@ -33,13 +33,6 @@ execute "/opt/opscode/bin/private-chef-ctl start" do
   retries 20
 end
 
-template "#{opscode_test_dir}/opscode-test.yml" do
-  source "opscode-test.yml.erb"
-  owner "root"
-  group "root"
-  mode "644"
-end
-
 execute "bootstrap-platform" do
   command "bash -c 'echo y | /opt/opscode/embedded/bin/bundle exec ./bin/bootstrap-platform -c ./bootstrapper-config/config.rb -s ./bootstrapper-config/script.rb'"
   cwd opscode_test_dir

@@ -15,8 +15,6 @@ default['private_chef']['notification_email'] = "pc-default@opscode.com"
 default['private_chef']['from_email'] = '"Opscode" <donotreply@opscode.com>'
 default['private_chef']['role'] = "standalone"
 
-default['private_chef']['global_placeholder_org_id'] = "00000000000000000000000000000000"
-
 ####
 # The Chef User that services run as
 ####
