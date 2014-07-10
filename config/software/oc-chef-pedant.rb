@@ -9,12 +9,12 @@ source :git => "git@github.com:opscode/oc-chef-pedant.git"
 
 relative_path "oc-chef-pedant"
 
-bundle_path = "#{install_dir}/embedded/service/gem"
+bundle_path = "#{install_path}/embedded/service/gem"
 
 build do
   bundle "install --path=#{bundle_path}"
-  command "mkdir -p #{install_dir}/embedded/service/oc-chef-pedant"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/oc-chef-pedant/"
+  command "mkdir -p #{install_path}/embedded/service/oc-chef-pedant"
+  command "#{install_path}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_path}/embedded/service/oc-chef-pedant/"
 
   # cleanup the .git directories in the bundle path before commiting
   # them as submodules to the git cache

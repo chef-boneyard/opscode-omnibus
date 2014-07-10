@@ -8,6 +8,6 @@ dependency "perl_pg_driver"
 
 build do
   command "make install"
-  command "mkdir -p #{install_dir}/embedded/service/#{name}"
-  command "#{install_dir}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_dir}/embedded/service/#{name}/"
+  command "mkdir -p #{install_path}/embedded/service/#{name}"
+  command "#{install_path}/embedded/bin/rsync -a --delete --exclude=.git/*** --exclude=.gitignore ./ #{install_path}/embedded/service/#{name}/"
 end

@@ -30,20 +30,20 @@ source :url => "http://ftp.postgresql.org/pub/source/v9.2.4/postgresql-9.2.4.tar
 relative_path "postgresql-9.2.4"
 
 configure_env = {
-  "LDFLAGS" => "-Wl,-rpath,#{install_dir}/embedded/lib,-rpath,#{install_dir}/embedded/postgresql/9.2/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
+  "LDFLAGS" => "-Wl,-rpath,#{install_path}/embedded/lib,-rpath,#{install_path}/embedded/postgresql/9.2/lib -L#{install_path}/embedded/lib -I#{install_path}/embedded/include",
+  "CFLAGS" => "-L#{install_path}/embedded/lib -I#{install_path}/embedded/include",
+  "LD_RUN_PATH" => "#{install_path}/embedded/lib"
 }
 
 build do
   command ["./configure",
-           "--prefix=#{install_dir}/embedded/postgresql/9.2",
+           "--prefix=#{install_path}/embedded/postgresql/9.2",
            "--with-libedit-preferred",
            "--with-openssl",
            "--with-ossp-uuid",
-           "--with-includes=#{install_dir}/embedded/include",
-           "--with-libraries=#{install_dir}/embedded/lib"].join(" "), :env => configure_env
-  command "make world -j #{max_build_jobs}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
+           "--with-includes=#{install_path}/embedded/include",
+           "--with-libraries=#{install_path}/embedded/lib"].join(" "), :env => configure_env
+  command "make world -j #{max_build_jobs}", :env => {"LD_RUN_PATH" => "#{install_path}/embedded/lib"}
   command "make install-world"
 
   # Postgres 9.2 is our "real" Postgres installation (prior versions
@@ -56,5 +56,5 @@ build do
   # otherwise, we end up getting some kind of weird Inception-style
   # variable interpolation, such that the value of $BIN in each
   # iteration of the loop is the last file in the directory.
- command "sh -c 'for BIN in #{install_dir}/embedded/postgresql/9.2/bin/*; do ln -s ${BIN} #{install_dir}/embedded/bin/$(basename ${BIN}); done'"
+ command "sh -c 'for BIN in #{install_path}/embedded/postgresql/9.2/bin/*; do ln -s ${BIN} #{install_path}/embedded/bin/$(basename ${BIN}); done'"
 end
