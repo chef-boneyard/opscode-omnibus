@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
-# Install omnibus software
-gem 'omnibus', github: 'opscode/omnibus-ruby'
-gem 'omnibus-software', github: 'opscode/omnibus-software'
+gem 'omnibus', github: 'opscode/omnibus-ruby',
+  branch: 'sethvargo/refactor_fetcher'
+
+gem 'omnibus-software', github: 'opscode/omnibus-software',
+  branch: 'master'
