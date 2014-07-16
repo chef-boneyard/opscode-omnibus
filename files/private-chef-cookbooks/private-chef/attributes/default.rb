@@ -433,6 +433,7 @@ default['private_chef']['dark_launch']["sql_users"] = true
 default['private_chef']['dark_launch']["add_type_and_bag_to_items"] = true
 default['private_chef']['dark_launch']["reporting"] = true
 default['private_chef']['dark_launch']["actions"] = false
+default['private_chef']['dark_launch']["actions_payload"] = false
 
 ###
 # Opscode Account
