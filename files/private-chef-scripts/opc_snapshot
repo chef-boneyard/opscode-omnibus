@@ -1,0 +1,7 @@
+# rendered by private-chef-ctl reconfigure, do not modify
+#Place me in /etc/cron.d/opc_snapshot and remove comment below to activate
+SHELL=/bin/bash
+HOME=/opt/opscode/bin
+PATH=/usr/bin:/usr/sbin:/bin:/opt/opscode/embedded/bin:/opt/opscode/bin
+MAILTO=root@localhost
+#17 23 * * * root drbd-backups -g opscode -l drbd > /dev/null 2>&1
