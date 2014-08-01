@@ -13,7 +13,7 @@ expander_reindexer_log_dir = node['private_chef']['opscode-expander']['reindexer
 [ expander_dir, expander_etc_dir, expander_log_dir, expander_reindexer_log_dir ].each do |dir_name|
   directory dir_name do
     owner node['private_chef']['user']['username']
-    mode '0700'
+    mode '0750'
     recursive true
   end
 end

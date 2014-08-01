@@ -26,6 +26,7 @@
 * [OC-11710] Fix couchdb compaction log rotation
 * [OC-11540] Fix invalid opscode-account config when forcing SSL
 * [OC-11297] tweak partybus migration-level subscribes for a more reliable workaround
+* [OC-11712] Group Read Permissions Needed for Logging System Ingestion
 
 ### private-chef-ctl
 

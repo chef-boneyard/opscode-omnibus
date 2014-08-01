@@ -14,7 +14,7 @@ upgrades_service_dir = "/opt/opscode/embedded/service/partybus"
 ].each do |dir_name|
   directory dir_name do
     owner node['private_chef']['user']['username']
-    mode '0700'
+    mode '0750'
     recursive true
   end
 end

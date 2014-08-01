@@ -22,6 +22,7 @@ The following items are the set of bug fixes that have been applied since Enterp
 * [OC-11708] Fix user association bug when last updater of users group is no longer associated
 * [OC-11540] Fix invalid opscode-account config when forcing SSL
 * [OC-11297] tweak partybus migration-level subscribes for a more reliable workaround
+* [OC-11712] Group Read Permissions Needed for Logging System Ingestion
 
 ### Security Fixes:
 

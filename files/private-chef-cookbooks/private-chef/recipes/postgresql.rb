@@ -37,7 +37,7 @@ end
 directory node['private_chef']['postgresql']['home'] do
   owner node['private_chef']['postgresql']['username']
   recursive true
-  mode "0700"
+  mode '0750'
 end
 
 file File.join(node['private_chef']['postgresql']['home'], ".profile") do
@@ -52,13 +52,14 @@ end
 
 directory postgresql_log_dir do
   owner node['private_chef']['user']['username']
+  mode '0750'
   recursive true
 end
 
 directory postgresql_dir do
   owner node['private_chef']['postgresql']['username']
+  mode '0750'
   recursive true
-  mode "0700"
 end
 
 ####
