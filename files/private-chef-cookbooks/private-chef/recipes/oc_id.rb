@@ -28,7 +28,7 @@ oc_id_log_dir = node['private_chef']['oc_id']['log_directory']
   directory dir_name do
     owner node['private_chef']['user']['username']
     group node['private_chef']['user']['username']
-    mode '0700'
+    mode '0750'
     recursive true
   end
 end

@@ -25,7 +25,7 @@ solr_jetty_dir        = "/opt/opscode/embedded/service/opscode-solr4/jetty"
 ].each do |dir_name|
   directory dir_name do
     owner node['private_chef']['user']['username']
-    mode '0700'
+    mode '0750'
     recursive true
   end
 end
