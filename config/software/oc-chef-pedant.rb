@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-default_version "master"
+default_version "sd/fix-groups-tests"
 
 dependency "ruby"
 dependency "bundler"
