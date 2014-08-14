@@ -37,7 +37,7 @@ bookshelf_sasl_log_dir = File.join(bookshelf_log_dir, "sasl")
   directory dir_name do
     owner owner
     group group
-    mode "0700"
+    mode '0750'
     recursive true
   end
 end

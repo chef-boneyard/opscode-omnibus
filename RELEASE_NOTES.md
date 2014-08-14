@@ -25,6 +25,7 @@ The following items are the set of bug fixes that have been applied since Enterp
 * [OC-11703] Fix bug that prevents ACL and group expansion when containing group that no longer exists
 * [OC-11708] Fix user association bug when last updater of users group is no longer associated
 * [OC-11297] tweak partybus migration-level subscribes for a more reliable workaround
+* [OC-11712] Group Read Permissions Needed for Logging System Ingestion
 
 ## 11.1.6 (2014-06-05)
 
