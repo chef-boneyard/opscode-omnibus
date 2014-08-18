@@ -30,7 +30,7 @@ nginx_addon_dir = File.join(nginx_etc_dir, "addon.d")
 ].each do |dir_name|
   directory dir_name do
     owner node['private_chef']['user']['username']
-    mode '0700'
+    mode '0750'
     recursive true
   end
 end
@@ -92,7 +92,7 @@ remote_directory nginx_html_dir do
   files_group "root"
   files_mode "0644"
   owner node['private_chef']['user']['username']
-  mode "0700"
+  mode '0750'
 end
 
 nginx_config = File.join(nginx_etc_dir, "nginx.conf")

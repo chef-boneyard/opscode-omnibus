@@ -18,7 +18,7 @@ opscode_certificate_log_dir = node['private_chef']['opscode-certificate']['log_d
 ].each do |dir_name|
   directory dir_name do
     owner owner
-    mode "0700"
+    mode '0750'
     recursive true
   end
 end

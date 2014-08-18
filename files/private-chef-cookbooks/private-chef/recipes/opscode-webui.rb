@@ -21,7 +21,7 @@ private_chef_webui_log_dir = node['private_chef']['opscode-webui']['log_director
 ].each do |dir_name|
   directory dir_name do
     owner node['private_chef']['user']['username']
-    mode '0700'
+    mode '0750'
     recursive true
   end
 end
