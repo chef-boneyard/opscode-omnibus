@@ -1,62 +1,38 @@
 GIT
-  remote: git://github.com/opscode/omnibus-ruby.git
-  revision: d9e6cb9f488f6cc24b525a47e0b7bb2f7def94f4
-  branch: 3.0-stable
+  remote: git://github.com/opscode/omnibus-software.git
+  revision: ff7d627e7dfb80e2d9905d66c476e1d2498ad79e
   specs:
-    omnibus (3.2.1)
-      chef-sugar (~> 1.2)
-      fpm (~> 0.4)
+    omnibus-software (4.0.0)
+
+GIT
+  remote: git://github.com/opscode/omnibus.git
+  revision: a9b4596bcebeb3448c90c7beccc70b1ce5ef65b2
+  specs:
+    omnibus (4.0.0.alpha)
+      chef-sugar (~> 2.2)
+      cleanroom (~> 1.0)
       mixlib-shellout (~> 1.4)
       ohai (~> 7.2)
       thor (~> 0.18)
       uber-s3
 
-GIT
-  remote: git://github.com/opscode/omnibus-software.git
-  revision: a974609f94b190a4c99ce13ac3857f0b027b0994
-  branch: omnibus/3.2-stable
-  specs:
-    omnibus-software (3.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.3.6)
-    arr-pm (0.0.9)
-      cabin (> 0)
-    backports (3.6.0)
-    cabin (0.6.1)
-    chef-sugar (1.3.0)
-    childprocess (0.5.3)
-      ffi (~> 1.0, >= 1.0.11)
-    clamp (0.6.3)
+    chef-sugar (2.2.0)
+    cleanroom (1.0.0)
     ffi (1.9.3)
-    ffi-yajl (1.0.1)
+    ffi-yajl (1.0.2)
       ffi (~> 1.5)
       libyajl2 (~> 1.0)
-    fpm (0.4.42)
-      arr-pm (~> 0.0.8)
-      backports (>= 2.6.2)
-      cabin (>= 0.6.0)
-      childprocess
-      clamp (~> 0.6)
-      ftw (~> 0.0.30)
-      json (>= 1.7.7)
-    ftw (0.0.39)
-      addressable
-      backports (>= 2.6.2)
-      cabin (> 0)
-      http_parser.rb (= 0.5.3)
-    http_parser.rb (0.5.3)
     ipaddress (0.8.0)
-    json (1.8.1)
     libyajl2 (1.0.1)
     mime-types (1.25.1)
     mixlib-cli (1.5.0)
     mixlib-config (2.1.0)
     mixlib-log (1.6.0)
     mixlib-shellout (1.4.0)
-    ohai (7.2.0)
+    ohai (7.2.4)
       ffi (~> 1.9)
       ffi-yajl (~> 1.0)
       ipaddress
