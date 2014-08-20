@@ -1,0 +1,22 @@
+#! /bin/bash
+#
+# Copyright 2012-<%= Time.now.year %> Chef Software, Inc.
+#
+# All Rights Reserved.
+#
+
+export SVWAIT=30
+
+# Ensure the calling environment does not infect our Ruby environment if
+# private-chef-ctl is called from a Ruby script.
+for ruby_env_var in RUBYOPT \\
+                    BUNDLE_BIN_PATH \\
+                    BUNDLE_GEMFILE \\
+                    GEM_PATH \\
+                    GEM_ROOT \\
+                    GEM_HOME
+do
+  unset $ruby_env_var
+done
+
+<%= embedded_bin %>/omnibus-ctl opscode <%= embedded_service %>/omnibus-ctl $@
