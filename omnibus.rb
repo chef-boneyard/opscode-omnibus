@@ -11,6 +11,7 @@ s3_bucket      ENV['AWS_S3_BUCKET']
 
 # Customize compiler bits
 # ------------------------------
+build_retries 1
 solaris_compiler 'gcc'
 
 # Load additional software
