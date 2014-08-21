@@ -49,6 +49,12 @@ link "/opt/opscode/embedded/service/oc_bifrost/log" do
   to oc_bifrost_log_dir
 end
 
+directory "/opt/opscode/embedded/service/oc_bifrost/bin" do
+  owner "root"
+  group "root"
+  mode  "0755"
+end
+
 template "/opt/opscode/embedded/service/oc_bifrost/bin/oc_bifrost" do
   source "oc_bifrost.erb"
   owner "root"
