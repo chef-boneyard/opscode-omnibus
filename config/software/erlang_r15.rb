@@ -44,7 +44,7 @@ build do
   #
   # In future releases of erlang, someone should check if these flags (or
   # environment variables) are avaiable to remove this ugly hack.
-  %w(ncurses openssl zlib.h zconf.h).each do |name|
+  %w(ncurses).each do |name|
     link "#{install_dir}/embedded/include/#{name}", "#{install_dir}/embedded/#{name}/include/#{name}"
   end
 
