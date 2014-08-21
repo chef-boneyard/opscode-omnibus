@@ -27,7 +27,12 @@ build do
   )
 
   # Include the erlang_r15 bin
-  env['PATH'] = "#{install_dir}/embedded/erlang_r15/bin:#{env['PATH']}"
+  env["PATH"] = "#{install_dir}/embedded/erlang_r15/bin:#{env['PATH']}"
+
+  # WARNING - this is different! Someone with more time than me should figure
+  # out why!
+  env["CFLAGS"]  = "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include"
+  env.delete("LDFLAGS")
 
   command "./configure" \
           " --prefix=#{install_dir}/embedded" \
