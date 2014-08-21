@@ -90,4 +90,5 @@ dependency "private-chef-cookbooks"
 dependency "version-manifest"
 
 exclude "**/.git"
+exclude "**/.gitkeep"
 exclude "**/bundler/git"
