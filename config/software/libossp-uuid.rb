@@ -21,6 +21,6 @@ build do
   command "./configure" \
           " --prefix=#{install_dir}/embedded", env: env
 
-  make "-j #{max_build_jobs}", env: env
+  make "-j #{workers}", env: env
   make "install", env: env
 end
