@@ -1,10 +1,13 @@
+#
+# Copyright 2014 Chef Software, Inc.
+#
+# All Rights Reserved.
+#
+
 name "private-chef-upgrades"
 
-dependency "rsync"
-
-source :path => File.expand_path("files/private-chef-upgrades", Config.project_root)
+source path: "#{project.resources_path}/#{name}"
 
 build do
-  command "mkdir -p #{install_dir}/embedded/upgrades"
-  command "#{install_dir}/embedded/bin/rsync --delete -a ./ #{install_dir}/embedded/upgrades/"
+  sync "#{project_dir}", "#{install_dir}/embedded/upgrades/", exclude: ['**/.git', '**/.gitignore']
 end

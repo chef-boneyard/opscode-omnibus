@@ -1,30 +1,33 @@
+#
+# Copyright 2014 Chef Software, Inc.
+#
+# All Rights Reserved.
+#
+
 name "opscode-chef-mover"
 default_version "2.2.10"
 
 dependency "erlang"
 dependency "rebar"
-dependency "rsync"
 
-source :git => "git@github.com:opscode/chef-mover"
+source git: "git@github.com:opscode/chef-mover"
 
 relative_path "opscode-chef-mover"
 
-env = {
-  "PATH" => "#{install_dir}/embedded/bin:#{ENV["PATH"]}",
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
-}
-
 build do
-  command "make distclean", :env => env
-  command "make rel", :env => env
-  command "mkdir -p #{install_dir}/embedded/service/opscode-chef-mover"
-  command "#{install_dir}/embedded/bin/rsync -a --delete ./rel/mover/ #{install_dir}/embedded/service/opscode-chef-mover/"
-  command "rm -rf #{install_dir}/embedded/service/opscode-chef-mover/log"
-  command "mkdir -p #{install_dir}/embedded/service/opscode-chef-mover/scripts"
-  command "cp scripts/migrate #{install_dir}/embedded/service/opscode-chef-mover/scripts"
+  env = with_standard_compiler_flags(with_embedded_path)
+
+  make "distclean", env: env
+  make "rel", env: env
+
+  sync "#{project_dir}/rel/mover/", "#{install_dir}/embedded/service/opscode-chef-mover/", exclude: ['**/.git', '**/.gitignore']
+  delete "#{install_dir}/embedded/service/opscode-chef-mover/log"
+
+  mkdir "#{install_dir}/embedded/service/opscode-chef-mover/scripts"
+
+  copy "#{project_dir}/scripts/migrate", "#{install_dir}/embedded/service/opscode-chef-mover/scripts"
   command "chmod ugo+x #{install_dir}/embedded/service/opscode-chef-mover/scripts/migrate"
-  command "cp scripts/check_logs.rb #{install_dir}/embedded/service/opscode-chef-mover/scripts"
+
+  copy "#{project_dir}/scripts/check_logs.rb", "#{install_dir}/embedded/service/opscode-chef-mover/scripts"
   command "chmod ugo+x #{install_dir}/embedded/service/opscode-chef-mover/scripts/check_logs.rb"
 end

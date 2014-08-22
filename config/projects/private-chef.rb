@@ -1,8 +1,13 @@
+#
+# Copyright 2014 Chef Software, Inc.
+#
+# All Rights Reserved.
+#
+
 name "private-chef"
 maintainer "Chef Software, Inc."
 homepage   "http://www.getchef.com"
 
-replaces        "private-chef-full"
 install_dir    "/opt/opscode"
 build_version   Omnibus::BuildVersion.new.semver
 build_iteration 1
@@ -12,6 +17,9 @@ override :berkshelf2, version: "2.0.18"
 override :rabbitmq, version: "3.3.4"
 override :erlang, version: "R16B03-1"
 override :'omnibus-ctl', version: "0.1.1"
+
+# this project used to be called private-chef-full
+replace "private-chef-full"
 
 # creates required build directories
 dependency "preparation"
@@ -24,7 +32,7 @@ dependency "chef-gem" # for embedded chef-solo
 dependency "private-chef-scripts" # assorted scripts used by installed instance
 dependency "private-chef-ctl" # additional project-specific private-chef-ctl subcommands
 dependency "openresty"
-dependency "redis-rb" # gem for interacting with redis
+dependency "redis-gem" # gem for interacting with redis
 dependency "openresty-lpeg"  # lua-based routing
 dependency "runit"
 dependency "unicorn"
@@ -81,5 +89,7 @@ dependency "private-chef-cookbooks"
 # version manifest file
 dependency "version-manifest"
 
-exclude "\.git*"
-exclude "bundler\/git"
+exclude "**/.git"
+exclude "**/.gitignore"
+exclude "**/.gitkeep"
+exclude "**/bundler/git"
