@@ -49,7 +49,7 @@ build do
   end
 
   command "./configure" \
-          " --prefix=#{install_dir}/embedded" \
+          " --prefix=#{install_dir}/embedded/#{name}" \
           " --enable-threads" \
           " --enable-smp-support" \
           " --enable-kernel-poll" \
