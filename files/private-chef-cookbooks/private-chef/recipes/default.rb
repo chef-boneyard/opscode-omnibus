@@ -165,6 +165,7 @@ end
 
 include_recipe "enterprise::runit"
 include_recipe "private-chef::sysctl-updates"
+include_recipe "ha"
 
 # Configure Services
 [
@@ -219,8 +220,6 @@ include_recipe "private-chef::sysctl-updates"
 
   end
 end
-
-include_recipe "ha"
 
 include_recipe "private-chef::actions" if darklaunch_values["actions"]
 
