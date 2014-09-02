@@ -30,7 +30,6 @@ dependency "runit"
 dependency "unicorn"
 
 # the backend
-dependency "couchdb"
 dependency "postgresql92"
 dependency "rabbitmq"
 dependency "redis" # dynamic routing controls
