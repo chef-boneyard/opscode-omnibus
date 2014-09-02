@@ -173,7 +173,6 @@ include_recipe "private-chef::plugins"
   "postgresql",
   "oc_bifrost",
   "oc_id",
-  "opscode-certificate",
   "opscode-solr4",
   "opscode-expander",
   "bookshelf",
