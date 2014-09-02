@@ -174,7 +174,6 @@ include_recipe "private-chef::plugins"
   "oc_bifrost",
   "oc_id",
   "opscode-certificate",
-  "opscode-account",
   "opscode-solr4",
   "opscode-expander",
   "bookshelf",
