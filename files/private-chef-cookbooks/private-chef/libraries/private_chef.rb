@@ -37,7 +37,6 @@ module PrivateChef
   oc_bifrost Mash.new
   oc_id Mash.new
   opscode_certificate Mash.new
-  opscode_org_creator Mash.new
   bookshelf Mash.new
   bootstrap Mash.new
   drbd Mash.new # For DRBD specific settings
@@ -73,6 +72,7 @@ module PrivateChef
   opscode_solr Mash.new
   couchdb Mash.new
   opscode_account Mash.new
+  opscode_org_creator Mash.new
 
   class << self
 
@@ -222,7 +222,6 @@ module PrivateChef
         "oc_bifrost",
         "oc_id",
         "opscode_certificate",
-        "opscode_org_creator",
         "opscode_chef_mover",
         "bookshelf",
         "bootstrap",
@@ -312,7 +311,6 @@ module PrivateChef
       PrivateChef["redis_lb"]["ha"] ||= true
       PrivateChef["oc_bifrost"]["ha"] ||= true
       PrivateChef["opscode_certificate"]["ha"] ||= true
-      PrivateChef["opscode_org_creator"]["ha"] ||= true
       PrivateChef["nginx"]["ha"] ||= true
     end
 
@@ -350,7 +348,6 @@ module PrivateChef
       PrivateChef["opscode_solr4"]["enable"] ||= false
       PrivateChef["opscode_solr4"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["opscode_expander"]["enable"] ||= false
-      PrivateChef["opscode_org_creator"]["enable"] ||= false
       PrivateChef["postgresql"]["enable"] ||= false
       PrivateChef["postgresql"]["vip"] ||= PrivateChef["backend_vips"]["ipaddress"]
       PrivateChef["lb"]["cache_cookbook_files"] ||= true
