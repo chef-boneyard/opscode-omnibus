@@ -8,10 +8,7 @@ require 'chef'
 require 'sequel'
 require 'highline/import'
 
-
 # General comments:
-#
-# How can these actions be made idempotent as best as possible?
 #
 # A way should be provided to either suppress all output, or else
 # have it suppressed by default and then made available if a verbose
@@ -20,53 +17,35 @@ require 'highline/import'
 
 class OpenSourceChef11Upgrade
 
+# Explicitly public methods to mark the intended API
+# Public methods are in use by one or more ctl commands
+public
+
   def initialize(options, ctlContext)
     @options = options
     @ctlContext = ctlContext
   end
 
-  # User method_missing to catch calls to methods that are
-  # defined outside this class in the omnibus-ctl context
-  def method_missing(method_sym, *args, &block)
-    if @ctlContext.respond_to?(method_sym)
-      @ctlContext.send(method_sym, *args, &block)
-    else
-      super
-    end
-  end
-
   # Main function
   def run_upgrade
 
-    # As a precaution, we want the location to vary. TODO: We need to save
-    # the value to a read protected file so it can be read from if a resume
-    # is needed
-    # Do we want to delete the directory on failure or leave it for debugging?
-    # Are the permissions good enough? (0700)
-    chef11_data_dir = Dir.mktmpdir('chef11-server-data')
-    log "Making #{chef11_data_dir} as the location to save the open source Chef 11 server data"
+    org_name, org_full_name = determine_org_name
+
+    validate_org_names(org_name, org_full_name)
+
+    chef11_data_dir = determine_chef11_data_dir
 
     key_file = "#{chef11_data_dir}/key_dump.json"
 
     download_chef11_data(chef11_data_dir, key_file)
 
-    log "Open source Chef 11 server data downloaded to #{chef11_data_dir}"
+    chef12_data_dir = determine_chef12_data_dir
 
-    # See note above on chef11_data_dir
-    chef12_data_dir = Dir.mktmpdir('chef12-server-data')
-
-    transform_chef11_data(chef11_data_dir, key_file, chef12_data_dir)
+    transform_chef11_data(chef11_data_dir, key_file, chef12_data_dir, org_name, org_full_name)
 
     upload_transformed_data(chef12_data_dir)
 
-    # The OSC bits still live on the system - do we delete them here?
-    # For example, /opt/chef-server is still in the path, but /opt/opscode is not
-    # on dev-vm testing
-    # This has the effect of making the default knife, gem, etc the chef-server versions
-
-    # The migration data still lives on the system - it is probably worth while
-    # to include an optional step to delete it, if the user specifies this, other
-    # wise leave it on the system
+    upgrade_success_message(chef11_data_dir, chef12_data_dir)
   end
 
   def download_chef11_data(chef11_data_dir, key_file)
@@ -90,9 +69,11 @@ class OpenSourceChef11Upgrade
     log "Finished downloading data from the open source Chef 11 server"
 
     stop_chef11
+
+    log "Open source Chef 11 server data downloaded to #{chef11_data_dir}"
   end
 
-  def transform_chef11_data(chef11_data_dir, key_file, chef12_data_dir)
+  def transform_chef11_data(chef11_data_dir, key_file, chef12_data_dir, org_name, org_full_name)
 
     log "Transforming open source Chef 11 server data for upload to Chef 12 server"
 
@@ -101,15 +82,13 @@ class OpenSourceChef11Upgrade
     # and then knife-ec-backup restore functionality is used to upload it to the
     # new Chef 12 server.
 
-    org_name, org_full_name, org_type = determine_org_name
-
     make_dir("#{chef12_data_dir}/organizations", 0644)
     org_dir = "#{chef12_data_dir}/organizations/#{org_name}"
     make_dir(org_dir, 0644)
     groups_dir = "#{org_dir}/groups"
     make_dir(groups_dir, 0644)
 
-    create_org_json(org_dir, org_name, org_full_name, org_type)
+    create_org_json(org_dir, org_name, org_full_name)
 
     # Copy over the key_dump.json file
     FileUtils.cp(key_file, "#{chef12_data_dir}/key_dump.json")
@@ -136,6 +115,8 @@ class OpenSourceChef11Upgrade
     create_admins_json(admin_users, groups_dir)
 
     create_billing_admins(admin_users, groups_dir)
+
+    log "Data transformed and saved to #{chef12_data_dir}"
   end
 
   def upload_transformed_data(chef12_data_dir)
@@ -151,7 +132,61 @@ class OpenSourceChef11Upgrade
 
     run_knife_ec_restore(chef12_data_dir)
 
-    log "Open source Chef 11 server upgraded to a Chef 12 server"
+    log "Open source Chef 11 server data successfully uploaded to Chef 12 server"
+  end
+
+  def determine_chef11_data_dir
+    # As a precaution, we want the location to vary if the user did not specify
+    # the location
+    # TODO: Save the value to a read protected file so it can be read from if
+    # a resume is needed
+    # Do we want to delete the directory on failure or leave it for debugging?
+    # Are the permissions good enough? (0700)
+
+    if @options.chef11_data_dir
+      @options.chef11_data_dir
+    else
+      chef11_data_dir = Dir.mktmpdir('chef11-server-data')
+      log "Creating #{chef11_data_dir} as the location to save the open source Chef 11 server data"
+      chef11_data_dir
+    end
+  end
+
+  def determine_chef12_data_dir
+    # See note in determine_chef11_data_dir
+    if @options.chef12_data_dir
+      @options.chef12_data_dir
+    else
+      chef12_dir = Dir.mktmpdir('chef12-server-data')
+      log "Created #{chef12_dir} as the location to save the tranformed data"
+      chef12_dir
+    end
+  end
+
+  def determine_org_name
+    org_name = @options.org_name || ask("Chef 12 short organization name? ")
+    org_full_name = @options.full_org_name || ask("Chef 12 full organization name? ")
+
+    [org_name, org_full_name]
+  end
+
+  def validate_org_names(org_name, org_full_name)
+    validate_org_name(org_name)
+    validate_org_full_name(org_full_name)
+  end
+
+
+# Private methods intended to only be accessed through the public interface
+private
+
+  # User method_missing to catch calls to methods that are
+  # defined outside this class in the omnibus-ctl context
+  def method_missing(method_sym, *args, &block)
+    if @ctlContext.respond_to?(method_sym)
+      @ctlContext.send(method_sym, *args, &block)
+    else
+      super
+    end
   end
 
   def fix_rabbit_wait_script
@@ -229,14 +264,10 @@ class OpenSourceChef11Upgrade
   end
 
   def write_knife_config(chef11_data_dir)
-    # Hard coded path to key (stole idea to use from pedant), but the path is in attributes
-    # Need to ensure we have a valid path to the key here
-
-    # Do the rest of these need to be arguments?
     config = <<-EOH
-      chef_server_url "#{@options.chef_server_url}"
-      node_name 'admin'
-      client_key '/etc/chef-server/admin.pem'
+      chef_server_url "#{@options.chef11_server_url}"
+      node_name "#{@options.chef11_admin_client_name}"
+      client_key "#{@options.chef11_admin_client_key}"
       repo_mode 'everything'
       versioned_cookbooks true
       chef_repo_path "#{chef11_data_dir}"
@@ -307,17 +338,31 @@ class OpenSourceChef11Upgrade
     check_status(status, msg)
   end
 
-  def determine_org_name
-    org_name = @options.org_name || ask("Chef Organization Name? ")
-    org_full_name = @options.full_org_name || ask("The full Chef Organization Name? ")
-    org_type = 'Business'
-
-    [org_name, org_full_name, org_type]
+  def validate_org_name(org_name)
+    # Must begin with a lower case letter or digit; can only have lower case letters
+    # digits, hyphens, and underscores. Must be between 1 and 255 characters long.
+    org_name_regex = /^[a-z0-9][a-z0-9_-]{0,254}$/
+    unless org_name =~ org_name_regex
+      log "The Chef 12 short organization name #{org_name} failed validation."
+      log "The Chef 12 short organizaiton name must begin with a lower case letter or digit; can only have lower case letters, digits, hyphens, and underscores and must be between 1 and 255 characters long."
+      exit 1
+    end
   end
 
-  def create_org_json(org_dir, org_name, org_full_name, org_type)
+  def validate_org_full_name(org_full_name)
+    # Must begin with a non-white space. Must be between 1 and 1023 characters long.
+    org_full_name_regex = /^\S.{0,1022}$/
+    unless org_full_name =~ org_full_name_regex
+      log "The Chef 12 full organization name #{org_full_name} failed validation."
+      log "The Chef 12 full organization name must begin with a non-white space and must be between 1 and 1023 characters long."
+      exit 1
+    end
+  end
+
+  def create_org_json(org_dir, org_name, org_full_name)
     # How is the private key returned to the user creating the org in this way?
-    org_json = {"name" => org_name, "full_name" => org_full_name, "org_type" => org_type}
+
+    org_json = {"name" => org_name, "full_name" => org_full_name}
     file_open("#{org_dir}/org.json", "w"){ |file| file.write(Chef::JSONCompat.to_json_pretty(org_json)) }
   end
 
@@ -392,7 +437,7 @@ class OpenSourceChef11Upgrade
     # The server root is likely the same as was set for the knife config
     # used by knife download
     config = <<-EOH
-    chef_server_root '#{@options.chef_server_url}'
+    chef_server_root '#{@options.chef12_server_url}'
     node_name 'pivotal'
     client_key '/etc/opscode/pivotal.pem'
     EOH
@@ -411,6 +456,17 @@ class OpenSourceChef11Upgrade
     status = run_command(cmd)
     msg = "Failed uploading transformed data to the Chef 12 server"
     check_status(status, msg)
+  end
+
+  def upgrade_success_message(chef11_data_dir, chef12_data_dir)
+
+    # Ensure a new line is present to make this message stand out more
+    log ""
+    log "Open source Chef 11 server successfully upgrade to Chef 11."
+    log "Download Chef 11 data is still on disk, located at #{chef11_data_dir}."
+    log "Transformed data upload to Chef 12 server is still on disk, located at #{chef12_data_dir}."
+    log "These directories can be backed up or removed as desired."
+    log "The Chef 11 server package is still present on the system. It can now be safely removed."
   end
 
 end
