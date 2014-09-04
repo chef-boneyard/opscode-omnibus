@@ -1,5 +1,5 @@
 name "opscode-test"
-default_version "0.3.2"
+default_version "sd/chef-12"
 
 dependency "ruby"
 dependency "libxml2"
