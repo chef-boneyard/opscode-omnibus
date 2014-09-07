@@ -1,5 +1,5 @@
 name "oc-chef-pedant"
-default_version "1.0.56"
+default_version "mp/opscode-account-compatibility-fixes"
 
 dependency "ruby"
 dependency "bundler"
