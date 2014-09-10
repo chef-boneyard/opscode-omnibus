@@ -12,6 +12,8 @@ The following items are new for Enterprise Chef 11.1.5 and/or are changes from p
 * [opscode-platform-debug] Upgrade to rel-0.5.1
 * [private-chef-ctl] Add a gather-logs command to create a tarball of
   important logs and system information.
+* [private-chef-cookbooks] Use X-Forwarded-For header instead of remote address in nginx logs
+  when topology is set to 'ha' or 'tier'
 
 ### Bug Fixes:
 

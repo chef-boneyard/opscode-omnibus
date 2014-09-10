@@ -2,6 +2,11 @@
 
 ## 12.0.0 (Unreleased)
 
+### use X-Forwarded-For header in nginx logs if topology is HA
+* in the nginx logs, use $http_x_forwarded_for instead of $remote_addr if
+  node['private_chef']['log_x_forwarded_for'] is true.  The attribute defaults
+  to true if 'topology' is set to 'ha' or 'tier' and false otherwise
+
 ### enterprise-chef-common updated to 0.4.5
 * Fix issue where 'private-chef' was being changed to 'private_chef' unexectedly in upstart/runit files
 
