@@ -1,7 +1,7 @@
 # Copyright (c) 2014 Chef Software, Inc.
 # All Rights Reserved
 
-add_command "install", "Install addon package by name, with optional --path supplied", 2 do
+add_command "install", "Install addon package by name, with optional --path parameter indicating directory containing packages", 2 do
   package = ARGV[3]
   path_arg = "--path"
   if (ARGV.include?(path_arg))
