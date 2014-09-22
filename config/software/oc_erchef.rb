@@ -1,5 +1,6 @@
 name "oc_erchef"
-default_version "0.27.3"
+#default_version "0.27.3"
+default_version "hh/stats_hero_fixes"
 
 dependency "erlang"
 dependency "rebar"
