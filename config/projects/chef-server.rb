@@ -45,6 +45,7 @@ dependency "openresty"
 dependency "redis-gem" # gem for interacting with redis
 dependency "openresty-lpeg"  # lua-based routing
 dependency "runit"
+dependency "chef_backup-gem" # chef-server-ctl backup
 
 # the backend
 dependency "postgresql92"
