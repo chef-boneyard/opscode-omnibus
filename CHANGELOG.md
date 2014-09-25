@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### chef-server-ctl
+* Clarify the use of the --path options for the `install` subcommand
+
 ### oc_erchef 0.27.3
 
 * Fix mech dependency locking issue.
