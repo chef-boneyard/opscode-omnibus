@@ -17,6 +17,9 @@
 * fix for GET of org users not returning correct state record, resulting
   in requests not properly terminating
 
+### chef-server-ctl
+* Clarify the use of the --path options for the `install` subcommand
+
 ### oc_erchef 0.27.3
 * Fix meck dependency locking issue.
 
