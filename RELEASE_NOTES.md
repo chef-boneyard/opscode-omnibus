@@ -30,6 +30,13 @@ The following items are new since Enterprise Chef 11.2.1 and/or are changes from
   important logs and system information.
 * [solr] has been upgraded to Solr 4
 
+#### WebUI Removed
+
+As mentioned above, opscode-webui has been removed from Chef Server 12.
+This means that if you need web-based access to chef server, you will
+need to install the Manage Console.  This can be done as follows:
+
+``chef-server-ctl install opscode-manage``
 
 ### Bug Fixes:
 
