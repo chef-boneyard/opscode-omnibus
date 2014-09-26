@@ -10,6 +10,7 @@
 * expose license configuration options
 * Add man page for chef-server-ctl.
 * Correct gather-logs to point to chef-server.rb
+* move module tempfile directories to /var/opt/nginx/tmp
 
 ### oc_erchef 0.27.4
 * ldap start_tls support
