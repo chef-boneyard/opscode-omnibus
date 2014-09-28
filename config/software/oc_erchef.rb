@@ -1,5 +1,6 @@
 name "oc_erchef"
-default_version "0.28.3"
+
+default_version "praj/CA-616/acls"
 
 dependency "erlang"
 dependency "rebar"
