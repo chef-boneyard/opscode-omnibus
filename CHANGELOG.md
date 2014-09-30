@@ -6,7 +6,8 @@
 * properly configure ldap under erchef, and add some safeguards
   against incorrect encryption configuration.
 * oc_erchef updated to 0.27.4
-* Bump the chef_max_version to 12 (this is the max chef client version that Chef Server will accept)
+* Remove chef_max_version check for server clients, though minimum
+  version of 10 is still enforced.
 * expose license configuration options
 * Add man page for chef-server-ctl.
 * Correct gather-logs to point to chef-server.rb

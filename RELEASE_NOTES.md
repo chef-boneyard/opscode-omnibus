@@ -1,17 +1,13 @@
 # Enterprise Chef Release Notes
 
-## 12.0.0.rc4 (2014-09-17)
-
-### Security Fixes
-* [opscode-omnibus] Ensure contents of install dir (/opt/opscode) are owned by root.
-
 ## 12.0.0
 
 ### What's New:
 
 The following items are new since Enterprise Chef 11.2.1 and/or are changes from previous versions:
 
-* [opscode-omnibus] The chef_max_version has been bumped to 12, so that Chef clients up to 12 can connect to the server.
+* [opscode-omnibus] The check for a maximum version of chef client has been removed,
+  though minimum (10) remains in place.
 * [couchdb] has been removed
 * [oc_erchef]
   * All endpoints that formerly were in opscode-account are now in erchef and the data
@@ -37,6 +33,9 @@ This means that if you need web-based access to chef server, you will
 need to install the Manage Console.  This can be done as follows:
 
 ``chef-server-ctl install opscode-manage``
+
+### Security Fixes
+* [rc4] [opscode-omnibus] Ensure contents of install dir (/opt/opscode) are owned by root.
 
 ### Bug Fixes:
 
