@@ -38,7 +38,7 @@ add_command_under_category "password", "organization-and-user-management", "Set 
     end
 
     command << '--user-password'
-    command << password
+    command << "'#{password}'"
     if ldap_authentication_enabled?
       command << '--recovery-authentication-enabled'
       verbed = 'enabled for System Recovery'

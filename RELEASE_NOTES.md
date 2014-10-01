@@ -39,6 +39,7 @@ The following items are the set of bug fixes that have been applied since Enterp
 * [OC-10470] Allow private-chef-ctl status to ignore disabled services
 * [OC-11574] private-chef-ctl service commands should be HA-aware
 * [OC-9877] Exclude binary files and archives from 'omnibus-ctl tail'
+* [private-chef-ctl] password subcommand - put quotes around the password so special characters can be used
 
 ## 11.2.1
 
