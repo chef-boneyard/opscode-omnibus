@@ -2,6 +2,10 @@
 
 ## 12.0.0.rc5
 
+## oc_erchef 0.27.6
+* fixes to oc_chef_action
+* Update pooler to 1.2.2
+
 ### opscode-omnibus
 * properly configure ldap under erchef, and add some safeguards
   against incorrect encryption configuration.
