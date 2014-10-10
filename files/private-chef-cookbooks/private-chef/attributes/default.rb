@@ -273,6 +273,10 @@ default['private_chef']['lb']['chef_max_version'] = 11
 default['private_chef']['lb']['xdl_defaults']['503_mode'] = false
 default['private_chef']['lb']['xdl_defaults']['couchdb_containers'] = true
 default['private_chef']['lb']['xdl_defaults']['couchdb_groups'] = true
+default['private_chef']['lb']['xdl_defaults']['couchdb_associations'] = true
+default['private_chef']['lb']['xdl_defaults']['couchdb_association_requests'] = true
+default['private_chef']['lb']['xdl_defaults']['couchdb_acls'] = true
+default['private_chef']['lb']['xdl_defaults']['couchdb_organizations'] = true
 
 ####
 # Nginx
