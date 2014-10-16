@@ -1,5 +1,5 @@
 name "oc_erchef"
-default_version "0.27.7"
+default_version "of/fix_return_value"
 
 dependency "erlang"
 dependency "rebar"
