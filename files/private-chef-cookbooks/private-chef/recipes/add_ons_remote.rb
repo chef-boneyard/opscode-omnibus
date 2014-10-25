@@ -11,10 +11,16 @@ when 'debian'
   apt_repository 'chef-stable' do
     uri "https://packagecloud.io/chef/stable/ubuntu/"
     key 'https://packagecloud.io/gpg.key'
-    distribution node['lsb']['codename']
+    distribution 'lucid'
     deb_src true
     trusted true
     components %w( main )
+  end
+
+  # FIXME: We should test on higher versions of ubuntu https://github.com/opscode/opscode-omnibus/issues/460
+  log "Chef Server packages and addons are not regression tested on #{node['platform']}-#{node['platform_version']}. They may install, but may not work, use at your own risk" do
+    level :warn
+    only_if { (platform?('ubuntu') && node['platform_version'].to_f > 12.04) || platform?('debian') }
   end
 
   # Performs an apt-get update
