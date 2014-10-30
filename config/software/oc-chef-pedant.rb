@@ -1,5 +1,6 @@
 name "oc-chef-pedant"
-default_version "1.0.62"
+#default_version "1.0.62"
+default_version "mp/verify-remove-user-fails-safely"
 
 dependency "ruby"
 dependency "bundler"

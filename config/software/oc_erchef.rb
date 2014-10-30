@@ -1,6 +1,6 @@
 name "oc_erchef"
-default_version "0.28.3"
-
+default_version "mp/remove-user-fail-safely"
+#default_version "0.28.3"
 dependency "erlang"
 dependency "rebar"
 dependency "rsync"
