@@ -27,6 +27,9 @@
 ### chef-server-ctl
 * Partition server start/stop in upgrade process
 
+### chef-server-ctl
+* Partition server start/stop in upgrade process
+
 ## 12.0.0.rc5 (2014-10-17)
 
 ### openssl - 1.0.1j
