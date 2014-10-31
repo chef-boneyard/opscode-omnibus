@@ -120,7 +120,8 @@
              {cache_defaults, [{max_size, <%= @max_cache_size %> },
                                   {ttl, <%= @cache_ttl %> }]},
              {couchdb_host, "<%= @helper.normalize_host(node['private_chef']['couchdb']['vip']) %>"},
-             {couchdb_port, <%= node['private_chef']['couchdb']['port'] %> }
+             {couchdb_port, <%= node['private_chef']['couchdb']['port'] %> },
+             {use_couchdb, <%= node['private_chef']['opscode-erchef']['use_couchdb'] %> }
             ]},
   {chef_index, [
                 {ip_mode, [ <%=PrivateChef['use_ipv6'] ? "ipv6,ipv4" : "ipv4" %> ] },

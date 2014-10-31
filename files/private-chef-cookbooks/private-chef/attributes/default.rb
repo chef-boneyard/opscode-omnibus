@@ -173,6 +173,8 @@ default['private_chef']['opscode-erchef']['depsolver_worker_count'] = 5
 default['private_chef']['opscode-erchef']['depsolver_timeout'] = 5000
 default['private_chef']['opscode-erchef']['max_request_size'] = 1000000
 default['private_chef']['opscode-erchef']['cleanup_batch_size'] = 0
+# Default to fall back to when darklaunch server is unavailable
+default['private_chef']['opscode-erchef']['use_couchdb'] = true
 
 ###
 # Legacy path (required for cookbok migration)
