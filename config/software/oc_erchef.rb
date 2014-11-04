@@ -1,5 +1,5 @@
 name "oc_erchef"
-default_version "0.28.3"
+default_version "sd/acctmgmt-fix"
 
 dependency "erlang"
 dependency "rebar"
