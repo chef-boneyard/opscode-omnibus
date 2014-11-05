@@ -1,5 +1,5 @@
 name "oc_erchef"
-default_version "0.28.3"
+default_version "of/set_client_default_acl_read_only"
 
 dependency "erlang"
 dependency "rebar"
