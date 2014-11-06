@@ -1,5 +1,6 @@
 name "oc_erchef"
-default_version "0.28.3"
+
+default_version "mp/association-disassociation-error-message-fixes"
 
 dependency "erlang"
 dependency "rebar"
