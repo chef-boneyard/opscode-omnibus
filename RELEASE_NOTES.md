@@ -34,8 +34,8 @@ The following items are the set of bug fixes that have been applied since Enterp
 * The 'gather-logs' script now obeys the attribute for postsgresql['username'] 
 * oc_erchef 0.25.14.2 - Reverting to previous version for addon compatibility
 
-## 11.2.4 (Never Released)
-Never released due to a regression discovered after tagging.
+## 11.2.4 (Rescinded)
+Rescinded due to a regression discovered after tagging.
 
 ## 11.2.3 (2014-10-17)
 

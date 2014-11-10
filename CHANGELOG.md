@@ -24,8 +24,8 @@
 * Make postgresql slow query logging configurable
 * Remove max Client Version limit
 
-## 11.2.4 (Never Released)
-Never released due to a regression discovered after tagging.
+## 11.2.4 (Rescinded)
+Rescinded due to a regression discovered after tagging.
 
 ## 11.2.3 (2014-10-17)
 
