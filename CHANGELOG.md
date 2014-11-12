@@ -1,5 +1,14 @@
 # Chef Server Changelog
 
+## master (unreleased)
+
+### opscode-omnibus
+* Provide reasonable default for LDAP and LDAPS ports.
+
+### private-chef-cookbooks
+* Select appropriate default port for LDAP and LDAPS (when encryption is
+  selected, as previously user had to manually add port to make it work).
+
 ## 12.0.0.rc6 (2014-11-11)
 
 ### oc-chef-pedant 1.0.65
