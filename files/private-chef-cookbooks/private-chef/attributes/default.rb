@@ -173,6 +173,7 @@ default['private_chef']['opscode-erchef']['bulk_fetch_batch_size'] = '5'
 default['private_chef']['opscode-erchef']['max_cache_size'] = '10000'
 default['private_chef']['opscode-erchef']['cache_ttl'] = '3600'
 default['private_chef']['opscode-erchef']['db_pool_size'] = '20'
+default['private_chef']['opscode-erchef']['sql_db_timeout'] = 5000
 default['private_chef']['opscode-erchef']['udp_socket_pool_size'] = '20'
 default['private_chef']['opscode-erchef']['couchdb_max_conn'] = '100'
 default['private_chef']['opscode-erchef']['ibrowse_max_sessions'] = 256
@@ -404,6 +405,7 @@ default['private_chef']['oc_bifrost']['sql_user'] = "bifrost"
 default['private_chef']['oc_bifrost']['sql_password'] = "challengeaccepted"
 default['private_chef']['oc_bifrost']['sql_ro_user'] = "bifrost_ro"
 default['private_chef']['oc_bifrost']['sql_ro_password'] = "foreveralone"
+default['private_chef']['oc_bifrost']['sql_db_timeout'] = 5000
 # Enable extended performance logging data for bifrost.  Setting this to false
 # will cut bifrost request log size approximately in half.
 default['private_chef']['oc_bifrost']['extended_perf_log'] = true
@@ -497,6 +499,7 @@ default['private_chef']['opscode-chef-mover']['bulk_fetch_batch_size'] = '5'
 default['private_chef']['opscode-chef-mover']['max_cache_size'] = '10000'
 default['private_chef']['opscode-chef-mover']['cache_ttl'] = '3600'
 default['private_chef']['opscode-chef-mover']['db_pool_size'] = '5'
+default['private_chef']['opscode-chef-mover']['sql_db_timeout'] = 5000
 default['private_chef']['opscode-chef-mover']['ibrowse_max_sessions'] = 256
 default['private_chef']['opscode-chef-mover']['ibrowse_max_pipeline_size'] = 1
 default['private_chef']['opscode-chef-mover']['solr_timeout'] = 30000
