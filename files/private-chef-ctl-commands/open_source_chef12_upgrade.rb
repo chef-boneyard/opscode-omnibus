@@ -405,7 +405,16 @@ EOF
   def stop_chef11
     log 'Ensuring open source Chef 11 server is stopped'
     msg = "Unable to stop open souce Chef 11 server, which is needed to complete the upgrade"
-    status = run_command("/opt/chef-server/bin/chef-server-ctl stop")
+    status = run_command("ln -sf /opt/chef-server/bin/chef-server-ctl /usr/bin/chef-server-ctl")
+    check_status(status, msg)
+    status = run_command("initctl stop chef-server-runsvdir")
+    check_status(status, msg)
+    status = run_command("ln -sf /opt/opscode/bin/chef-server-ctl /usr/bin/chef-server-ctl")
+    check_status(status, msg)
+    FileUtils.rm_f("/etc/init/chef-server-runsvdir.conf") if File.exists?("/etc/init/chef-server-runsvdir.conf")
+    status = run_command("egrep -v '/opt/chef-server/embedded/bin/runsvdir-start' /etc/inittab > /etc/inittab.new && mv /etc/inittab.new /etc/inittab") if File.exists?("/etc/inittab")
+    check_status(status, msg)
+    status = run_command("kill -HUP 1")
     check_status(status, msg)
   end
 
