@@ -28,6 +28,7 @@ dependency "openresty"
 dependency "redis-rb" # gem for interacting with redis
 dependency "openresty-lpeg"  # lua-based routing
 dependency "runit"
+dependency "private-chef-extras" # extra miscellaneous files used throughout the install
 
 # the backend
 dependency "postgresql92"
