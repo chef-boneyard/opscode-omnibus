@@ -11,6 +11,7 @@
 
 ### opscode-omnibus
 * pin mixlib-shellout to 1.6.1
+* added new group_dn ldap attribute
 
 ## 12.0.0 (2014-11-25)
 
