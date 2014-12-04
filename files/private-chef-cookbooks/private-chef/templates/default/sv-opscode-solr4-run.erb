@@ -1,9 +1,12 @@
 #!/bin/sh
 
-source('sv_lib')
+exec 2>&1
+
+# Include sv_lib
+. sv_lib
 
 ensure_backing_storage
-if [[ $? != 0 ]]; then
+if [ $? != 0 ]; then
   exit 1
 fi
 
