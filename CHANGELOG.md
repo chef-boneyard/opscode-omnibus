@@ -1,17 +1,23 @@
 # Chef Server Changelog
 
-## 12.0.0 (unreleased)
+## 12.0.1 (unreleased)
 
-### private-chef-cookbooks
-* Move Postgres database stop/start out of migrations
-* Gracefullly attempt to start the database during migrations
+### chef-mover
+* update to version 2.2.17, with better failure case handling and
+  increased timeouts.
 
-## 12.0.0.rc7 (unreleased)
+### oc-chef-pedant 1.0.68
+* pin mixlib-shellout to 1.6.1
 
-## enterprise-chef-common 0.4.7
+### opscode-omnibus
+* pin mixlib-shellout to 1.6.1
+
+## 12.0.0 (2014-11-25)
+
+### enterprise-chef-common 0.4.7
 * Restart logging service on log configuration change
 
-## enterprise-chef-common 0.4.6
+### enterprise-chef-common 0.4.6
 * Make project-ctl configurable by name
 
 ### omnibus-ctl 0.3.1
@@ -29,6 +35,9 @@
 * Expose "proxy_connect_timeout" for Nginx when it connects to the backends,
   so it can be adjused. The hard coded default might not be sufficient in
   some cases.
+* Expose folsom_graphite configuration, default to disable
+* Move Postgres database stop/start out of migrations
+* Gracefullly attempt to start the database during migrations
 
 ### opscode-omnibus
 * Add ability to configure SQL query timeout for Erchef, bifrost and mover.
@@ -167,7 +176,7 @@
 ### oc\_erchef 0.27.3
 * Fix meck dependency locking issue.
 
-## oc\_id 0.4.2
+### oc\_id 0.4.2
 * Add support for Chef signed headers in Resource Owner Password
   Credentials flow
 * Add new endpoint (/v1/me/organizations) to get the list of
