@@ -3,7 +3,7 @@
 exec 2>&1
 
 # Include sv_lib
-. sv_lib
+. /opt/opscode/bin/sv_lib
 
 ensure_backing_storage
 if [ $? != 0 ]; then
