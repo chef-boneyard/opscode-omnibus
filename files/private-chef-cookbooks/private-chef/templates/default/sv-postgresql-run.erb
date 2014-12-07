@@ -1,4 +1,13 @@
 #!/bin/sh
 exec 2>&1
+
+# Include sv_lib
+. /opt/opscode/bin/sv_lib
+
+ensure_backing_storage
+if [ $? != 0 ]; then
+  exit 1
+fi
+
 exec chpst -P -U <%= node['private_chef']['postgresql']['username'] %> -u <%= node['private_chef']['postgresql']['username'] %> /opt/opscode/embedded/bin/postgres -D <%= node['private_chef']['postgresql']['data_dir'] %>
 

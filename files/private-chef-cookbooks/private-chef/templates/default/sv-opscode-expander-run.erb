@@ -1,5 +1,15 @@
 #!/bin/sh
 
+exec 2>&1
+
+# Include sv_lib
+. /opt/opscode/bin/sv_lib
+
+ensure_backing_storage
+if [ $? != 0 ]; then
+  exit 1
+fi
+
 /opt/opscode/bin/wait-for-rabbit
 
 cd /opt/opscode/embedded/service/opscode-expander

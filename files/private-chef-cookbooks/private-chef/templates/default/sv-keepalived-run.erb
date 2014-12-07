@@ -1,3 +1,12 @@
 #!/bin/sh
 exec 2>&1
+
+# Include sv_lib
+. /opt/opscode/bin/sv_lib
+
+ensure_backing_storage
+if [ $? != 0 ]; then
+  exit 1
+fi
+
 exec chpst -P /opt/opscode/embedded/sbin/keepalived --log-console --log-detail --dump-conf --dont-fork --use-file=<%= File.join(node["private_chef"]["keepalived"]["dir"], "etc", "keepalived.conf") %>
