@@ -24,7 +24,7 @@ source git: "git@github.com:opscode/chef-server-bootstrap"
 dependency "ruby"
 dependency "libxml2"
 dependency "bundler"
-dependency "postgresql92"
+dependency "postgresql"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
