@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/opscode/omnibus-software.git
-  revision: ae1a9a63fba05940b70aa9ceb2f9f8a3efa6cdbf
+  revision: d0a197380a2a4e968feea80da6579f0f6865c9b5
+  branch: schisamo/fix-postgresql-uuid-ossp
   specs:
     omnibus-software (4.0.0)
 
