@@ -1,5 +1,10 @@
 # Chef Server Changelog
 
+## 12.0.1 (unreleased)
+
+### oc-id
+Bump oc-id to 0.4.4 to address doorkeeper CSRF
+
 ## 12.0.0 (2014-11-25)
 
 ### enterprise-chef-common 0.4.7
