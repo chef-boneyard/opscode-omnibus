@@ -15,7 +15,7 @@
 #
 
 name "opscode-chef-mover"
-default_version "2.2.17"
+default_version "of/oc_erchef"
 
 source git: "git@github.com:opscode/chef-mover"
 
