@@ -15,7 +15,7 @@
 #
 
 name "oc_erchef"
-default_version "0.29.4"
+default_version "tc/fix-the-test"
 
 source git: "git@github.com:opscode/oc_erchef"
 
