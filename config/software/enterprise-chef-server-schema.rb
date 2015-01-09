@@ -15,7 +15,8 @@
 #
 
 name "enterprise-chef-server-schema"
-default_version "2.5.3"
+default_version "master"
+
 
 source git: "git@github.com:opscode/enterprise-chef-server-schema.git"
 
