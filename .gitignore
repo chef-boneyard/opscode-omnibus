@@ -6,5 +6,5 @@ files/private-chef-cookbooks/cache/
 pkg/*
 vendor/
 tests/**/*.so
-
+*_git_cache
 .kitchen.local.yml
