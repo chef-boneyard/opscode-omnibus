@@ -15,7 +15,7 @@
 #
 
 name "oc_erchef"
-default_version "1.0.1"
+default_version "of/update_chef_objects_bundle"
 
 source git: "git@github.com:opscode/oc_erchef"
 
