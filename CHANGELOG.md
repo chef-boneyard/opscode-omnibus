@@ -6,6 +6,7 @@
 * Fix other recipe locations referencing node['private_chef']['user']['username'] directly
 * Adjust perms to 0750 for all service's log dir
 * Add and use new perms attribute
+* Backport /etc/opscode/pivotal.rb (pivotal knife config) file creation from CS12
 
 ### private-chef-cookbooks
 * Fixed the default value for Postgres effective_cache_size

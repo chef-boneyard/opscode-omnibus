@@ -13,6 +13,7 @@ changes from previous versions:
 
 The following items are the set of bug fixes that have been applied since Enterprise Chef 11.2.6:
 
+* [core] create templated pivotal.rb (backport of Chef Server 12 work)
 
 ## 11.2.5 (2014-11-03)
 
