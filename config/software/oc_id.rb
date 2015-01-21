@@ -19,7 +19,7 @@ default_version "0.4.4"
 
 source git: "git@github.com:opscode/oc-id"
 
-dependency "postgresql92" # for libpq
+dependency "postgresql" # for libpq
 dependency "nodejs"
 dependency "ruby"
 dependency "bundler"
