@@ -15,7 +15,7 @@
 #
 
 name "oc_erchef"
-default_version "1.1.1"
+default_version "3b040df1e984096729f79a5489fbbeb597912e77"
 
 source git: "git@github.com:opscode/oc_erchef"
 
