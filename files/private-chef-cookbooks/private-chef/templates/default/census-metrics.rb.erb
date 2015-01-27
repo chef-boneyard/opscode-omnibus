@@ -1,0 +1,97 @@
+#!/opt/opscode/embedded/bin/ruby
+
+# Pulls gross usage numbers from postgres, writes the summary locally, and sends it out via
+# http to switchboard (http sending TODO)
+
+require "sequel"
+
+class CensusMetrics
+  # TODO(jmink) Pull these from somewhere so they can be real
+  SITE_PLACEHOLDER = 1
+  SERVER_ID_PLACEHOLDER = 1
+
+  # @param db_connection_url of the form: postgres://user:password@host:port/database_name
+  def initialize(db_connection_url)
+    @db = Sequel.connect(db_connection_url)
+  end
+
+  # Creates the rollup table.  Should probably be done through other means,
+  # but is here to make testing more reasonable.
+  def populate_db
+    @db.run("CREATE TABLE IF NOT EXISTS rollups (
+        rollup_id            SERIAL PRIMARY KEY,
+        source_table         VARCHAR(20) NOT NULL,
+        site_id              TEXT NOT NULL,
+        item_count           INT NOT NULL,
+        client_version       VARCHAR(10),
+        org_id               VARCHAR(50),
+        server_id            VARCHAR(50),
+        sender_host          VARCHAR(100),
+        sender_ip            VARCHAR(15),
+        dt_sampled           INT NOT NULL,
+        dt_added             INT NOT NULL
+        )")
+  end
+
+  # @returns (int) how many orgs exist in this install
+  def count_orgs
+    @db[:orgs].count
+  end
+
+  # @returns an array of hashes with the keys ct(count) and org_id
+  def count_by_org(table_name)
+    case table_name
+    when :cookbooks
+      @db["SELECT count(*) as ct, org_id FROM cookbooks GROUP BY org_id"].all
+    when :roles
+      @db["SELECT count(*) as ct, org_id FROM roles GROUP BY org_id"].all
+    when :nodes
+      @db["SELECT count(*) as ct, org_id FROM nodes GROUP BY org_id"].all
+    when :org_nodes
+      @db["SELECT count(*) as ct, org_id FROM orgs, nodes WHERE nodes.org_id=orgs.id GROUP BY org_id"].all
+    end
+  end
+
+  # Write the rollup data to the local db
+  # @param other is a hash of the other columns in the rollups table that you wish to populate
+  def record(source_table, item_count, site_id, server_id, dt_sampled, other)
+    required_vals = { :source_table => source_table.to_s, :item_count => item_count,
+        :site_id => site_id, :server_id => server_id, :dt_sampled => dt_sampled, :dt_added => Time.now().to_i }
+    combined = other.merge(required_vals)
+    @db[:rollups].insert(combined)
+  end
+
+  # This is the main function to call
+  # It looks up the data for that table and records it in the local db
+  # TODO(jmink) have it send out the data over http
+  def collect_and_record(table_name)
+    return collect_and_record_orgs if table_name == :orgs
+
+    results_by_org = count_by_org(table_name)
+    results_by_org = [] if results_by_org.nil?
+    results_by_org.each do |result|
+      record(table_name, result[:ct], SITE_PLACEHOLDER, SERVER_ID_PLACEHOLDER, Time.now().to_i, { :org_id => result[:org_id] })
+    end
+  end
+
+  # helper function for collect_and_record
+  def collect_and_record_orgs
+    count = count_orgs
+    record('orgs', count, SITE_PLACEHOLDER, SERVER_ID_PLACEHOLDER, Time.now().to_i, { })
+  end
+
+  # @returns all stored rollup data.  Useful for debugging
+  def rollup
+    @db[:rollups].all
+  end
+end
+
+db_host = "<%= node['private_chef']['postgresql']['vip'] %>"
+db_port = "5432"
+db_user = "<%= node['private_chef']['postgresql']['sql_user'] %>"
+db_password = "<%= node['private_chef']['postgresql']['sql_password'] %>"
+db_name = "opscode_chef"
+
+metrics = CensusMetrics.new("postgres://#{db_user}:#{db_password}@#{db_host}:#{db_port}/#{db_name}")
+[ :cookbooks, :roles, :nodes, :org_nodes, :orgs ].each { |table| metrics.collect_and_record(table) }
+metrics.rollup.each { |m| puts m.inspect }
