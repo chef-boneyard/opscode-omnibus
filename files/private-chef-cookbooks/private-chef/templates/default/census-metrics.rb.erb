@@ -75,7 +75,9 @@ class CensusMetrics
   def clean_up_raw_results(results, table_name)
     return [] if results.nil?
     results.map do |result|
-      { :item_count => result[:ct], :site_id => SITE_PLACEHOLDER, :server_id => SERVER_ID_PLACEHOLDER, :dt_sampled => Time.now().to_i, :org_id => result[:org_id], :source_table => table_name }
+      { :item_count => result[:ct], :site_id => SITE_PLACEHOLDER,
+        :server_id => SERVER_ID_PLACEHOLDER, :dt_sampled => Time.now().to_i,
+        :org_id => result[:org_id], :source_table => table_name }
     end
   end
 
@@ -83,6 +85,11 @@ class CensusMetrics
   def send_data(data)
     http = Net::HTTP.new(@api_host, @api_port)
     http.use_ssl = true
+    # TODO(jmink) This is dangerous in that it turns off all SSL verification.
+    # That means this is trivial to middle man. The way to fix this is to
+    # switch to a non-self signed cert on switchboard, or (more likley) swap
+    # out the http gem with something that will accept self-signed certs
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     http.post('/counts', JSON.generate(:counts => data))
   end
 
