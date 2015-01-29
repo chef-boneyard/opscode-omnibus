@@ -1,9 +1,11 @@
 #!/opt/opscode/embedded/bin/ruby
 
 # Pulls gross usage numbers from postgres, writes the summary locally, and sends it out via
-# http to switchboard (http sending TODO)
+# http to switchboard
 
-require "sequel"
+require 'sequel'
+require 'net/http'
+require 'json'
 
 class CensusMetrics
   # TODO(jmink) Pull these from somewhere so they can be real
@@ -11,8 +13,21 @@ class CensusMetrics
   SERVER_ID_PLACEHOLDER = 1
 
   # @param db_connection_url of the form: postgres://user:password@host:port/database_name
-  def initialize(db_connection_url)
+  def initialize(db_connection_url, api)
     @db = Sequel.connect(db_connection_url)
+    @api_host = api[:host]
+    @api_port = api[:port]
+  end
+
+  # This is the main function to call
+  # It looks up the data for that table and records it in the local db
+  def collect_and_record(table_name)
+    results = fetch_count(table_name)
+    send_data(results)
+    results.each do |result|
+      result[:dt_added] = Time.now().to_i
+      @db[:rollups].insert(result)
+    end
   end
 
   # Creates the rollup table.  Should probably be done through other means,
@@ -33,9 +48,14 @@ class CensusMetrics
         )")
   end
 
-  # @returns (int) how many orgs exist in this install
-  def count_orgs
-    @db[:orgs].count
+  # Fetches the count for any table and normalizes the result
+  def fetch_count(table_name)
+    if table_name == :orgs
+      results = [{:ct => @db[:orgs].count}]
+    else
+      results = count_by_org(table_name)
+    end
+    clean_up_raw_results(results, table_name)
   end
 
   # @returns an array of hashes with the keys ct(count) and org_id
@@ -52,32 +72,18 @@ class CensusMetrics
     end
   end
 
-  # Write the rollup data to the local db
-  # @param other is a hash of the other columns in the rollups table that you wish to populate
-  def record(source_table, item_count, site_id, server_id, dt_sampled, other)
-    required_vals = { :source_table => source_table.to_s, :item_count => item_count,
-        :site_id => site_id, :server_id => server_id, :dt_sampled => dt_sampled, :dt_added => Time.now().to_i }
-    combined = other.merge(required_vals)
-    @db[:rollups].insert(combined)
-  end
-
-  # This is the main function to call
-  # It looks up the data for that table and records it in the local db
-  # TODO(jmink) have it send out the data over http
-  def collect_and_record(table_name)
-    return collect_and_record_orgs if table_name == :orgs
-
-    results_by_org = count_by_org(table_name)
-    results_by_org = [] if results_by_org.nil?
-    results_by_org.each do |result|
-      record(table_name, result[:ct], SITE_PLACEHOLDER, SERVER_ID_PLACEHOLDER, Time.now().to_i, { :org_id => result[:org_id] })
+  def clean_up_raw_results(results, table_name)
+    return [] if results.nil?
+    results.map do |result|
+      { :item_count => result[:ct], :site_id => SITE_PLACEHOLDER, :server_id => SERVER_ID_PLACEHOLDER, :dt_sampled => Time.now().to_i, :org_id => result[:org_id], :source_table => table_name }
     end
   end
 
-  # helper function for collect_and_record
-  def collect_and_record_orgs
-    count = count_orgs
-    record('orgs', count, SITE_PLACEHOLDER, SERVER_ID_PLACEHOLDER, Time.now().to_i, { })
+  # Sends the data to the switchboard endpoint
+  def send_data(data)
+    http = Net::HTTP.new(@api_host, @api_port)
+    http.use_ssl = true
+    http.post('/counts', JSON.generate(:counts => data))
   end
 
   # @returns all stored rollup data.  Useful for debugging
@@ -92,6 +98,6 @@ db_user = "<%= node['private_chef']['postgresql']['sql_user'] %>"
 db_password = "<%= node['private_chef']['postgresql']['sql_password'] %>"
 db_name = "opscode_chef"
 
-metrics = CensusMetrics.new("postgres://#{db_user}:#{db_password}@#{db_host}:#{db_port}/#{db_name}")
+metrics = CensusMetrics.new("postgres://#{db_user}:#{db_password}@#{db_host}:#{db_port}/#{db_name}",
+    { :host => "census.opschef.tv", :port => 8080 })
 [ :cookbooks, :roles, :nodes, :org_nodes, :orgs ].each { |table| metrics.collect_and_record(table) }
-metrics.rollup.each { |m| puts m.inspect }
