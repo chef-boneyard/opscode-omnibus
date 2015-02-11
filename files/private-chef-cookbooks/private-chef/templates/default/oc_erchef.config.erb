@@ -83,7 +83,7 @@
                       {bind_password, "<%= node['private_chef']['ldap']['bind_password'] || "" %>" },
                       {base_dn, "<%= node['private_chef']['ldap']['base_dn'] || "" %>" },
                       {group_dn, "<%= node['private_chef']['ldap']['group_dn'] || "" %>" },
-                      {login_attribute, "<%= node['private_chef']['ldap']['login_attribute'] || "samaccountname" %>" },
+                      {login_attribute, "<%= node['private_chef']['ldap']['login_attribute'].downcase || "samaccountname" %>" },
                       {encryption, <%= @ldap_encryption_type %>}
               ]},
               <% else -%>
