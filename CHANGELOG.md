@@ -2,6 +2,11 @@
 
 ## 12.0.5 (TBD)
 
+### oc_erchef 1.4.2
+
+* Bug: Don't overwrite external_authetnication_uid on key reset.
+  Fixes https://github.com/chef/chef-server/issues/66
+
 ### bookshelf 1.1.6
 * Updated to webmachine 1.10.8
 
