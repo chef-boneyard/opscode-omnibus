@@ -16,7 +16,8 @@
 
 name "oc_erchef"
 
-default_version "1.6.2"
+#default_version "1.6.3"
+default_version "keys-api-named-PUT"
 
 source git: "git@github.com:opscode/oc_erchef"
 
