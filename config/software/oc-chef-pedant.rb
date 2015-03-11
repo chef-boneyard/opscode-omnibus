@@ -16,8 +16,8 @@
 
 name "oc-chef-pedant"
 
-default_version "2.0.1"
-
+#default_version "2.0.1"
+default_version "keys-api-named-DELETE"
 source git: "git@github.com:opscode/oc-chef-pedant.git"
 
 dependency "ruby"
