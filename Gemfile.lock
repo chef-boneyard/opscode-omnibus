@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/opscode/omnibus-software.git
-  revision: 2e26be554787803214ba9525b6b4214b5c7b6d43
+  revision: 86392a7bdd206a5be3e41c895f0725da3ea4bdc5
+  ref: of/upgrade_java
   specs:
     omnibus-software (4.0.0)
 
@@ -23,7 +24,7 @@ GEM
     chef-sugar (2.5.0)
     cleanroom (1.0.0)
     ffi (1.9.6)
-    ffi-yajl (1.3.1)
+    ffi-yajl (1.4.0)
       ffi (~> 1.5)
       libyajl2 (~> 1.2)
     ipaddress (0.8.0)
