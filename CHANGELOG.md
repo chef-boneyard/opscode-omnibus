@@ -2,6 +2,9 @@
 
 ## 12.0.6 (undetermined)
 
+### oc\_erchef 1.6.3
+* Search results respect ACLs.
+
 ### bookshelf 1.1.7
 * Uses relx for Erlang application releases
 * Upgraded to lager 2.1.1
