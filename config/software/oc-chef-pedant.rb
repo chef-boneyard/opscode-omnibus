@@ -16,8 +16,9 @@
 
 name "oc-chef-pedant"
 
-#default_version "2.0.1"
-default_version "keys-api-named-PUT"
+#default_version "2.0.2"
+default_version "mp/server-api-versioning"
+
 source git: "git@github.com:opscode/oc-chef-pedant.git"
 
 dependency "ruby"
