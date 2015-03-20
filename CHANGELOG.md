@@ -21,6 +21,9 @@
 * Add user to billing-admins group with --admin is passed
 * Print new private-key when user-edit results in a key generation
 
+### oc\_erchef 1.6.3
+* Search results respect ACLs.
+
 ### bookshelf 1.1.7
 * Uses relx for Erlang application releases
 * Upgraded to lager 2.1.1

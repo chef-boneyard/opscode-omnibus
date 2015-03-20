@@ -20,6 +20,9 @@ For specific breakdown of updated components, refer to CHANGELOG.md
 * oc\_erchef
   * Key API Updates - GET, PUT and DELETE  of named keys now supported
   * Policyfile validation support. (See API Changes, below.)
+  * Search results respect ACLs. (Disabled by default)
+    To enable, ensure that `opscode_erchef['strict_search_result_acls']`
+    is set to `true` in `chef-server.rb`.
 
 ### Closed Issues
 * [chef-server-119](https://github.com/chef/chef-server/issues/119)
