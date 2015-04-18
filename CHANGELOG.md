@@ -6,6 +6,9 @@
 * Added rspec testing basics for chef-server-ctl commands
 * Updated and added testing for key rotation related chef-server-ctl commands
 
+### opscode-omnibus
+* Remove install message from postinst package script
+
 ## 12.0.7 (2015-03-26)
 
 ### oc\_erchef 1.7.0
