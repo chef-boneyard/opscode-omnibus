@@ -1,6 +1,6 @@
 resolver = require("resolver")
 
-local acct_upstream = "opscode_account"
+local acct_upstream = "opscode_erchef"
 local erchef_upstream = "opscode_erchef"
 local reporting_upstream = "opscode_reporting"
 local tarpit_name = "TP1"
