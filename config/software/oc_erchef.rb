@@ -16,7 +16,7 @@
 
 name "oc_erchef"
 
-default_version "1.8.3"
+default_version "mp/remove_couch"
 
 source git: "https://github.com/opscode/oc_erchef"
 

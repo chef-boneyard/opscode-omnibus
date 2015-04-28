@@ -16,7 +16,7 @@
 
 name "oc-chef-pedant"
 
-default_version "2.2.0"
+default_version "mp/remove-ruby-server-support"
 
 source git: "https://github.com/opscode/oc-chef-pedant"
 
