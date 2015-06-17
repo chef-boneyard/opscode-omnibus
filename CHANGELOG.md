@@ -1,5 +1,15 @@
 # Enterprise Chef Changelog
 
+## 11.3.2 (Unreleased)
+
+* redis 2.8.21
+
+### redis 2.8.21
+
+* Multiple bug fixes since 2.8.21:
+https://raw.githubusercontent.com/antirez/redis/2.8/00-RELEASENOTES
+* CVE-2015-4335: Redis Lua Sandbox Escape
+
 ## 11.3.1 (2015-04-20)
 
 * openresty (nginx) 1.7.7.10
