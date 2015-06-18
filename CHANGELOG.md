@@ -1,6 +1,6 @@
 # Enterprise Chef Changelog
 
-## 11.3.2 (Unreleased)
+## 11.3.2 (2015-06-18)
 
 * redis 2.8.21
 

@@ -1,5 +1,16 @@
 # Enterprise Chef Release Notes
 
+# 11.3.2 (2015-06-18)
+
+The following items are new for Enterprise Chef 11.3.2 and/or are
+changed from previous versions:
+
+## Security Updates
+
+* redis 2.8.21
+  * Multiple bug fixes since 2.8.21: https://raw.githubusercontent.com/antirez/redis/2.8/00-RELEASENOTES
+  * CVE-2015-4335: Redis Lua Sandbox Escape
+
 ## 11.3.1 (2015-04-20)
 
 The folllowing items are new for Enterprise Chef 11.3.1 and/or are
@@ -44,7 +55,6 @@ changes from previous versions:
 * [OC-11712] Adjust perms to 0750 for all service's log dirs
 
 The following items are the set of bug fixes that have been applied since Enterprise Chef 11.2.5:
-
 
 ## 11.2.5 (2014-11-03)
 
