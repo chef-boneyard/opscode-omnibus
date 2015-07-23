@@ -60,6 +60,9 @@ build do
         verbose_logging true
         ssl_verify_mode :verify_peer
         client_fork false
+        Ohai::Config[:disabled_plugins] = [
+          :Passwd
+        ]
       EOH
     end
   end
