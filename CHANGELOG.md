@@ -2,6 +2,9 @@
 
 ## 12.1.0 (unknown)
 
+### private-chef-cookbooks/private-chef
+* Fix logrotate configuration to make it work with SELinux enabled.
+
 ### chef-client master
 * Server's install of Chef now floats on master.
 
